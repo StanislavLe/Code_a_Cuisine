@@ -2,3 +2,47 @@ body {
   margin: 0px !important;
   font-family: Arial, sans-serif;
 }
+
+
+@font-face {
+  font-family: 'quicksandBold';
+  src: url('assets/fonts/quicksand/Quicksand_Bold.otf');
+}
+
+@font-face {
+  font-family: 'quicksandBoldOblique';
+  src: url('assets/fonts/quicksand/Quicksand_Bold_Oblique.otf');
+}
+
+@font-face {
+  font-family: 'quicksandBook';
+  src: url('assets/fonts/quicksand/Quicksand_Book.otf');
+}
+
+@font-face {
+  font-family: 'quicksandBookOblique';
+  src: url('assets/fonts/quicksand/Quicksand_Book_Oblique.otf');
+}
+
+@font-face {
+  font-family: 'quicksandDash';
+  src: url('assets/fonts/quicksand/Quicksand_Dash.otf');
+}
+
+@font-face {
+  font-family: 'quicksandLight';
+  src: url('assets/fonts/quicksand/Quicksand_Light.otf');
+}
+
+@font-face {
+  font-family: 'quicksandLightOblique';
+  src: url('assets/fonts/quicksand/Quicksand_Light_Oblique.otf');
+}
+
+.logo {
+  width: 142px !important;
+  height: 48px !important;
+  position: absolute;
+  top: 20px;
+  left: 50px;
+}
