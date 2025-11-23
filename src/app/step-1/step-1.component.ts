@@ -25,36 +25,65 @@ export class Step1Component {
 
   constructor(private http: HttpClient) { }
 
-  onSearch() {
-    if (this.searchTerm.length < 2) {
-      this.suggestions = [];
-      return;
-    }
-    const url = `http://localhost:5678/webhook-test/ingredients?query=${this.searchTerm}`;
-    this.http.get<string[]>(url).subscribe({
-      next: (data) => (this.suggestions = data),
-      error: (err) => console.error(err)
-    });
+  // 🧠 Eingabeüberwachung + Request an n8n/Gemini
+  
+ onSearch() {
+  // Sofort schließen, wenn leer
+  if (!this.searchTerm?.trim()) {
+    this.suggestions = [];
+    return;
   }
 
+  if (this.searchTerm.length < 2) {
+    this.suggestions = [];
+    return;
+  }
+
+  const url = `http://localhost:5678/webhook/ingredients?query=${this.searchTerm}`;
+  this.http.get<any[]>(url).subscribe({
+    next: (data) => {
+      if (!data || !Array.isArray(data) || data.length === 0 || !data[0]?.queries) {
+        this.suggestions = [];
+        return;
+      }
+      this.suggestions = data[0].queries;
+    },
+    error: (err) => {
+      console.error('Fehler bei Ingredient-Request:', err);
+      this.suggestions = [];
+    },
+  });
+}
+
+
+
+  // 🧩 Vorschlag auswählen
   selectIngredient(item: string) {
     this.searchTerm = item;
     this.suggestions = [];
   }
 
+  // ➕ Ingredient hinzufügen
   addIngredient() {
-    if (!this.searchTerm.trim()) return;
+    const name = this.searchTerm.trim();
+    if (!name) return;
+
     const ingredient: Ingredient = {
-      name: this.searchTerm.trim(),
+      name,
       quantity: this.quantity ?? 0,
-      unit: this.unit
+      unit: this.unit,
     };
+
     this.ingredients.push(ingredient);
+
+    // Reset
     this.searchTerm = '';
     this.quantity = null;
     this.unit = 'g';
+    this.suggestions = [];
   }
 
+  // ❌ Ingredient löschen
   removeIngredient(index: number) {
     this.ingredients.splice(index, 1);
   }

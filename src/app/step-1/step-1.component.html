@@ -13,16 +13,18 @@
                 <div class="ingredientRow">
                     <h3>Ingredient</h3>
                     <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" />
+                    <!-- 🧠 Dropdown mit Gemini-Vorschlägen -->
+                    <div class="autocomplete-dropdown" *ngIf="suggestions.length > 0 && searchTerm.trim().length > 0">
+                        <div *ngFor="let item of suggestions" class="autocomplete-item"
+                            (click)="selectIngredient(item)">
+                            {{ item }}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="sizeRow">
                     <h3>Serving size</h3>
                     <div class="rowWrapper">
-                        <ul *ngIf="suggestions.length > 0" class="dropdown">
-                            <li *ngFor="let item of suggestions" (click)="selectIngredient(item)">
-                                {{ item }}
-                            </li>
-                        </ul>
 
                         <input type="number" placeholder="100" [(ngModel)]="quantity" />
                         <select [(ngModel)]="unit">
@@ -38,11 +40,32 @@
             <div class="pushIngredientTable">
                 <h3>List of your ingredients</h3>
                 <div class="listRow">
-
+                    <div *ngFor="let ingredient of ingredients; let i = index" class="ingredient-item">
+                        <div class="ingredientName">
+                            <span class="ingredient-qty">{{ ingredient.quantity }} {{ ingredient.unit }}</span>
+                            <span class="ingredient-name">{{ ingredient.name }}</span>
+                        </div>
+                        <div class="ingredientQuantity">
+                            <img (click)="removeIngredient(i)" src="../../assets/img/delete.png">
+                            <img src="../../assets/img/edit.png">
+                        </div>
+                    </div>
+                    <div class="ingredient-item">
+                        <div class="ingredientName">
+                            <span class="ingredient-qty">100 g</span>
+                            <span>bannane</span>
+                        </div>
+                        <div class="ingredientQuantity">
+                            <img src="../../assets/img/delete.png">
+                            <img src="../../assets/img/edit.png">
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
+        <div class="btnWrapper">
+            <button class="nextStepBtn">Next Step</button>
+        </div>
+
     </div>
 </div>
-

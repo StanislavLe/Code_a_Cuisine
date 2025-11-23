@@ -59,14 +59,20 @@ h1 {
     background-color: #3960394D;
     width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: start;
     justify-content: space-between;
-    flex-direction: row;
     min-height: 150px;
     padding: 24px;
     gap: 20px;
     border-radius: 20px;
+}
+
+.pullIngredientTable {
+    flex-direction: row;
+}
+
+.pushIngredientTable {
+    flex-direction: column;
 }
 
 h3 {
@@ -76,7 +82,6 @@ h3 {
     display: flex;
     justify-content: start;
     align-items: center;
-    margin: 24px;
     width: 100%;
 }
 
@@ -128,6 +133,8 @@ select {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    width: 100%;
+    gap: 8px;
 }
 
 .rowWrapper {
@@ -138,7 +145,75 @@ select {
 }
 
 
-//1. Ich baue gerade eine KI gesteuerte webseite die mir immer wieder neue rezepte anhand von nur 3 eingetragenen zutaten ein komplettes rezept herstellt.
-//2. ich baue hierfür das frontend mit angular und das backend baue ich mit n8n.
-//3. ich habe auch schon angefangen und bekomme daten an mein 8n8 gesendet. 
-//4. ich hänge nun mit der weiteren vorangehensweise. hier ist fürs erste mein code:
+.autocomplete-dropdown {
+    width: 60%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    animation: fadeIn 0.15s ease-in-out;
+}
+
+.autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.autocomplete-item:hover {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.ingredient-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 32px;
+}
+
+.ingredientName {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.ingredientQuantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.btnWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.nextStepBtn {
+    margin-top: 20px;
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: #1E5515 ;
+    color: #FAF0E6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'quicksandBold';
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #379c28;
+        transition: background-color 0.3s ease;
+    }
+}
