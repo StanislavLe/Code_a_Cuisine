@@ -14,7 +14,9 @@
                     <h3>Ingredient</h3>
                     <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" />
                     <!-- 🧠 Dropdown mit Gemini-Vorschlägen -->
-                    <div class="autocomplete-dropdown" *ngIf="suggestions.length > 0 && searchTerm.trim().length > 0">
+                    <div class="autocomplete-dropdown" [class.fade-in]="dropdownVisible"
+                        [class.fade-out]="!dropdownVisible"
+                        *ngIf="suggestions.length > 0 && searchTerm.trim().length > 0">
                         <div *ngFor="let item of suggestions" class="autocomplete-item"
                             (click)="selectIngredient(item)">
                             {{ item }}
@@ -40,24 +42,36 @@
             <div class="pushIngredientTable">
                 <h3>List of your ingredients</h3>
                 <div class="listRow">
-                    <div *ngFor="let ingredient of ingredients; let i = index" class="ingredient-item">
-                        <div class="ingredientName">
-                            <span class="ingredient-qty">{{ ingredient.quantity }} {{ ingredient.unit }}</span>
-                            <span class="ingredient-name">{{ ingredient.name }}</span>
+                    <div *ngFor="let ingredient of ingredients; let i = index" class="ingredient-item fade-in">
+                        <div class="ingredientData">
+                            <ng-container *ngIf="editIndex !== i; else editMode">
+                                <div class="nameWrapper">
+                                    <span class="ingredient-qty">{{ ingredient.quantity }} {{ ingredient.unit }}</span>
+                                    <span class="ingredient-name">{{ ingredient.name }}</span>
+                                </div>
+                            </ng-container>
+                            <ng-template #editMode>
+                                <div class="nameWrapper">
+                                    <input type="number" [(ngModel)]="editableIngredient.quantity"
+                                        class="edit-input quantity" />
+                                    <select [(ngModel)]="editableIngredient.unit" class="edit-select">
+                                        <option value="g">g</option>
+                                        <option value="ml">ml</option>
+                                        <option value="pcs">pcs</option>
+                                    </select>
+                                    <span class="ingredient-name">{{ ingredient.name }}</span>
+                                </div>
+                                <div class="ingredientEdit">
+                                    <img src="../../assets/img/save.png" class="save-icon"
+                                        (click)="saveIngredient(i)" />
+                                    <img (click)="removeIngredient(i)" src="../../assets/img/delete.png" />
+                                </div>
+                            </ng-template>
                         </div>
-                        <div class="ingredientQuantity">
-                            <img (click)="removeIngredient(i)" src="../../assets/img/delete.png">
-                            <img src="../../assets/img/edit.png">
-                        </div>
-                    </div>
-                    <div class="ingredient-item">
-                        <div class="ingredientName">
-                            <span class="ingredient-qty">100 g</span>
-                            <span>bannane</span>
-                        </div>
-                        <div class="ingredientQuantity">
-                            <img src="../../assets/img/delete.png">
-                            <img src="../../assets/img/edit.png">
+                        <div class="ingredientEdit">
+                            <img *ngIf="editIndex !== i" src="../../assets/img/edit.png" (click)="startEdit(i)" />
+                            <img *ngIf="editIndex !== i" (click)="removeIngredient(i)"
+                                src="../../assets/img/delete.png" />
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,42 @@
+/* 🌍 Global Smooth Transitions */
+* {
+    transition: all 0.25s ease-in-out;
+}
+
+/* 🔥 Einheitliche Keyframes */
+@keyframes fadeInSmooth {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutSmooth {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+/* 🌫️ Globale Utility-Klassen für Bewegung */
+.fade-in {
+    animation: fadeInSmooth 0.25s ease-out forwards;
+}
+
+.fade-out {
+    animation: fadeOutSmooth 0.25s ease-in forwards;
+}
+
 .step1Content {
     display: flex;
     flex-direction: column;
@@ -61,10 +100,10 @@ h1 {
     display: flex;
     align-items: start;
     justify-content: space-between;
-    min-height: 150px;
     padding: 24px;
     gap: 20px;
     border-radius: 20px;
+    animation: fadeInSmooth 0.25s ease-out forwards;
 }
 
 .pullIngredientTable {
@@ -91,6 +130,8 @@ h3 {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+ /* 🪄 Animiertes „Wachsen“ */
+  transition: all 0.35s ease-in-out;
 
     input {
         width: 100%;
@@ -135,7 +176,8 @@ select {
     flex-direction: column;
     width: 100%;
     gap: 8px;
-}
+ /* 🪄 Animiertes „Wachsen“ */
+  transition: all 0.35s ease-in-out;}
 
 .rowWrapper {
     display: flex;
@@ -146,17 +188,29 @@ select {
 
 
 .autocomplete-dropdown {
-    width: 60%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-top: 4px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    max-height: 200px;
-    overflow-y: auto;
-    animation: fadeIn 0.15s ease-in-out;
+  width: 60%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+
+  &.fade-in {
+    animation: fadeInSmooth 0.25s ease-out forwards;
+    pointer-events: auto;
+  }
+
+  &.fade-out {
+    animation: fadeOutSmooth 0.25s ease-in forwards;
+    pointer-events: none;
+  }
 }
+
 
 .autocomplete-item {
     padding: 10px;
@@ -169,22 +223,46 @@ select {
     color: #2e7d32;
 }
 
+
+
+
+
+
+
 .ingredient-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    gap: 32px;
+    height: 36px;
+    transition: all 0.25s ease-in-out;
 }
 
-.ingredientName {
+.ingredient-item.removing {
+  opacity: 0;
+  transform: translateY(-5px);
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.ingredientData {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+}
+
+.nameWrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 24px;
+    flex-direction: row;
+    gap: 6px;
 }
 
-.ingredientQuantity {
+.ingredientEdit {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -203,7 +281,7 @@ select {
     padding: 16px 32px;
     font-size: 20px;
     font-weight: 600;
-    background-color: #1E5515 ;
+    background-color: #1E5515;
     color: #FAF0E6;
     border: none;
     border-radius: 8px;
