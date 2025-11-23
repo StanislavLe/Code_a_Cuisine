@@ -1,0 +1,144 @@
+.step1Content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: row;
+    height: 100dvh;
+    text-align: center;
+    gap: 16px;
+    padding: 0 50px;
+}
+
+.step1Headline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    width: 100%;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: 0%;
+    margin: 0px;
+}
+
+h1 {
+    font-size: 54px;
+    font-weight: 600;
+    line-height: 100%;
+    letter-spacing: 0%;
+    margin: 0px;
+}
+
+.spacer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+    width: 100%;
+}
+
+.tableWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+}
+
+
+.pullIngredientTable,
+.pushIngredientTable {
+    background-color: #3960394D;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: row;
+    min-height: 150px;
+    padding: 24px;
+    gap: 20px;
+    border-radius: 20px;
+}
+
+h3 {
+    font-family: 'quicksandBook';
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 24px;
+    width: 100%;
+}
+
+.ingredientRow {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    input {
+        width: 100%;
+    }
+}
+
+input,
+select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    padding-block: 0px !important;
+    padding-inline: 0px !important;
+    border-radius: 20px;
+    border-style: unset;
+}
+
+select {
+    width: 71px;
+}
+
+.sizeRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-left: 56px;
+
+    input {
+        width: 20%;
+    }
+}
+
+.listRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.rowWrapper {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 16px;
+}
+
+
+//1. Ich baue gerade eine KI gesteuerte webseite die mir immer wieder neue rezepte anhand von nur 3 eingetragenen zutaten ein komplettes rezept herstellt.
+//2. ich baue hierfür das frontend mit angular und das backend baue ich mit n8n.
+//3. ich habe auch schon angefangen und bekomme daten an mein 8n8 gesendet. 
+//4. ich hänge nun mit der weiteren vorangehensweise. hier ist fürs erste mein code:

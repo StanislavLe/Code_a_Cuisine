@@ -1,1 +1,48 @@
-<p>step-1 works!</p>
+<div class="step1Content">
+    <img class="logo" src="../../assets/img/logoGreen.png" />
+    <div class="spacer">
+        <div class="step1Headline">
+            <h1>Generate recipe</h1>
+            <h2>Got random stuff in your kitchen? Pop it in—we’ve got the perfect recipe waiting.</h2>
+        </div>
+
+        <div class="tableWrapper">
+
+            <div class="pullIngredientTable">
+
+                <div class="ingredientRow">
+                    <h3>Ingredient</h3>
+                    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" />
+                </div>
+
+                <div class="sizeRow">
+                    <h3>Serving size</h3>
+                    <div class="rowWrapper">
+                        <ul *ngIf="suggestions.length > 0" class="dropdown">
+                            <li *ngFor="let item of suggestions" (click)="selectIngredient(item)">
+                                {{ item }}
+                            </li>
+                        </ul>
+
+                        <input type="number" placeholder="100" [(ngModel)]="quantity" />
+                        <select [(ngModel)]="unit">
+                            <option value="g">gram</option>
+                            <option value="ml">ml</option>
+                            <option value="pcs">piece</option>
+                        </select>
+                        <img class="addIcon" src="../../assets/img/addToGreen.png" (click)="addIngredient()" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="pushIngredientTable">
+                <h3>List of your ingredients</h3>
+                <div class="listRow">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
