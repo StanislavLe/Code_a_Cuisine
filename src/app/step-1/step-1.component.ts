@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 interface Ingredient {
   name: string;
@@ -16,69 +16,92 @@ interface Ingredient {
   templateUrl: './step-1.component.html',
   styleUrls: ['./step-1.component.scss'],
 })
-export class Step1Component {
+export class Step1Component implements AfterViewInit {
   searchTerm = '';
   suggestions: string[] = [];
   quantity: number | null = null;
   unit = 'g';
   ingredients: Ingredient[] = [];
 
-  dropdownVisible = false; // Sichtbarkeit (CSS fade)
-  dropdownRendered = false; // Existenz im DOM (ngIf)
+  dropdownVisible = false;
+  dropdownRendered = false;
+
+  dropdownOpen = false;
+  unitOptions = ['g', 'ml', 'pcs'];
 
   editIndex: number | null = null;
   editableIngredient: Ingredient = { name: '', quantity: 0, unit: 'g' };
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
-  // 🔍 Suche + Vorschläge holen
-  onSearch() {
-    const query = this.searchTerm.trim();
-
-    // 🟥 Wenn Eingabe leer oder zu kurz → Fade-Out + Entfernen
-    if (!query || query.length < 2) {
-      if (this.dropdownVisible) {
-        this.dropdownVisible = false;
-        setTimeout(() => {
-          this.dropdownRendered = false;
-          this.suggestions = [];
-        }, 250); // muss mit CSS-Animation übereinstimmen
-      }
-      return;
-    }
-
-    // 🟩 Wenn Eingabe gültig → Vorschläge abrufen
-    const url = `http://localhost:5678/webhook/ingredients?query=${encodeURIComponent(query)}`;
-    this.http.get<any[]>(url).subscribe({
-      next: (data) => {
-        const results = data?.[0]?.queries ?? [];
-
-        if (!results || results.length === 0) {
-          this.dropdownVisible = false;
-          setTimeout(() => {
-            this.dropdownRendered = false;
-            this.suggestions = [];
-          }, 250);
-          return;
+  // ✅ DOM Event nur im Browser registrieren
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest('.custom-select-wrapper')) {
+          this.dropdownOpen = false;
         }
+      });
+    }
+  }
 
-        // Vorschläge da → Dropdown aktivieren
-        this.suggestions = results;
-        this.dropdownRendered = true;
+// 🧠 Input Autocomplete (wie gehabt)
+onSearch() {
+  const query = this.searchTerm.trim();
 
-        // Kurzer Delay für flüssige CSS-Transition
-        setTimeout(() => (this.dropdownVisible = true), 10);
-      },
-      error: (err) => {
-        console.error('Fehler bei Ingredient-Request:', err);
+  if (!query || query.length < 2) {
+    if (this.dropdownVisible) {
+      this.dropdownVisible = false;
+      setTimeout(() => {
+        this.dropdownRendered = false;
+        this.suggestions = [];
+      }, 250);
+    }
+    return;
+  }
+
+  const url = `http://localhost:5678/webhook/ingredients?query=${encodeURIComponent(query)}`;
+  this.http.get<any[]>(url).subscribe({
+    next: (data) => {
+      const results = data?.[0]?.queries ?? [];
+      if (!results || results.length === 0) {
         this.dropdownVisible = false;
         setTimeout(() => {
           this.dropdownRendered = false;
           this.suggestions = [];
         }, 250);
-      },
-    });
-  }
+        return;
+      }
+
+      this.suggestions = results;
+      this.dropdownRendered = true;
+      setTimeout(() => (this.dropdownVisible = true), 10);
+    },
+    error: (err) => {
+      console.error('Fehler bei Ingredient-Request:', err);
+      this.dropdownVisible = false;
+      setTimeout(() => {
+        this.dropdownRendered = false;
+        this.suggestions = [];
+      }, 250);
+    },
+  });
+}
+
+// 🧠 Custom Select Dropdown
+toggleDropdown() {
+  this.dropdownOpen = !this.dropdownOpen;
+}
+
+selectUnit(opt: string) {
+  this.unit = opt;
+  this.dropdownOpen = false;
+}
+
 
   // 🧩 Vorschlag auswählen
   selectIngredient(item: string) {
@@ -102,26 +125,25 @@ export class Step1Component {
     };
 
     this.ingredients.push(ingredient);
-
-    // Reset nach Hinzufügen
     this.searchTerm = '';
     this.quantity = null;
     this.unit = 'g';
     this.dropdownVisible = false;
+
     setTimeout(() => {
       this.dropdownRendered = false;
       this.suggestions = [];
     }, 250);
   }
 
-  // 🗑️ Ingredient entfernen (mit Fade-Out)
+  // 🗑️ Entfernen mit Fade-Out
   removeIngredient(index: number) {
     const element = document.querySelectorAll('.ingredient-item')[index];
     if (element) {
       element.classList.add('fade-out');
       setTimeout(() => {
         this.ingredients.splice(index, 1);
-      }, 200); // gleiche Dauer wie fadeOut CSS
+      }, 200);
     }
   }
 
@@ -138,9 +160,11 @@ export class Step1Component {
     this.cancelEdit();
   }
 
-  // ❌ Bearbeitung abbrechen
   cancelEdit() {
     this.editIndex = null;
     this.editableIngredient = { name: '', quantity: 0, unit: 'g' };
   }
+
+
+
 }

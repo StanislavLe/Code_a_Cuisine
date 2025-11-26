@@ -1,86 +1,153 @@
 <div class="step1Content">
-    <img class="logo" src="../../assets/img/logoGreen.png" />
-    <div class="spacer">
-        <div class="step1Headline">
-            <h1>Generate recipe</h1>
-            <h2>Got random stuff in your kitchen? Pop it in—we’ve got the perfect recipe waiting.</h2>
-        </div>
-
-        <div class="tableWrapper">
-
-            <div class="pullIngredientTable" [class.open]="dropdownVisible">
-
-                <div class="ingredientRow">
-                    <h3>Ingredient</h3>
-                    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" />
-
-                    <div class="autocomplete-dropdown" *ngIf="dropdownRendered" [class.fade-in]="dropdownVisible"
-                        [class.fade-out]="!dropdownVisible">
-
-                        <div *ngFor="let item of suggestions" class="autocomplete-item"
-                            (click)="selectIngredient(item)">
-                            {{ item }}
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="sizeRow">
-                    <h3>Serving size</h3>
-                    <div class="rowWrapper">
-
-                        <input type="number" placeholder="100" [(ngModel)]="quantity" />
-                        <select [(ngModel)]="unit">
-                            <option value="g">gram</option>
-                            <option value="ml">ml</option>
-                            <option value="pcs">piece</option>
-                        </select>
-                        <img class="addIcon" src="../../assets/img/addToGreen.png" (click)="addIngredient()" />
-                    </div>
-                </div>
-
-            </div>
-            <div class="pushIngredientTable" [ngClass]="'open-' + ingredients.length">
-                <h3>List of your ingredients</h3>
-                <div class="listRow">
-                    <div *ngFor="let ingredient of ingredients; let i = index" class="ingredient-item fade-in">
-                        <div class="ingredientData">
-                            <ng-container *ngIf="editIndex !== i; else editMode">
-                                <div class="nameWrapper">
-                                    <span class="ingredient-qty">{{ ingredient.quantity }} {{ ingredient.unit }}</span>
-                                    <span class="ingredient-name">{{ ingredient.name }}</span>
-                                </div>
-                            </ng-container>
-                            <ng-template #editMode>
-                                <div class="nameWrapper">
-                                    <input type="number" [(ngModel)]="editableIngredient.quantity"
-                                        class="edit-input quantity" />
-                                    <select [(ngModel)]="editableIngredient.unit" class="edit-select">
-                                        <option value="g">g</option>
-                                        <option value="ml">ml</option>
-                                        <option value="pcs">pcs</option>
-                                    </select>
-                                    <span class="ingredient-name">{{ ingredient.name }}</span>
-                                </div>
-                                <div class="ingredientEdit">
-                                    <img src="../../assets/img/save.png" class="save-icon"
-                                        (click)="saveIngredient(i)" />
-                                    <img (click)="removeIngredient(i)" src="../../assets/img/delete.png" />
-                                </div>
-                            </ng-template>
-                        </div>
-                        <div class="ingredientEdit">
-                            <img *ngIf="editIndex !== i" src="../../assets/img/edit.png" (click)="startEdit(i)" />
-                            <img *ngIf="editIndex !== i" (click)="removeIngredient(i)"
-                                src="../../assets/img/delete.png" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="btnWrapper">
-            <button class="nextStepBtn">Next Step</button>
-        </div>
-
+  <img class="logo" src="../../assets/img/logoGreen.png" />
+  <div class="spacer">
+    <div class="step1Headline">
+      <h1>Generate recipe</h1>
+      <h2>
+        Got random stuff in your kitchen? Pop it in—we’ve got the perfect recipe waiting.
+      </h2>
     </div>
+
+    <div class="tableWrapper">
+      <!-- 🥦 Input Table -->
+<div
+  class="pullIngredientTable"
+  [ngClass]="{
+    'open-search': dropdownVisible,
+    'open-size': dropdownOpen
+  }"
+>
+        <div class="ingredientRow">
+          <h3>Ingredient</h3>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
+
+          <div
+            class="autocomplete-dropdown"
+            *ngIf="dropdownRendered"
+            [class.fade-in]="dropdownVisible"
+            [class.fade-out]="!dropdownVisible"
+          >
+            <div
+              *ngFor="let item of suggestions"
+              class="autocomplete-item"
+              (click)="selectIngredient(item)"
+            >
+              {{ item }}
+            </div>
+          </div>
+        </div>
+
+        <div class="sizeRow">
+          <h3>Serving size</h3>
+          <div class="rowWrapper">
+            <input
+              type="number"
+              placeholder="100"
+              [(ngModel)]="quantity"
+            />
+
+            <!-- 🧠 Custom Select Dropdown -->
+            <div class="custom-select-wrapper">
+              <div class="custom-select" (click)="toggleDropdown()">
+                <span>{{ unit }}</span>
+              </div>
+
+              <ul class="custom-options" *ngIf="dropdownOpen">
+                <li
+                  *ngFor="let opt of unitOptions"
+                  (click)="selectUnit(opt)"
+                  [class.selected]="opt === unit"
+                >
+                  {{ opt }}
+                </li>
+              </ul>
+            </div>
+
+            <img
+              class="addIcon"
+              src="../../assets/img/addToGreen.png"
+              (click)="addIngredient()"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 🍅 Ingredient List -->
+      <div class="pushIngredientTable" [ngClass]="'open-' + ingredients.length">
+        <h3>List of your ingredients</h3>
+        <div class="listRow">
+          <div
+            *ngFor="let ingredient of ingredients; let i = index"
+            class="ingredient-item fade-in"
+          >
+            <div class="ingredientData">
+              <ng-container *ngIf="editIndex !== i; else editMode">
+                <div class="nameWrapper">
+                  <span class="ingredient-qty">
+                    {{ ingredient.quantity }} {{ ingredient.unit }}
+                  </span>
+                  <span class="ingredient-name">
+                    {{ ingredient.name }}
+                  </span>
+                </div>
+              </ng-container>
+
+              <ng-template #editMode>
+                <div class="nameWrapper">
+                  <input
+                    type="number"
+                    [(ngModel)]="editableIngredient.quantity"
+                    class="edit-input quantity"
+                  />
+                  <select
+                    [(ngModel)]="editableIngredient.unit"
+                    class="edit-select"
+                  >
+                    <option value="g">g</option>
+                    <option value="ml">ml</option>
+                    <option value="pcs">pcs</option>
+                  </select>
+                  <span class="ingredient-name">
+                    {{ ingredient.name }}
+                  </span>
+                </div>
+                <div class="ingredientEdit">
+                  <img
+                    src="../../assets/img/save.png"
+                    class="save-icon"
+                    (click)="saveIngredient(i)"
+                  />
+                  <img
+                    (click)="removeIngredient(i)"
+                    src="../../assets/img/delete.png"
+                  />
+                </div>
+              </ng-template>
+            </div>
+
+            <div class="ingredientEdit">
+              <img
+                *ngIf="editIndex !== i"
+                src="../../assets/img/edit.png"
+                (click)="startEdit(i)"
+              />
+              <img
+                *ngIf="editIndex !== i"
+                (click)="removeIngredient(i)"
+                src="../../assets/img/delete.png"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btnWrapper">
+      <button class="nextStepBtn">Next Step</button>
+    </div>
+  </div>
 </div>

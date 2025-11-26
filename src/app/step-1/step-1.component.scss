@@ -93,11 +93,6 @@ h1 {
 }
 
 
-
-.pullIngredientTable.open {
-    height: 20rem;
-}
-
 .pullIngredientTable,
 .pushIngredientTable {
     background-color: #3960394D;
@@ -115,6 +110,15 @@ h1 {
     flex-direction: row;
     justify-content: space-between;
     height: 8rem;
+
+
+    &.open-size {
+        height: 13rem;
+    }
+
+    &.open-search {
+        height: 18rem;
+    }
 
 }
 
@@ -172,24 +176,107 @@ h3 {
     }
 }
 
-input,
-select {
+input {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 36px;
-    text-align: center;
-    padding: 0px;
-    margin: 0px;
-    padding-block: 0px !important;
-    padding-inline: 0px !important;
     border-radius: 20px;
-    border-style: unset;
+    background: #FAF0E6CC;
+    border: 1px solid #1e5515;
+    color: #1e5515;
+    font-family: 'quicksandBook';
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    text-align: center;
+    vertical-align: center ;
+
+    &:hover {
+        background: rgba(30, 85, 21, 0.05);
+    }
+
+    &:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        transform: none;
+        transition: none;
+    }
 }
 
-select {
-    width: 71px;
+.custom-select-wrapper {
+    position: relative;
+    width: 80px;
 }
+
+.custom-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    border-radius: 20px;
+    background: #FAF0E6CC;
+    border: 1px solid #1e5515;
+    color: #1e5515;
+    font-family: 'quicksandBook';
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+
+    &:hover {
+        background: rgba(30, 85, 21, 0.05);
+    }
+}
+
+.custom-options {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 4px 0;
+    margin: 0;
+    z-index: 50;
+    animation: fadeInDropdown 0.2s ease;
+
+    li {
+        padding: 8px 0;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-family: 'quicksandBook';
+        color: #1e5515;
+
+        &:hover {
+            background: rgba(30, 85, 21, 0.1);
+        }
+
+        &.selected {
+            background: rgba(30, 85, 21, 0.2);
+            font-weight: 600;
+        }
+    }
+}
+
+@keyframes fadeInDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 
 .sizeRow {
     display: flex;
@@ -201,6 +288,28 @@ select {
     input {
         width: 30%;
     }
+
+    input::placeholder {
+        color: #aaa; // Standardfarbe
+        transition: opacity 0.2s ease;
+    }
+
+    input:focus::placeholder {
+        opacity: 0; // verschwindet weich
+    }
+
+    /* Entfernt Pfeile in Chrome, Edge, Safari, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Entfernt Pfeile in Firefox */
+    input {
+        -moz-appearance: textfield;
+    }
+
 }
 
 .listRow {
