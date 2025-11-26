@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-
 interface Ingredient {
   name: string;
   quantity: number | null;
@@ -24,59 +23,71 @@ export class Step1Component {
   unit = 'g';
   ingredients: Ingredient[] = [];
 
-  constructor(private http: HttpClient) { }
+  dropdownVisible = false; // Sichtbarkeit (CSS fade)
+  dropdownRendered = false; // Existenz im DOM (ngIf)
 
-  dropdownVisible = false;
+  editIndex: number | null = null;
+  editableIngredient: Ingredient = { name: '', quantity: 0, unit: 'g' };
 
-onSearch() {
-  const query = this.searchTerm.trim();
+  constructor(private http: HttpClient) {}
 
-  // 🟥 Wenn leer -> sanft ausblenden
-  if (!query || query.length < 2) {
-    if (this.dropdownVisible) {
-      this.dropdownVisible = false;
+  // 🔍 Suche + Vorschläge holen
+  onSearch() {
+    const query = this.searchTerm.trim();
 
-      // ⏳ Warte, bis Fade-Out fertig ist, dann Suggestions löschen
-      setTimeout(() => {
-        this.suggestions = [];
-      }, 250);
-    }
-    return;
-  }
-
-  // 🟢 Wenn Eingabe valide -> Daten holen
-  const url = `http://localhost:5678/webhook/ingredients?query=${query}`;
-  this.http.get<any[]>(url).subscribe({
-    next: (data) => {
-      const results = data?.[0]?.queries ?? [];
-      if (results.length === 0) {
-        // Nichts gefunden -> sanft ausblenden
+    // 🟥 Wenn Eingabe leer oder zu kurz → Fade-Out + Entfernen
+    if (!query || query.length < 2) {
+      if (this.dropdownVisible) {
         this.dropdownVisible = false;
-        setTimeout(() => (this.suggestions = []), 250);
-        return;
+        setTimeout(() => {
+          this.dropdownRendered = false;
+          this.suggestions = [];
+        }, 250); // muss mit CSS-Animation übereinstimmen
       }
+      return;
+    }
 
-      // Neue Ergebnisse -> Dropdown anzeigen
-      this.suggestions = results;
-      setTimeout(() => (this.dropdownVisible = true), 10);
-    },
-    error: (err) => {
-      console.error('Fehler bei Ingredient-Request:', err);
-      this.dropdownVisible = false;
-      setTimeout(() => (this.suggestions = []), 250);
-    },
-  });
-}
+    // 🟩 Wenn Eingabe gültig → Vorschläge abrufen
+    const url = `http://localhost:5678/webhook/ingredients?query=${encodeURIComponent(query)}`;
+    this.http.get<any[]>(url).subscribe({
+      next: (data) => {
+        const results = data?.[0]?.queries ?? [];
 
+        if (!results || results.length === 0) {
+          this.dropdownVisible = false;
+          setTimeout(() => {
+            this.dropdownRendered = false;
+            this.suggestions = [];
+          }, 250);
+          return;
+        }
 
+        // Vorschläge da → Dropdown aktivieren
+        this.suggestions = results;
+        this.dropdownRendered = true;
 
-
-
+        // Kurzer Delay für flüssige CSS-Transition
+        setTimeout(() => (this.dropdownVisible = true), 10);
+      },
+      error: (err) => {
+        console.error('Fehler bei Ingredient-Request:', err);
+        this.dropdownVisible = false;
+        setTimeout(() => {
+          this.dropdownRendered = false;
+          this.suggestions = [];
+        }, 250);
+      },
+    });
+  }
 
   // 🧩 Vorschlag auswählen
   selectIngredient(item: string) {
     this.searchTerm = item;
-    this.suggestions = [];
+    this.dropdownVisible = false;
+    setTimeout(() => {
+      this.dropdownRendered = false;
+      this.suggestions = [];
+    }, 250);
   }
 
   // ➕ Ingredient hinzufügen
@@ -92,27 +103,27 @@ onSearch() {
 
     this.ingredients.push(ingredient);
 
-    // Reset
+    // Reset nach Hinzufügen
     this.searchTerm = '';
     this.quantity = null;
     this.unit = 'g';
-    this.suggestions = [];
+    this.dropdownVisible = false;
+    setTimeout(() => {
+      this.dropdownRendered = false;
+      this.suggestions = [];
+    }, 250);
   }
 
+  // 🗑️ Ingredient entfernen (mit Fade-Out)
   removeIngredient(index: number) {
     const element = document.querySelectorAll('.ingredient-item')[index];
     if (element) {
       element.classList.add('fade-out');
       setTimeout(() => {
         this.ingredients.splice(index, 1);
-      }, 200); // ⏱ gleiche Dauer wie deine fadeOut Animation
+      }, 200); // gleiche Dauer wie fadeOut CSS
     }
   }
-
-
-
-  editIndex: number | null = null;
-  editableIngredient: Ingredient = { name: '', quantity: 0, unit: 'g' };
 
   // ✏️ Bearbeiten starten
   startEdit(index: number) {
@@ -123,18 +134,13 @@ onSearch() {
   // 💾 Änderungen speichern
   saveIngredient(index: number) {
     if (!this.editableIngredient.name.trim()) return;
-
     this.ingredients[index] = { ...this.editableIngredient };
-    this.editIndex = null;
-    this.editableIngredient = { name: '', quantity: 0, unit: 'g' };
+    this.cancelEdit();
   }
 
-  // ❌ Abbrechen
+  // ❌ Bearbeitung abbrechen
   cancelEdit() {
     this.editIndex = null;
     this.editableIngredient = { name: '', quantity: 0, unit: 'g' };
   }
-
 }
-
-

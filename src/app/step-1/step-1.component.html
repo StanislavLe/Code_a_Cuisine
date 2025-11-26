@@ -8,21 +8,22 @@
 
         <div class="tableWrapper">
 
-            <div class="pullIngredientTable">
+            <div class="pullIngredientTable" [class.open]="dropdownVisible">
 
                 <div class="ingredientRow">
                     <h3>Ingredient</h3>
                     <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" />
-                    <!-- 🧠 Dropdown mit Gemini-Vorschlägen -->
-                    <div class="autocomplete-dropdown" [class.fade-in]="dropdownVisible"
-                        [class.fade-out]="!dropdownVisible"
-                        *ngIf="suggestions.length > 0 && searchTerm.trim().length > 0">
+
+                    <div class="autocomplete-dropdown" *ngIf="dropdownRendered" [class.fade-in]="dropdownVisible"
+                        [class.fade-out]="!dropdownVisible">
+
                         <div *ngFor="let item of suggestions" class="autocomplete-item"
                             (click)="selectIngredient(item)">
                             {{ item }}
                         </div>
                     </div>
                 </div>
+
 
                 <div class="sizeRow">
                     <h3>Serving size</h3>
@@ -39,7 +40,7 @@
                 </div>
 
             </div>
-            <div class="pushIngredientTable">
+            <div class="pushIngredientTable" [ngClass]="'open-' + ingredients.length">
                 <h3>List of your ingredients</h3>
                 <div class="listRow">
                     <div *ngFor="let ingredient of ingredients; let i = index" class="ingredient-item fade-in">

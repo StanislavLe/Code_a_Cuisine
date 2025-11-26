@@ -93,26 +93,60 @@ h1 {
 }
 
 
+
+.pullIngredientTable.open {
+    height: 20rem;
+}
+
 .pullIngredientTable,
 .pushIngredientTable {
     background-color: #3960394D;
     width: 100%;
     display: flex;
     align-items: start;
-    justify-content: space-between;
     padding: 24px;
     gap: 20px;
     border-radius: 20px;
-    animation: fadeInSmooth 0.25s ease-out forwards;
+    overflow: hidden;
+    transition: height 0.4s ease;
 }
 
 .pullIngredientTable {
     flex-direction: row;
+    justify-content: space-between;
+    height: 8rem;
+
 }
 
 .pushIngredientTable {
     flex-direction: column;
+    justify-content: start;
+    height: 8rem;
+    overflow: hidden;
+    transition: height 0.4s ease;
+
+    &.open-1 {
+        height: 10rem;
+    }
+
+    &.open-2 {
+        height: 12rem;
+    }
+
+    &.open-3 {
+        height: 14rem;
+    }
+
+    &.open-4 {
+        height: 16rem;
+    }
+
+    &.open-5 {
+        height: 18rem;
+    }
 }
+
+
 
 h3 {
     font-family: 'quicksandBook';
@@ -130,8 +164,8 @@ h3 {
     justify-content: center;
     align-items: center;
     flex-direction: column;
- /* 🪄 Animiertes „Wachsen“ */
-  transition: all 0.35s ease-in-out;
+    /* 🪄 Animiertes „Wachsen“ */
+    transition: all 0.35s ease-in-out;
 
     input {
         width: 100%;
@@ -165,7 +199,7 @@ select {
     padding-left: 56px;
 
     input {
-        width: 20%;
+        width: 30%;
     }
 }
 
@@ -176,8 +210,8 @@ select {
     flex-direction: column;
     width: 100%;
     gap: 8px;
- /* 🪄 Animiertes „Wachsen“ */
-  transition: all 0.35s ease-in-out;}
+    transition: all 0.35s ease-in-out;
+}
 
 .rowWrapper {
     display: flex;
@@ -188,29 +222,28 @@ select {
 
 
 .autocomplete-dropdown {
-  width: 60%;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-top: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  overflow-y: auto;
-  opacity: 0;
-  transform: translateY(-4px);
-  pointer-events: none;
-
-  &.fade-in {
-    animation: fadeInSmooth 0.25s ease-out forwards;
-    pointer-events: auto;
-  }
-
-  &.fade-out {
-    animation: fadeOutSmooth 0.25s ease-in forwards;
+    width: 60%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-4px);
     pointer-events: none;
-  }
-}
 
+    &.fade-in {
+        animation: fadeInSmooth 0.25s ease-out forwards;
+        pointer-events: auto;
+    }
+
+    &.fade-out {
+        animation: fadeOutSmooth 0.25s ease-in forwards;
+        pointer-events: none;
+    }
+}
 
 .autocomplete-item {
     padding: 10px;
@@ -224,11 +257,6 @@ select {
 }
 
 
-
-
-
-
-
 .ingredient-item {
     display: flex;
     justify-content: space-between;
@@ -239,11 +267,11 @@ select {
 }
 
 .ingredient-item.removing {
-  opacity: 0;
-  transform: translateY(-5px);
-  max-height: 0;
-  margin: 0;
-  padding: 0;
+    opacity: 0;
+    transform: translateY(-5px);
+    max-height: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .ingredientData {
