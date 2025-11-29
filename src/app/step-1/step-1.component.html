@@ -10,32 +10,17 @@
 
     <div class="tableWrapper">
       <!-- 🥦 Input Table -->
-<div
-  class="pullIngredientTable"
-  [ngClass]="{
+      <div class="pullIngredientTable" [ngClass]="{
     'open-search': dropdownVisible,
     'open-size': dropdownOpen
-  }"
->
+  }">
         <div class="ingredientRow">
           <h3>Ingredient</h3>
-          <input
-            type="text"
-            [(ngModel)]="searchTerm"
-            (input)="onSearch()"
-          />
+          <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" />
 
-          <div
-            class="autocomplete-dropdown"
-            *ngIf="dropdownRendered"
-            [class.fade-in]="dropdownVisible"
-            [class.fade-out]="!dropdownVisible"
-          >
-            <div
-              *ngFor="let item of suggestions"
-              class="autocomplete-item"
-              (click)="selectIngredient(item)"
-            >
+          <div class="autocomplete-dropdown" *ngIf="dropdownRendered" [class.fade-in]="dropdownVisible"
+            [class.fade-out]="!dropdownVisible">
+            <div *ngFor="let item of suggestions" class="autocomplete-item" (click)="selectIngredient(item)">
               {{ item }}
             </div>
           </div>
@@ -44,11 +29,7 @@
         <div class="sizeRow">
           <h3>Serving size</h3>
           <div class="rowWrapper">
-            <input
-              type="number"
-              placeholder="100"
-              [(ngModel)]="quantity"
-            />
+            <input type="number" placeholder="100" [(ngModel)]="quantity" />
 
             <!-- 🧠 Custom Select Dropdown -->
             <div class="custom-select-wrapper">
@@ -57,33 +38,25 @@
               </div>
 
               <ul class="custom-options" *ngIf="dropdownOpen">
-                <li
-                  *ngFor="let opt of unitOptions"
-                  (click)="selectUnit(opt)"
-                  [class.selected]="opt === unit"
-                >
+                <li *ngFor="let opt of unitOptions" (click)="selectUnit(opt)" [class.selected]="opt === unit">
                   {{ opt }}
                 </li>
               </ul>
             </div>
 
-            <img
-              class="addIcon"
-              src="../../assets/img/addToGreen.png"
-              (click)="addIngredient()"
-            />
+            <img class="addIcon" src="../../assets/img/addToGreen.png" (click)="addIngredient()" />
           </div>
         </div>
       </div>
 
       <!-- 🍅 Ingredient List -->
-      <div class="pushIngredientTable" [ngClass]="'open-' + ingredients.length">
+      <div class="pushIngredientTable" [ngClass]="
+       'open-' + ingredients.length + (editDropdownOpen ? ' open-edit' : '')
+     ">
+
         <h3>List of your ingredients</h3>
         <div class="listRow">
-          <div
-            *ngFor="let ingredient of ingredients; let i = index"
-            class="ingredient-item fade-in"
-          >
+          <div *ngFor="let ingredient of ingredients; let i = index" class="ingredient-item fade-in">
             <div class="ingredientData">
               <ng-container *ngIf="editIndex !== i; else editMode">
                 <div class="nameWrapper">
@@ -98,48 +71,42 @@
 
               <ng-template #editMode>
                 <div class="nameWrapper">
-                  <input
-                    type="number"
-                    [(ngModel)]="editableIngredient.quantity"
-                    class="edit-input quantity"
-                  />
-                  <select
-                    [(ngModel)]="editableIngredient.unit"
-                    class="edit-select"
-                  >
-                    <option value="g">g</option>
-                    <option value="ml">ml</option>
-                    <option value="pcs">pcs</option>
-                  </select>
+                  <!-- Menge -->
+                  <input type="number" [(ngModel)]="editableIngredient.quantity" class="edit-input quantity"
+                    placeholder="100" />
+
+                  <!-- Einheit (Dropdown wie oben) -->
+                  <div class="custom-select-wrapper">
+                    <div class="custom-select" (click)="toggleEditDropdown()">
+                      <span>{{ editableIngredient.unit }}</span>
+                    </div>
+
+                    <ul class="custom-options" *ngIf="editDropdownOpen">
+                      <li *ngFor="let opt of unitOptions" (click)="selectEditUnit(opt)"
+                        [class.selected]="opt === editableIngredient.unit">
+                        {{ opt }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Name -->
                   <span class="ingredient-name">
                     {{ ingredient.name }}
                   </span>
                 </div>
+
+                <!-- Buttons -->
                 <div class="ingredientEdit">
-                  <img
-                    src="../../assets/img/save.png"
-                    class="save-icon"
-                    (click)="saveIngredient(i)"
-                  />
-                  <img
-                    (click)="removeIngredient(i)"
-                    src="../../assets/img/delete.png"
-                  />
+                  <img src="../../assets/img/save.png" class="save-icon" (click)="saveIngredient(i)" />
+                  <img src="../../assets/img/delete.png" (click)="removeIngredient(i)" />
                 </div>
               </ng-template>
+
             </div>
 
             <div class="ingredientEdit">
-              <img
-                *ngIf="editIndex !== i"
-                src="../../assets/img/edit.png"
-                (click)="startEdit(i)"
-              />
-              <img
-                *ngIf="editIndex !== i"
-                (click)="removeIngredient(i)"
-                src="../../assets/img/delete.png"
-              />
+              <img *ngIf="editIndex !== i" src="../../assets/img/edit.png" (click)="startEdit(i)" />
+              <img *ngIf="editIndex !== i" (click)="removeIngredient(i)" src="../../assets/img/delete.png" />
             </div>
           </div>
         </div>

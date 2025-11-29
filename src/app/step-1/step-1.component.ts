@@ -31,6 +31,7 @@ export class Step1Component implements AfterViewInit {
 
   editIndex: number | null = null;
   editableIngredient: Ingredient = { name: '', quantity: 0, unit: 'g' };
+editDropdownOpen = false;
 
   constructor(
     private http: HttpClient,
@@ -91,6 +92,19 @@ onSearch() {
     },
   });
 }
+
+
+// Öffnen/Schließen des Dropdowns im Edit-Modus
+toggleEditDropdown() {
+  this.editDropdownOpen = !this.editDropdownOpen;
+}
+
+// Einheit im Edit-Modus auswählen
+selectEditUnit(opt: string) {
+  this.editableIngredient.unit = opt;
+  this.editDropdownOpen = false;
+}
+
 
 // 🧠 Custom Select Dropdown
 toggleDropdown() {
