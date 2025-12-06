@@ -1,1 +1,137 @@
-<p>step-2 works!</p>
+<div class="step2Content">
+  <img class="logo" src="../../assets/img/logoGreen.png" />
+  <div class="spacer">
+    <div class="step2Headline">
+      <h1>Choose your preferences</h1>
+    </div>
+
+    <div class="aboutTheCookSpacer">
+      <!-- Portionen -->
+      <div class="portionRow">
+        <p>How many portions you need?</p>
+        <div class="portionWrapper">
+          <img class="icon fewer" src="../../assets/img/fewer.png" (click)="decreasePortions()" />
+          <div class="portionNumber">
+            <p>{{ portionCount }}</p>
+            <p>Portions</p>
+          </div>
+          <img class="icon more" src="../../assets/img/more.png" (click)="increasePortions()" />
+        </div>
+      </div>
+
+      <!-- Personen -->
+      <div class="personRow">
+        <p>How many are cooking?</p>
+        <div class="personWrapper">
+          <img class="icon fewer" src="../../assets/img/fewer.png" (click)="decreasePersons()" />
+          <div class="personNumber">
+            <p>{{ personCount }}</p>
+            <p>{{ personCount === 1 ? 'Person' : 'People' }}</p>
+          </div>
+          <img class="icon more" src="../../assets/img/more.png" (click)="increasePersons()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="optionField">
+      <!-- Cooking Time -->
+      <div class="cookingTime">
+        <div class="headlines">
+          <img src="../../assets/img/cookingTime.png" />
+          <h3>Cooking time:</h3>
+        </div>
+
+        <div class="options">
+          <div>
+            <button 
+              (click)="toggleCookingTime('Quick')" 
+              [class.selected]="selectedCookingTimes.includes('Quick')">
+              Quick
+            </button>
+            <p>20min-</p>
+          </div>
+          <div>
+            <button 
+              (click)="toggleCookingTime('Medium')" 
+              [class.selected]="selectedCookingTimes.includes('Medium')">
+              Medium
+            </button>
+            <p>25-40min</p>
+          </div>
+          <div>
+            <button 
+              (click)="toggleCookingTime('Complex')" 
+              [class.selected]="selectedCookingTimes.includes('Complex')">
+              Complex
+            </button>
+            <p>45min+</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuisine -->
+      <div class="cuisine">
+        <div class="headlines">
+          <img src="../../assets/img/cuisine.png" />
+          <h3>Cuisine:</h3>
+        </div>
+
+        <div class="options">
+          <button 
+            (click)="toggleCuisine('German')" 
+            [class.selected]="selectedCuisines.includes('German')">German</button>
+          <button 
+            (click)="toggleCuisine('Italian')" 
+            [class.selected]="selectedCuisines.includes('Italian')">Italian</button>
+          <button 
+            (click)="toggleCuisine('Indian')" 
+            [class.selected]="selectedCuisines.includes('Indian')">Indian</button>
+          <button 
+            (click)="toggleCuisine('Japanese')" 
+            [class.selected]="selectedCuisines.includes('Japanese')">Japanese</button>
+          <button 
+            (click)="toggleCuisine('Gourmet')" 
+            [class.selected]="selectedCuisines.includes('Gourmet')">Gourmet</button>
+          <button 
+            (click)="toggleCuisine('Fusion')" 
+            [class.selected]="selectedCuisines.includes('Fusion')">Fusion</button>
+        </div>
+      </div>
+
+      <!-- Diet Preferences -->
+      <div class="dietPreferences">
+        <div class="headlines">
+          <img src="../../assets/img/dietPreferences.png" />
+          <h3>Diet preferences:</h3>
+        </div>
+
+        <div class="options">
+          <button 
+            (click)="toggleDiet('Vegetarian')" 
+            [class.selected]="selectedDiets.includes('Vegetarian')">Vegetarian</button>
+          <button 
+            (click)="toggleDiet('Vegan')" 
+            [class.selected]="selectedDiets.includes('Vegan')">Vegan</button>
+          <button 
+            (click)="toggleDiet('Gluten-free')" 
+            [class.selected]="selectedDiets.includes('Gluten-free')">Gluten-free</button>
+          <button 
+            (click)="toggleDiet('Lactose-free')" 
+            [class.selected]="selectedDiets.includes('Lactose-free')">Lactose-free</button>
+          <button 
+            (click)="toggleDiet('Keto')" 
+            [class.selected]="selectedDiets.includes('Keto')">Keto</button>
+          <button 
+            (click)="toggleDiet('No preferences')" 
+            [class.selected]="selectedDiets.includes('No preferences')">No preferences</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <div>
+      <button class="generateBtn">Generate a recipe</button>
+    </div>
+  </div>
+</div>

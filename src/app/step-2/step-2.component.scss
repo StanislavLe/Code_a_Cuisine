@@ -1,0 +1,179 @@
+.step2Content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: row;
+    height: 100dvh;
+    text-align: center;
+    gap: 16px;
+    padding: 0 50px;
+    font-family: 'quicksandBook';
+}
+
+.spacer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    width: 100%;
+}
+
+.step2Headline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    width: 100%;
+}
+
+h1 {
+    font-family: 'quicksandBook';
+    font-size: 28px;
+    margin: 0;
+    letter-spacing: 0%;
+    font-weight: 700;
+}
+
+.aboutTheCookSpacer {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+
+    p {
+        font-size: 20px;
+    }
+}
+
+.portionWrapper,
+.personWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.portionNumber,
+.personNumber {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.icon {
+    width: 28px;
+    height: 28px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon.fewer {
+    background-image: url('../../assets/img/fewer.png');
+
+    &:hover {
+        background-image: url('../../assets/img/fewerHover.png');
+    }
+
+    &:active {
+        background-image: url('../../assets/img/fewerClick.png');
+    }
+}
+
+.icon.more {
+    background-image: url('../../assets/img/more.png');
+
+    &:hover {
+        background-image: url('../../assets/img/moreHover.png');
+    }
+
+    &:active {
+        background-image: url('../../assets/img/moreClick.png');
+    }
+}
+
+.optionField {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    width: 70%;
+    background-color: #39603933;
+    border-radius: 20px;
+    padding: 32px 24px;
+    gap: 32px;
+
+    .headlines {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .options {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 24px;
+
+        p {
+            font-family: 'quicksandBook';
+            font-size: 16px;
+            margin: 4px;
+        }
+    }
+
+    button {
+        border-radius: 30px;
+        border-style: unset;
+        background-color: #FAF0E6;
+        padding: 6px 12px;
+        font-size: 20px;
+        cursor: pointer;
+        font-family: 'quicksandBook';
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            background-color: #e0d8cd;
+        }
+
+        &.selected {
+            background-color: #e6faee;
+            border: 1px solid #27ae60;
+            transform: scale(1.05);
+        }
+    }
+}
+
+
+
+
+.generateBtn {
+    margin-top: 20px;
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: #1E5515;
+    color: #FAF0E6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'quicksandBold';
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #379c28;
+        transition: background-color 0.3s ease;
+    }
+}

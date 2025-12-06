@@ -2,6 +2,8 @@ import { Component, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
+
 
 interface Ingredient {
   name: string;
@@ -12,7 +14,7 @@ interface Ingredient {
 @Component({
   selector: 'app-step1',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './step-1.component.html',
   styleUrls: ['./step-1.component.scss'],
 })
