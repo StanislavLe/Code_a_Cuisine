@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { RecipeDataService } from '../services/recipe-data.service';
 
 @Component({
   selector: 'app-step2',
@@ -17,70 +19,92 @@ export class Step2Component {
   readonly minPersons = 1;
   readonly maxPersons = 3;
 
-  // --- Updated state variables ---
   selectedCookingTimes: string[] = [];
   selectedCuisines: string[] = [];
   selectedDiets: string[] = [];
 
-  // --- Portion logic ---
+  constructor(
+    private recipeService: RecipeDataService,
+    private http: HttpClient
+  ) {}
+
+ngOnInit() {
+  const prefs = this.recipeService.getPreferences();
+  this.portionCount = prefs.portions;
+  this.personCount = prefs.persons;
+  this.selectedCookingTimes = [...prefs.cookingTimes];
+  this.selectedCuisines = [...prefs.cuisines];
+  this.selectedDiets = [...prefs.diets];
+}
+
+
   increasePortions() {
-    if (this.portionCount < this.maxPortions) {
-      this.portionCount++;
-    }
+    if (this.portionCount < this.maxPortions) this.portionCount++;
   }
 
   decreasePortions() {
-    if (this.portionCount > this.minPortions) {
-      this.portionCount--;
-    }
+    if (this.portionCount > this.minPortions) this.portionCount--;
   }
 
-  // --- Person logic ---
   increasePersons() {
-    if (this.personCount < this.maxPersons) {
-      this.personCount++;
-    }
+    if (this.personCount < this.maxPersons) this.personCount++;
   }
 
   decreasePersons() {
-    if (this.personCount > this.minPersons) {
-      this.personCount--;
-    }
+    if (this.personCount > this.minPersons) this.personCount--;
   }
 
-  // --- Cooking time logic ---
   toggleCookingTime(option: string) {
-    if (this.selectedCookingTimes.includes(option)) {
+    if (this.selectedCookingTimes.includes(option))
       this.selectedCookingTimes = this.selectedCookingTimes.filter(o => o !== option);
-    } else {
-      this.selectedCookingTimes.push(option);
-    }
+    else this.selectedCookingTimes.push(option);
   }
 
-  // --- Cuisine logic ---
   toggleCuisine(option: string) {
-    if (this.selectedCuisines.includes(option)) {
+    if (this.selectedCuisines.includes(option))
       this.selectedCuisines = this.selectedCuisines.filter(o => o !== option);
-    } else {
-      this.selectedCuisines.push(option);
-    }
+    else this.selectedCuisines.push(option);
   }
 
-  // --- Diet preferences logic ---
   toggleDiet(option: string) {
     if (option === 'No preferences') {
       this.selectedDiets = ['No preferences'];
     } else {
-      // Entferne "No preferences", wenn es existiert
       this.selectedDiets = this.selectedDiets.filter(o => o !== 'No preferences');
-
-      if (this.selectedDiets.includes(option)) {
-        // Toggle abwählen
+      if (this.selectedDiets.includes(option))
         this.selectedDiets = this.selectedDiets.filter(o => o !== option);
-      } else {
-        // Hinzufügen
-        this.selectedDiets.push(option);
-      }
+      else this.selectedDiets.push(option);
     }
   }
+
+generateRecipe() {
+  // 🧠 1️⃣ Speichere aktuelle Präferenzen im Service
+  this.recipeService.setPreferences({
+    portions: this.portionCount,
+    persons: this.personCount,
+    cookingTimes: this.selectedCookingTimes,
+    cuisines: this.selectedCuisines,
+    diets: this.selectedDiets,
+  });
+
+  // 🧠 2️⃣ Hol das vollständige JSON aus dem Service
+  const finalData = this.recipeService.getRecipeData();
+
+  // 🧾 3️⃣ Logge das JSON im Browser
+  console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
+
+  // 🌐 4️⃣ Schick das JSON an deinen n8n-Webhook
+  this.http
+    .post('http://localhost:5678/webhook-test/webhook/recipe-generator', finalData)
+    .subscribe({
+      next: (res) => {
+        console.log('✅ n8n Workflow Response:', res);
+      },
+      error: (err) => {
+        console.error('❌ Fehler beim Aufruf des Workflows:', err);
+      },
+    });
+}
+
+
 }
