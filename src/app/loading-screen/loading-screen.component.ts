@@ -18,7 +18,7 @@ export class LoadingScreenComponent implements OnInit, OnDestroy {
   constructor(private recipeService: RecipeDataService, private router: Router) {}
 
   ngOnInit() {
-    const timeout$ = timer(15000); // max 15 Sek warten
+   // const timeout$ = timer(15000); // max 15 Sek warten
 
     this.sub = this.recipeService.isRecipeReady().subscribe((ready) => {
       if (ready) {
@@ -27,13 +27,19 @@ export class LoadingScreenComponent implements OnInit, OnDestroy {
       }
     });
 
-    timeout$.subscribe(() => {
-      this.loadingText = '⏰ Timeout reached. Please try again.';
-      console.warn('Timeout reached');
-    });
+    //timeout$.subscribe(() => {
+      //this.loadingText = '⏰ Timeout reached. Please try again.';
+      //console.warn('Timeout reached');
+    //});
   }
 
   ngOnDestroy() {
     if (this.sub) this.sub.unsubscribe();
   }
 }
+
+
+
+
+
+//nur die kommentierungen retten

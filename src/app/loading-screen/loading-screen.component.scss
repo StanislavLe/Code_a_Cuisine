@@ -1,0 +1,36 @@
+.loadingContent {
+    background-color: #396039;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    height: 100dvh;
+    text-align: center;
+    gap: 16px;
+    padding: 0 50px;
+    font-family: 'quicksandBook';
+
+    .loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+
+    p {
+        font-family: 'quicksandBold';
+        color: #FAF0E6;
+        font-size: 48px;
+        margin-top: 16px;
+        font-weight: 700;
+    }
+}
+}
+
+.animationBox {
+    background-color: #C4D0C4;
+    width: 253px;
+    height: 309px;
+    border-radius: 20px;
+}

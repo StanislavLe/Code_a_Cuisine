@@ -37,7 +37,17 @@ export class Step2Component {
     this.selectedCookingTimes = [...prefs.cookingTimes];
     this.selectedCuisines = [...prefs.cuisines];
     this.selectedDiets = [...prefs.diets];
+    this.resetUI();
   }
+
+  private resetUI() {
+    this.portionCount = 2;
+    this.personCount = 1;
+    this.selectedCookingTimes = [];
+    this.selectedCuisines = [];
+    this.selectedDiets = [];
+  }
+
 
   increasePortions() {
     if (this.portionCount < this.maxPortions) this.portionCount++;
@@ -78,38 +88,38 @@ export class Step2Component {
     }
   }
 
- generateRecipe() {
-  // 1️⃣ Speichere Einstellungen
-  this.recipeService.setPreferences({
-    portions: this.portionCount,
-    persons: this.personCount,
-    cookingTimes: this.selectedCookingTimes,
-    cuisines: this.selectedCuisines,
-    diets: this.selectedDiets,
-  });
-
-  // 2️⃣ Hol das JSON
-  const finalData = this.recipeService.getRecipeData();
-  console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
-
-  // 3️⃣ Direkt zum Loading Screen navigieren
-  this.router.navigate(['/loading-screen']);
-
-  // 4️⃣ Im Hintergrund n8n aufrufen
-  this.http.post('http://localhost:5678/webhook/recipe-generator', finalData)
-    .subscribe({
-      next: (res) => {
-        console.log('✅ n8n Workflow Response:', res);
-        this.recipeService.setResult(res);
-
-        // 5️⃣ Jetzt weiter zu Results
-        this.router.navigate(['/results']);
-      },
-      error: (err) => {
-        console.error('❌ Fehler beim Aufruf des Workflows:', err);
-      },
+  generateRecipe() {
+    // 1️⃣ Speichere Einstellungen
+    this.recipeService.setPreferences({
+      portions: this.portionCount,
+      persons: this.personCount,
+      cookingTimes: this.selectedCookingTimes,
+      cuisines: this.selectedCuisines,
+      diets: this.selectedDiets,
     });
-}
+
+    // 2️⃣ Hol das JSON
+    const finalData = this.recipeService.getRecipeData();
+    console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
+
+    // 3️⃣ Direkt zum Loading Screen navigieren
+    this.router.navigate(['/loading-screen']);
+
+    // 4️⃣ Im Hintergrund n8n aufrufen
+    this.http.post('http://localhost:5678/webhook/recipe-generator', finalData)
+      .subscribe({
+        next: (res) => {
+          console.log('✅ n8n Workflow Response:', res);
+          this.recipeService.setResult(res);
+
+          // 5️⃣ Jetzt weiter zu Results
+          this.router.navigate(['/results']);
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Aufruf des Workflows:', err);
+        },
+      });
+  }
 
 
 }
