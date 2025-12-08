@@ -1,5 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 import { RecipeData } from '../models/recipe-data.model';
 
 const STORAGE_KEY = 'recipeData';
@@ -16,6 +17,8 @@ export class RecipeDataService {
       diets: [],
     },
   };
+
+  private recipeReady$ = new BehaviorSubject<boolean>(false);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.loadFromStorage();
@@ -41,12 +44,27 @@ export class RecipeDataService {
     return this.recipeData.preferences;
   }
 
+  // --- Recipe Results ---
+  setResult(result: any) {
+    this.recipeData.result = result;
+    this.recipeReady$.next(true);
+    this.saveToStorage();
+  }
+
+  getResult() {
+    return this.recipeData.result;
+  }
+
+  isRecipeReady() {
+    return this.recipeReady$.asObservable();
+  }
+
   // --- JSON Output ---
   getRecipeData(): RecipeData {
     return this.recipeData;
   }
 
-  // --- Save / Load with Browser Check ---
+  // --- Save / Load ---
   private saveToStorage() {
     if (isPlatformBrowser(this.platformId)) {
       try {
@@ -81,6 +99,7 @@ export class RecipeDataService {
         diets: [],
       },
     };
+    this.recipeReady$.next(false);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem(STORAGE_KEY);
     }

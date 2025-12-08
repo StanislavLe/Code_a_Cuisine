@@ -1,1 +1,8 @@
-<p>results works!</p>
+<div *ngIf="recipe; else loading">
+  <h1>{{ recipe.title || 'Your Recipe' }}</h1>
+  <pre>{{ recipe | json }}</pre>
+</div>
+
+<ng-template #loading>
+  <p>No recipe data found.</p>
+</ng-template>

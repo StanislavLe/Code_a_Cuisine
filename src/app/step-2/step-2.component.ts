@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RecipeDataService } from '../services/recipe-data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-step2',
@@ -25,18 +26,18 @@ export class Step2Component {
 
   constructor(
     private recipeService: RecipeDataService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private router: Router,
+  ) { }
 
-ngOnInit() {
-  const prefs = this.recipeService.getPreferences();
-  this.portionCount = prefs.portions;
-  this.personCount = prefs.persons;
-  this.selectedCookingTimes = [...prefs.cookingTimes];
-  this.selectedCuisines = [...prefs.cuisines];
-  this.selectedDiets = [...prefs.diets];
-}
-
+  ngOnInit() {
+    const prefs = this.recipeService.getPreferences();
+    this.portionCount = prefs.portions;
+    this.personCount = prefs.persons;
+    this.selectedCookingTimes = [...prefs.cookingTimes];
+    this.selectedCuisines = [...prefs.cuisines];
+    this.selectedDiets = [...prefs.diets];
+  }
 
   increasePortions() {
     if (this.portionCount < this.maxPortions) this.portionCount++;
@@ -77,8 +78,8 @@ ngOnInit() {
     }
   }
 
-generateRecipe() {
-  // 🧠 1️⃣ Speichere aktuelle Präferenzen im Service
+ generateRecipe() {
+  // 1️⃣ Speichere Einstellungen
   this.recipeService.setPreferences({
     portions: this.portionCount,
     persons: this.personCount,
@@ -87,18 +88,22 @@ generateRecipe() {
     diets: this.selectedDiets,
   });
 
-  // 🧠 2️⃣ Hol das vollständige JSON aus dem Service
+  // 2️⃣ Hol das JSON
   const finalData = this.recipeService.getRecipeData();
-
-  // 🧾 3️⃣ Logge das JSON im Browser
   console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
 
-  // 🌐 4️⃣ Schick das JSON an deinen n8n-Webhook
-  this.http
-    .post('http://localhost:5678/webhook-test/webhook/recipe-generator', finalData)
+  // 3️⃣ Direkt zum Loading Screen navigieren
+  this.router.navigate(['/loading-screen']);
+
+  // 4️⃣ Im Hintergrund n8n aufrufen
+  this.http.post('http://localhost:5678/webhook/recipe-generator', finalData)
     .subscribe({
       next: (res) => {
         console.log('✅ n8n Workflow Response:', res);
+        this.recipeService.setResult(res);
+
+        // 5️⃣ Jetzt weiter zu Results
+        this.router.navigate(['/results']);
       },
       error: (err) => {
         console.error('❌ Fehler beim Aufruf des Workflows:', err);

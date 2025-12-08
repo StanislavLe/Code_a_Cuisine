@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RecipeDataService } from '../services/recipe-data.service';
 
 @Component({
   selector: 'app-results',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './results.component.html',
-  styleUrl: './results.component.scss'
+  styleUrls: ['./results.component.scss']
 })
-export class ResultsComponent {
+export class ResultsComponent implements OnInit {
+  recipe: any = null;
 
+  constructor(private recipeService: RecipeDataService) {}
+
+  ngOnInit() {
+    this.recipe = this.recipeService.getResult();
+    console.log('📦 Loaded recipe:', this.recipe);
+  }
 }

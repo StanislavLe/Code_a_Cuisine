@@ -7,4 +7,5 @@ export interface RecipeData {
     cuisines: string[];
     diets: string[];
   };
+  result?: any;
 }
