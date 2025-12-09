@@ -77,7 +77,6 @@ export class Step1Component implements AfterViewInit {
           }, 250);
           return;
         }
-
         this.suggestions = results;
         this.dropdownRendered = true;
         setTimeout(() => (this.dropdownVisible = true), 10);

@@ -29,8 +29,18 @@
 }
 
 .animationBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #C4D0C4;
     width: 253px;
     height: 309px;
     border-radius: 20px;
+}
+
+.loaderImage {
+    width: 254px;
+    height: auto;
+    position: relative;
+    bottom: 50px;
 }
