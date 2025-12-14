@@ -1,1 +1,76 @@
-<p>recipe works!</p>
+<div class="recipeContent">
+  <img class="logo" src="../../assets/img/logoGreen.png">
+  <div class="backButton" (click)="goBack()">
+    <img src="../../assets/img/back.png">
+    <p>Recipe results</p>
+  </div>
+
+
+  <div class="recipeBox" *ngIf="recipe; else notFound">
+
+    <div class="recipeHeader">
+      <div class="recipeInfo">
+        <div class="cookingTime">
+          <img src="../../assets/img/cookingTime.png">
+          <p>Cooking time</p>
+          <p> {{ recipe.total_time_minutes }} min
+          </p>
+        </div>
+        <h1>{{ recipe.recipe_name }}</h1>
+        <div class="chefInfo">
+          <p>Cooking person:</p>
+          <p>{{ recipe.helpers }}</p>
+          <div class="chefIcons"></div>
+        </div>
+      </div>
+
+<div class="dietInfo">
+      <div class="nutritionItem">
+        <p>Calories</p>
+        <p>{{ recipe.nutrition.calories }} kcal</p>
+      </div>
+      <div class="nutritionItem">
+        <p>Protein</p>
+        <p>{{ recipe.nutrition.protein }} g</p>
+      </div>
+      <div class="nutritionItem">
+        <p>Carbohydrates</p>
+        <p>{{ recipe.nutrition.carbohydrates }} g</p>
+      </div>
+      <div class="nutritionItem">
+        <p>Fat</p>
+        <p>{{ recipe.nutrition.fat }} g</p>
+      </div>
+</div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <p>{{ recipe.description }}</p>
+
+    <h3>Ingredients</h3>
+    <ul>
+      <li *ngFor="let ing of recipe.ingredients">
+        {{ ing.quantity }} {{ ing.unit }} {{ ing.name }}
+      </li>
+    </ul>
+
+    <h3>Instructions</h3>
+    <ol>
+      <li *ngFor="let step of recipe.instructions">
+        {{ step.text }}
+      </li>
+    </ol>
+  </div>
+
+  <ng-template #notFound>
+    <p>Recipe not found.</p>
+  </ng-template>
+</div>

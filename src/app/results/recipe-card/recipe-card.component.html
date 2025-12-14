@@ -3,7 +3,9 @@
     <img src="../../../assets/img/cardHeader.png">
     <h2>Recipe {{ index }}</h2>
   </div>
+
   <h2>{{ recipe?.recipe_name }}</h2>
+
   <div class="cookingTime">
     <img src="../../../assets/img/cookingTime.png">
     <p>Cooking time:</p>
@@ -11,5 +13,6 @@
       {{ recipe.total_time_minutes }} min
     </span>
   </div>
-  <button>View</button>
+
+  <button (click)="openRecipe()">View</button>
 </div>

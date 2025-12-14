@@ -16,7 +16,10 @@ export const routes: Routes = [
   { path: 'step2', component: Step2Component },
   { path: 'loading-screen', component: LoadingScreenComponent },
   { path: 'results', component: ResultsComponent },
-  { path: 'recipe', component: RecipeComponent },
+
+  // 🔹 Detailroute mit Rezept-ID
+  { path: 'recipe/:id', component: RecipeComponent },
+
   { path: 'cookbook', component: CookbookComponent },
   { path: 'cuisine', component: CuisineComponent },
   { path: 'recipe-list', component: RecipeListComponent },

@@ -121,5 +121,8 @@ export class Step2Component {
       });
   }
 
+  goBack() {
+    this.router.navigate(['/step1']);
+  }
 
 }
