@@ -1,6 +1,31 @@
-<div *ngIf="recipe; else loading">
-  <h1>{{ recipe.title || 'Your Recipe' }}</h1>
-  <pre>{{ recipe | json }}</pre>
+<div class="resultsContent" *ngIf="recipes?.length; else loading">
+  <img class="logo" src="../../assets/img/logoWhite.png" />
+
+  <div class="spacer">
+    <div class="header">
+      <div class="text">
+        <h1>The recipe results</h1>
+        <p>
+          We took what you have and let our AI do the thinking.
+          Here are 3 easy recipes you can make right now!
+        </p>
+
+        <div class="settingIcons" *ngIf="prefs as p">
+          <p *ngFor="let cuisine of p.cuisines">
+            {{ cuisine }}
+          </p>
+        </div>
+      </div>
+
+      <img class="resultsImg" src="../../assets/img/resultsHeader.png">
+    </div>
+
+    <div class="recipeCards">
+      <app-recipe-card *ngFor="let r of recipes; let i = index" [recipe]="r" [index]="i + 1">
+      </app-recipe-card>
+    </div>
+
+  </div>
 </div>
 
 <ng-template #loading>

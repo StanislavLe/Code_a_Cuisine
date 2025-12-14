@@ -1,0 +1,15 @@
+<div class="recipe-card">
+  <div class="card-header">
+    <img src="../../../assets/img/cardHeader.png">
+    <h2>Recipe {{ index }}</h2>
+  </div>
+  <h2>{{ recipe?.recipe_name }}</h2>
+  <div class="cookingTime">
+    <img src="../../../assets/img/cookingTime.png">
+    <p>Cooking time:</p>
+    <span *ngIf="recipe?.total_time_minutes">
+      {{ recipe.total_time_minutes }} min
+    </span>
+  </div>
+  <button>View</button>
+</div>

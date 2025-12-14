@@ -1,0 +1,54 @@
+.recipe-card {
+    background-color: #DBE0DB;
+    border-radius: 20px;
+    padding: 32px 24px;
+}
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+h2 {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 24px;
+    font-weight: 700;
+    color: #396039;
+    text-align: left;
+    margin: 2px;
+}
+
+.cookingTime {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 14px;
+    font-weight: 500;
+    color: #396039;
+    gap: 8px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: #FAF0E6;
+    color: #1E5515;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'quicksandBold';
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #e0d6c652;
+        transition: background-color 0.3s ease;
+    }
+}
