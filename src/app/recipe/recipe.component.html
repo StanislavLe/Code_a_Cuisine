@@ -24,50 +24,39 @@
         </div>
       </div>
 
-<div class="dietInfo">
-      <div class="nutritionItem">
-        <p>Calories</p>
-        <p>{{ recipe.nutrition.calories }} kcal</p>
+      <div class="quickInfo">
+        <div class="dietSettings">
+          <p class="diet">{{ recipe.dietary_preferences }}</p>
+        </div>
+        <p>Nutritional information</p>
+        <div class="dietInfo">
+          <div class="nutritionItem">
+            <p>Calories</p>
+            <p>{{ recipe.nutrition.calories }} kcal</p>
+          </div>
+          <div class="nutritionItem">
+            <p>Protein</p>
+            <p>{{ recipe.nutrition.protein_g }} g</p>
+          </div>
+          <div class="nutritionItem">
+            <p>Carbohydrates</p>
+            <p>{{ recipe.nutrition.carbs_g }} g</p>
+          </div>
+          <div class="nutritionItem">
+            <p>Fat</p>
+            <p>{{ recipe.nutrition.fat_g }} g</p>
+          </div>
+        </div>
       </div>
-      <div class="nutritionItem">
-        <p>Protein</p>
-        <p>{{ recipe.nutrition.protein }} g</p>
-      </div>
-      <div class="nutritionItem">
-        <p>Carbohydrates</p>
-        <p>{{ recipe.nutrition.carbohydrates }} g</p>
-      </div>
-      <div class="nutritionItem">
-        <p>Fat</p>
-        <p>{{ recipe.nutrition.fat }} g</p>
-      </div>
-</div>
+
+
+
+
+
+
+
 
     </div>
-
-
-
-
-
-
-
-
-
-    <p>{{ recipe.description }}</p>
-
-    <h3>Ingredients</h3>
-    <ul>
-      <li *ngFor="let ing of recipe.ingredients">
-        {{ ing.quantity }} {{ ing.unit }} {{ ing.name }}
-      </li>
-    </ul>
-
-    <h3>Instructions</h3>
-    <ol>
-      <li *ngFor="let step of recipe.instructions">
-        {{ step.text }}
-      </li>
-    </ol>
   </div>
 
   <ng-template #notFound>
