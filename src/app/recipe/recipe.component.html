@@ -19,9 +19,13 @@
         <h1>{{ recipe.recipe_name }}</h1>
         <div class="chefInfo">
           <p>Cooking person:</p>
-          <p>{{ recipe.helpers }}</p>
-          <div class="chefIcons"></div>
+          <p>{{ recipe?.helpers }}</p>
+
+          <div class="chefIcons">
+            <img *ngFor="let icon of getVisibleChefIcons()" [src]="icon" alt="Chef icon" />
+          </div>
         </div>
+
       </div>
 
       <div class="quickInfo">
@@ -48,15 +52,28 @@
           </div>
         </div>
       </div>
+    </div>
 
 
+    <div class="recipeIngredients">
+      <div>
+        <img src="../../assets/img/recipeIngredients.png">
+        <h2>Ingredients</h2>
+      </div>
 
-
-
-
+<div>
+      <ul>
+        <li *ngFor="let ingredient of recipe.ingredients">
+          {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
+        </li>
+      </ul>
+</div>
 
 
     </div>
+
+
+
   </div>
 
   <ng-template #notFound>

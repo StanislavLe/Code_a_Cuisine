@@ -16,7 +16,7 @@ export class RecipeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeDataService,
-    private router: Router           // 👈 HIER FEHLTE DER ROUTER
+    private router: Router   
   ) {}
 
   ngOnInit() {
@@ -43,4 +43,19 @@ export class RecipeComponent implements OnInit {
   goBack() {
     this.router.navigate(['/results']);
   }
+
+
+  chefIconPaths: string[] = [
+  '../../assets/img/chef1.png',
+  '../../assets/img/chef2.png',
+  '../../assets/img/chef3.png',
+  '../../assets/img/chef4.png',
+];
+
+getVisibleChefIcons(): string[] {
+  const helpers = Number(this.recipe?.helpers ?? 0);
+  const cooksToShow = Math.min(helpers, this.chefIconPaths.length); 
+  return this.chefIconPaths.slice(0, cooksToShow);
+}
+
 }
