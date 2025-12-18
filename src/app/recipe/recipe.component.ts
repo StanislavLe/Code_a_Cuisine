@@ -54,8 +54,27 @@ export class RecipeComponent implements OnInit {
 
 getVisibleChefIcons(): string[] {
   const helpers = Number(this.recipe?.helpers ?? 0);
-  const cooksToShow = Math.min(helpers, this.chefIconPaths.length); 
+  const cooksToShow = Math.min(helpers + 1, this.chefIconPaths.length);
   return this.chefIconPaths.slice(0, cooksToShow);
+}
+
+getChefImage(role: string): string {
+  const key = role.toLowerCase();
+  if (key.includes('chef')) return '../../assets/img/chef1.png';
+  if (key.includes('helfer 1')) return '../../assets/img/chef2.png';
+  if (key.includes('helfer 2')) return '../../assets/img/chef3.png';
+  if (key.includes('helfer 3')) return '../../assets/img/chef4.png';
+  return '../../assets/img/default_chef.png'; // fallback
+}
+
+
+get groupedInstructions() {
+  const groups: { [key: string]: any[] } = {};
+ this.recipe.instructions.forEach((inst: any) => {
+  if (!groups[inst.assigned_to]) groups[inst.assigned_to] = [];
+  groups[inst.assigned_to].push(inst);
+});
+  return groups;
 }
 
 }
