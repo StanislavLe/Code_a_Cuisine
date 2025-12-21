@@ -69,3 +69,59 @@
         }
     }
 }
+
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 60px;
+    width: 100%;
+}
+
+article {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    background-color: #DBE0DBB2;
+    padding: 16px 16px;
+    border-radius: 16px;
+}
+
+.overviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+.cookingTime {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 8px;
+
+    p {
+        margin: 0px;
+    }
+}
+
+.like {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 8px;
+    padding: 6PX 12px;
+    background-color: #3960394D;
+    border-radius: 30px;
+
+    p {
+        margin: 0px;
+    }
+
+    img {
+        width: 24px;
+        height: 24px;
+    }
+}
+}
