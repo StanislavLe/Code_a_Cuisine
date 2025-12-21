@@ -1,7 +1,9 @@
+// src/app/recipe/recipe.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';  // 👈 Router hier zusammen importieren
+import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeDataService } from '../services/recipe-data.service';
 import { CommonModule } from '@angular/common';
+import { FirestoreRecipeService } from '../services/firestore-recipe.service';
 
 @Component({
   selector: 'app-recipe',
@@ -13,10 +15,16 @@ import { CommonModule } from '@angular/common';
 export class RecipeComponent implements OnInit {
   recipe: any = null;
 
+ isLiking = false;
+hasLiked = false;
+isHovered = false;
+
+
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeDataService,
-    private router: Router   
+    private router: Router,
+    private firestoreRecipeService: FirestoreRecipeService
   ) {}
 
   ngOnInit() {
@@ -44,44 +52,78 @@ export class RecipeComponent implements OnInit {
     this.router.navigate(['/results']);
   }
 
+  // 🔥 LIKE-LOGIK
+  async onLike() {
+    if (!this.recipe || this.isLiking) return;
+
+    this.isLiking = true;
+
+    try {
+      const clientId = this.getOrCreateClientId();
+      const recipeData = this.recipeService.getRecipeData();
+
+      await this.firestoreRecipeService.saveLikedRecipe(
+        this.recipe,
+        recipeData,
+        clientId
+      );
+
+      this.hasLiked = true;
+      console.log('✅ Rezept im Kochbuch gespeichert / Like erhöht');
+    } catch (err) {
+      console.error('❌ Fehler beim Speichern des Rezepts in Firestore:', err);
+    } finally {
+      this.isLiking = false;
+    }
+  }
+
+  private getOrCreateClientId(): string {
+    const KEY = 'clientId';
+    let id = localStorage.getItem(KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem(KEY, id);
+    }
+    return id;
+  }
+
+  // === dein bisheriger Code bleibt ===
 
   chefIconPaths: string[] = [
-  '../../assets/img/chef1.png',
-  '../../assets/img/chef2.png',
-  '../../assets/img/chef3.png',
-  '../../assets/img/chef4.png',
-];
+    '../../assets/img/chef1.png',
+    '../../assets/img/chef2.png',
+    '../../assets/img/chef3.png',
+    '../../assets/img/chef4.png',
+  ];
 
-getVisibleChefIcons(): string[] {
-  const helpers = Number(this.recipe?.helpers ?? 0);
-  const cooksToShow = Math.min(helpers, this.chefIconPaths.length);
-  return this.chefIconPaths.slice(0, cooksToShow);
-}
+  getVisibleChefIcons(): string[] {
+    const helpers = Number(this.recipe?.helpers ?? 0);
+    const cooksToShow = Math.min(helpers, this.chefIconPaths.length);
+    return this.chefIconPaths.slice(0, cooksToShow);
+  }
 
-getChefImage(role: string): string {
-  const key = role.toLowerCase();
-  if (key.includes('helfer 1')) return '../../assets/img/chef1.png';
-  if (key.includes('helfer 2')) return '../../assets/img/chef2.png';
-  if (key.includes('helfer 3')) return '../../assets/img/chef3.png';
-  if (key.includes('helfer 4')) return '../../assets/img/chef4.png';
-  return '../../assets/img/default_chef.png'; // fallback
-}
+  getChefImage(role: string): string {
+    const key = role.toLowerCase();
+    if (key.includes('helfer 1')) return '../../assets/img/chef1.png';
+    if (key.includes('helfer 2')) return '../../assets/img/chef2.png';
+    if (key.includes('helfer 3')) return '../../assets/img/chef3.png';
+    if (key.includes('helfer 4')) return '../../assets/img/chef4.png';
+    return '../../assets/img/default_chef.png';
+  }
 
-
-get groupedInstructions() {
-  const groups: { [key: string]: any[] } = {};
- this.recipe.instructions.forEach((inst: any) => {
-  if (!groups[inst.assigned_to]) groups[inst.assigned_to] = [];
-  groups[inst.assigned_to].push(inst);
-});
-  return groups;
-}
+  get groupedInstructions() {
+    const groups: { [key: string]: any[] } = {};
+    this.recipe.instructions.forEach((inst: any) => {
+      if (!groups[inst.assigned_to]) groups[inst.assigned_to] = [];
+      groups[inst.assigned_to].push(inst);
+    });
+    return groups;
+  }
 
   generateNewRecipe() {
     this.router.navigate(['/step1']);
-        this.recipeService.reset();
+    this.recipeService.reset();
   }
-
 
   goToCookbook() {
     this.router.navigate(['/cookbook']);

@@ -113,11 +113,19 @@
           </div>
         </div>
 
-        <div class="likeBox">
+        <div class="likeBox" (click)="onLike()">
           <p>Just finished this meal? </p>
           <p>Give it a heart, so that the others know this is delicious.</p>
-          <img src="../../assets/img/like.png">
+          <img [src]="
+    hasLiked
+      ? 'assets/img/likeActive.png'
+      : isHovered
+        ? 'assets/img/likeHover.png'
+        : 'assets/img/like.png'
+  " (mouseenter)="isHovered = true" (mouseleave)="isHovered = false" [class.disabled]="isLiking" alt="Like" />
+
         </div>
+
       </div>
     </div>
     <div class="inspirationBox">

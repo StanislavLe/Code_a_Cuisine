@@ -1,1 +1,77 @@
-<p>cookbook works!</p>
+<div class="cookbookContent">
+    <img class="logo" src="assets/img/logoGreen.png" />
+
+    <div class="backButton">
+        <img src="assets/img/back.png" />
+        <p>Back</p>
+    </div>
+
+    <div class="cookbookHeader">
+        <div class="textSection">
+            <h1>Cookbook</h1>
+            <p>From quick bites to gourmet delights, explore them all in our
+                ultimate cookbook and get inspired for your next culinary adventure.</p>
+        </div>
+
+        <div class="favDishes">
+            <div class="favDishesHeader">
+                <p>Most liked recipes</p>
+                <img src="../../assets/img/like.png" />
+            </div>
+            <div class="favDishesContent">
+                <div class="favDish"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- src/app/cookbook/cookbook.component.html     <app-cuisine></app-cuisine>
+ -->
+
+    <div class="cookbook">
+        <h1>Cookbook</h1>
+
+        <section class="top-liked">
+            <h2>🔥 Most liked recipes</h2>
+
+            <ng-container *ngIf="topRecipes$ | async as recipes; else loading">
+                <div *ngIf="recipes.length === 0">
+                    <p>No recipes in the cookbook yet.</p>
+                    <a routerLink="/step1">Generate your first recipe</a>
+                </div>
+
+                <div class="recipe-grid" *ngIf="recipes.length > 0">
+                    <article class="recipe-card" *ngFor="let r of recipes">
+                        <h3>{{ r.recipe_name }}</h3>
+                        <p class="likes">{{ r.likes }} ❤️ likes</p>
+
+                        <p>Cooking time: {{ r.total_time_minutes }} min</p>
+
+                        <h4>Dietary preferences</h4>
+                        <p class="tags">
+                            <span *ngFor="let pref of r.dietary_preferences">
+                                {{ pref }}
+                            </span>
+                        </p>
+
+                        <h4>Ingredients (preview)</h4>
+                        <ul>
+                            <li *ngFor="let ing of r.ingredients.available | slice:0:3">
+                                {{ ing?.quantity }} {{ ing?.unit }} {{ ing?.name }}
+                            </li>
+
+
+                        </ul>
+                    </article>
+                </div>
+            </ng-container>
+
+            <ng-template #loading>
+                <p>Loading recipes…</p>
+            </ng-template>
+        </section>
+    </div>
+
+
+</div>
