@@ -1,0 +1,8 @@
+<div class="cuisineGrid">
+  <article class="cuisineCard" *ngFor="let c of cuisines" (click)="onSelectCuisine(c)">
+    <h3>{{ c.label }}</h3>
+    <p *ngIf="c.description">{{ c.description }}</p>
+    <img *ngIf="c.icon" [src]="c.icon" [alt]="c.label" />
+
+  </article>
+</div>

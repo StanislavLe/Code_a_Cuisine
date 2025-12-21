@@ -7,83 +7,61 @@
     </div>
 
     <div class="cookbookHeader">
+        <!-- ================== TEXT SECTION ================== -->
         <div class="textSection">
             <h1>Cookbook</h1>
-            <p>From quick bites to gourmet delights, explore them all in our
-                ultimate cookbook and get inspired for your next culinary adventure.</p>
+            <p>
+                From quick bites to gourmet delights, explore them all in our
+                ultimate cookbook and get inspired for your next culinary adventure.
+            </p>
         </div>
 
+        <!-- ================== FAV DISHES ================== -->
         <div class="favDishes">
             <div class="favDishesHeader">
                 <p>Most liked recipes</p>
-                <img src="../../assets/img/like.png" />
+                <img src="assets/img/like.png" />
             </div>
-            <div class="favDishesContent">
-                <div class="favDish">
 
+            <ng-container *ngIf="topRecipes$ | async as recipes; else loading">
+                <div *ngIf="recipes.length === 0">
+                    <p>No recipes in the cookbook yet.</p>
+                    <a routerLink="/step1">Generate your first recipe</a>
+                </div>
 
-
-
-
-                    <ng-container *ngIf="topRecipes$ | async as recipes; else loading">
-                        <div *ngIf="recipes.length === 0">
-                            <p>No recipes in the cookbook yet.</p>
-                            <a routerLink="/step1">Generate your first recipe</a>
-                        </div>
-
-                        <div class="recipe-grid" *ngIf="recipes.length > 0">
-                            <article class="recipe-card" *ngFor="let r of recipes">
-
-                                <div class="overviewHeader">
-                                    <div class="cookingTime">
-                                        <img src="../../assets/img/cookingTime.png">
-                                        <p>Cooking time: {{ r.total_time_minutes }} min</p>
-
-                                    </div>
-                                    <div class="like">
-                                        <p class="likes">{{ r.likes }}</p>
-                                        <img src="../../assets/img/like.png">
-                                    </div>
-
-
+                <!-- ===== SCROLLABLE GRID ===== -->
+                <div class="recipe-grid-wrapper" *ngIf="recipes.length > 0">
+                    <div class="recipe-grid">
+                        <article class="recipe-card" *ngFor="let r of recipes">
+                            <div class="overviewHeader">
+                                <div class="cookingTime">
+                                    <img src="assets/img/cookingTime.png" />
+                                    <p>Cooking time: {{ r.total_time_minutes }} min</p>
                                 </div>
 
-                                <h3>{{ r.recipe_name }}</h3>
-                            </article>
-                        </div>
-                    </ng-container>
+                                <div class="like">
+                                    <img src="assets/img/like.png" />
+                                    <p class="likes">{{ r.likes }}</p>
+                                </div>
+                            </div>
 
-
-
-
-
-
-
-
-
+                            <h3>{{ r.recipe_name }}</h3>
+                        </article>
+                    </div>
                 </div>
-            </div>
+            </ng-container>
         </div>
     </div>
 
 
+    <app-cuisine></app-cuisine>
 
-    <!-- src/app/cookbook/cookbook.component.html     <app-cuisine></app-cuisine>
- -->
-
-    <div class="cookbook">
-        <h1>Cookbook</h1>
-
-        <section class="top-liked">
-            <h2>🔥 Most liked recipes</h2>
-
-
-
-            <ng-template #loading>
-                <p>Loading recipes…</p>
-            </ng-template>
-        </section>
-    </div>
 
 
 </div>
+
+<section class="top-liked">
+    <ng-template #loading>
+        <p>Loading recipes…</p>
+    </ng-template>
+</section>

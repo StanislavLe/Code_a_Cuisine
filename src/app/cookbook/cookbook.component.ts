@@ -1,14 +1,14 @@
-// src/app/cookbook/cookbook.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FirestoreRecipeService } from '../services/firestore-recipe.service';
 import { StoredRecipe } from '../models/stored-recipe.model';
 import { Observable } from 'rxjs';
+import { CuisineComponent } from './cuisine/cuisine.component';
 
 @Component({
   selector: 'app-cookbook',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CuisineComponent],
   templateUrl: './cookbook.component.html',
   styleUrls: ['./cookbook.component.scss'],
 })

@@ -1,66 +1,74 @@
+/* ================== PAGE WRAPPER ================== */
+
 .cookbookContent {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    justify-content: center;
     text-align: center;
     gap: 16px;
     padding: 0 50px;
     font-family: 'quicksandBook';
 }
 
+/* ================== HEADER ================== */
+
 .cookbookHeader {
     padding: 20px 50px;
     margin-top: 180px;
     display: flex;
-    justify-content: space-between;
-    align-items: start;
-    flex-direction: row;
-    text-align: left;
+    gap: 32px;
     background-color: #3960390A;
     border-radius: 20px;
-    gap: 32px;
 
-    .textSection {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 70%;
+    /* verhindert, dass der Header breiter als der Bildschirm wird */
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
-        h1 {
-            font-family: 'quicksandBold';
-            font-size: 64px;
-            color: #1E5515;
-            margin: 0px;
-        }
+/* ================== LEFT SIDE ================== */
 
-        p {
-            font-size: 24px;
-            color: #10310B;
-            font-weight: 500;
-        }
+.textSection {
+    flex: 0 0 40%;
+    min-width: 0; // wichtig!
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+
+    h1 {
+        font-family: 'quicksandBold';
+        font-size: 64px;
+        color: #1E5515;
+        margin: 0px;
+    }
+
+    p {
+        font-size: 24px;
+        color: #10310B;
+        font-weight: 500;
     }
 }
 
+/* ================== RIGHT SIDE: FAV DISHES ================== */
+
 .favDishes {
+    flex: 0 0 60%;
+    min-width: 0; // verhindert overflow
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: center;
+    align-items: flex-start;
     gap: 24px;
-    width: 100%;
 
     .favDishesHeader {
         display: flex;
-        flex-direction: row;
         align-items: center;
-        justify-content: center;
         gap: 16px;
 
         p {
             font-family: 'quicksandBold';
             font-size: 24px;
             color: #1E5515;
+            margin: 0;
         }
 
         img {
@@ -70,58 +78,94 @@
     }
 }
 
-.recipe-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 60px;
+/* ================== SCROLL WRAPPER ================== */
+
+.recipe-grid-wrapper {
     width: 100%;
+    max-width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 8px;
+    scroll-behavior: smooth;
+
+    box-sizing: border-box;
 }
+
+.recipe-grid-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.recipe-grid-wrapper::-webkit-scrollbar-thumb {
+    background: #9ec89f;
+    border-radius: 4px;
+}
+
+.recipe-grid-wrapper::-webkit-scrollbar-track {
+    background: #e5f3e7;
+}
+
+/* ================== HORIZONTAL GRID ================== */
+
+.recipe-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 16px;
+    width: max-content;
+}
+
+/* ================== RECIPE CARD ================== */
 
 article {
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: center;
     gap: 12px;
-    width: 100%;
+    text-align: left;
+    width: 500px;
     background-color: #DBE0DBB2;
-    padding: 16px 16px;
+    padding: 16px;
     border-radius: 16px;
+
+    h3 {
+        margin: 0px;
+    }
 }
 
 .overviewHeader {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     width: 100%;
 
-.cookingTime {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    gap: 8px;
+    .cookingTime {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
 
-    p {
-        margin: 0px;
-    }
-}
-
-.like {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    gap: 8px;
-    padding: 6PX 12px;
-    background-color: #3960394D;
-    border-radius: 30px;
-
-    p {
-        margin: 0px;
+        p {
+            margin: 0;
+        }
     }
 
-    img {
-        width: 24px;
-        height: 24px;
+    .like {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 6px 12px;
+        background-color: #3960394D;
+        border-radius: 30px;
+
+        p {
+            margin: 0;
+        }
+
+        img {
+            width: 24px;
+            height: 24px;
+        }
     }
-}
 }
