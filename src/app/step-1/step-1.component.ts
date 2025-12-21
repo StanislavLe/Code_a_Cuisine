@@ -171,5 +171,4 @@ export class Step1Component implements AfterViewInit {
     this.editableIngredient.unit = opt;
     this.editDropdownOpen = false;
   }
-
 }

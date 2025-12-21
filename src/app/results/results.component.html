@@ -14,7 +14,12 @@
           <p *ngFor="let cuisine of p.cuisines">
             {{ cuisine }}
           </p>
+
+          <p *ngFor="let time of p.cookingTimes">
+            {{ time }}
+          </p>
         </div>
+
       </div>
 
       <img class="resultsImg" src="../../assets/img/resultsHeader.png">
@@ -27,9 +32,9 @@
 
 
     <div class="backButtonResults" (click)="goBack()">
-    <p>Generate new recipie</p>
+      <p>Generate new recipie</p>
       <img src="../../assets/img/arrow.png">
-</div>
+    </div>
 
 
   </div>

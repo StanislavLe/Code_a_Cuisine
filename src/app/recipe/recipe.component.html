@@ -6,138 +6,135 @@
     <p>Recipe results</p>
   </div>
 
-  <div class="recipeBox" *ngIf="recipe; else notFound">
-
-    <!-- =======================
+  <div class="recipePage" *ngIf="recipe; else notFound">
+    <div class="recipeBox">
+      <!-- =======================
          HEADER
     ======================= -->
-    <div class="recipeHeader">
-      <div class="recipeInfo">
-        <div class="cookingTime">
-          <img src="assets/img/cookingTime.png" />
-          <p>Cooking time</p>
-          <p>{{ recipe.total_time_minutes }} min</p>
-        </div>
+      <div class="recipeHeader">
+        <div class="recipeInfo">
+          <div class="cookingTime">
+            <img src="assets/img/cookingTime.png" />
+            <p>Cooking time</p>
+            <p>{{ recipe.total_time_minutes }} min</p>
+          </div>
 
-        <h1>{{ recipe.recipe_name }}</h1>
+          <h1>{{ recipe.recipe_name }}</h1>
 
-        <div class="chefInfo">
-          <p>Cooking persons:</p>
-          <p>{{ recipe.helpers + 1 }}</p>
-          <div class="chefIcons">
-            <img
-              *ngFor="let icon of getVisibleChefIcons()"
-              [src]="icon"
-              alt="Chef icon"
-            />
+          <div class="chefInfo">
+            <p>Cooking persons:</p>
+            <p>{{ recipe.helpers }}</p>
+            <div class="chefIcons">
+              <img *ngFor="let icon of getVisibleChefIcons()" [src]="icon" alt="Chef icon" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="quickInfo">
-        <div class="dietSettings">
-          <p class="diet" *ngFor="let pref of recipe.dietary_preferences">
-            {{ pref }}
-          </p>
-          <p class="diet">{{ recipe.cook_time }}</p>
-        </div>
+        <div class="quickInfo">
+          <div class="dietSettings">
+            <p class="diet" *ngFor="let pref of recipe.dietary_preferences">
+              {{ pref }}
+            </p>
+            <p class="diet">{{ recipe.cook_time }}</p>
+          </div>
 
-        <p>Nutritional information</p>
+          <p>Nutritional information</p>
 
-        <div class="dietInfo">
-          <div class="nutritionItem">
-            <p>Calories</p>
-            <p>{{ recipe.nutrition.calories }} kcal</p>
-          </div>
-          <div class="nutritionItem">
-            <p>Protein</p>
-            <p>{{ recipe.nutrition.protein_g }} g</p>
-          </div>
-          <div class="nutritionItem">
-            <p>Carbohydrates</p>
-            <p>{{ recipe.nutrition.carbs_g }} g</p>
-          </div>
-          <div class="nutritionItem">
-            <p>Fat</p>
-            <p>{{ recipe.nutrition.fat_g }} g</p>
+          <div class="dietInfo">
+            <div class="nutritionItem">
+              <p>Calories</p>
+              <p>{{ recipe.nutrition.calories }} kcal</p>
+            </div>
+            <div class="nutritionItem">
+              <p>Protein</p>
+              <p>{{ recipe.nutrition.protein_g }} g</p>
+            </div>
+            <div class="nutritionItem">
+              <p>Carbohydrates</p>
+              <p>{{ recipe.nutrition.carbs_g }} g</p>
+            </div>
+            <div class="nutritionItem">
+              <p>Fat</p>
+              <p>{{ recipe.nutrition.fat_g }} g</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- =======================
+      <!-- =======================
          INGREDIENTS SECTION
     ======================= -->
-    <div class="recipeIngredients">
-      <div>
-        <img src="assets/img/recipeIngredients.png" />
-        <h2>Ingredients</h2>
-      </div>
-
-      <div class="ingredientsLists">
+      <div class="recipeIngredients">
         <div>
-          <h3>Your ingredients</h3>
-          <ul>
-            <li *ngFor="let ingredient of recipe.ingredients.available">
-              {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
-            </li>
-          </ul>
+          <img src="assets/img/recipeIngredients.png" />
+          <h2>Ingredients</h2>
         </div>
 
-        <div>
-          <h3>Extra ingredients</h3>
-          <ul>
-            <li *ngFor="let ingredient of recipe.ingredients.added">
-              {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+        <div class="ingredientsLists">
+          <div>
+            <h3>Your ingredients</h3>
+            <ul>
+              <li *ngFor="let ingredient of recipe.ingredients.available">
+                {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
+              </li>
+            </ul>
+          </div>
 
-    <!-- =======================
-         INSTRUCTIONS SECTION (Neue Struktur)
-    ======================= -->
-    <div class="recipeDirections">
-      <div>
-        <img src="assets/img/recipeDirections.png" />
-        <h2>Instructions</h2>
-      </div>
-
-      <div class="instructions-container">
-        <div
-          class="group-card"
-          *ngFor="let group of recipe.instruction_groups"
-        >
-          <!-- Gruppen-Icon -->
-          <img
-            class="group-image"
-            [src]="'assets/img/' + group.group_icon"
-            alt="{{ group.group_title }}"
-          />
-
-          <!-- Gruppenname -->
-          <h4>{{ group.group_title }}</h4>
-
-          <!-- Schritte -->
-          <div
-            *ngFor="let instruction of group.instructions"
-            class="instruction-step"
-          >
-            <strong>Step {{ instruction.step }}:</strong>
-            <p>{{ instruction.text }}</p>
+          <div>
+            <h3>Extra ingredients</h3>
+            <ul>
+              <li *ngFor="let ingredient of recipe.ingredients.added">
+                {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
+
+      <!-- =======================
+         INSTRUCTIONS SECTION (Neue Struktur)
+    ======================= -->
+      <div class="recipeDirections">
+        <div>
+          <img src="assets/img/recipeDirections.png" />
+          <h2>Directions</h2>
+        </div>
+
+        <div class="instructions-container">
+          <div class="group-card" *ngFor="let group of recipe.instruction_groups">
+            <div class="group-header">
+              <img class="group-image" [src]="'assets/img/' + group.group_icon" alt="{{ group.group_title }}" />
+              <h4>{{ group.description }}</h4>
+            </div>
+
+            <div *ngFor="let instruction of group.instructions" class="instruction-step">
+              <p>{{ instruction.text }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="likeBox">
+          <p>Just finished this meal? </p>
+          <p>Give it a heart, so that the others know this is delicious.</p>
+          <img src="../../assets/img/like.png">
+        </div>
+      </div>
+    </div>
+    <div class="inspirationBox">
+      <h2>Find inspiration for your next culinary adventure!</h2>
+      <button class="cookbookBtn" (click)="goToCookbook()">Cookbook</button>
     </div>
 
-    <!-- =======================
-         NOTES SECTION
-    ======================= -->
-    <div class="recipeNotes" *ngIf="recipe.notes">
-      <h3>Notes</h3>
-      <p>{{ recipe.notes }}</p>
-    </div>
+
+
+  </div>
+
+
+
+
+  <div class="backButtonRecipe" (click)="generateNewRecipe()">
+    <p>Generate new recipie</p>
+    <img src="../../assets/img/arrowGreen.png">
   </div>
 
   <!-- =======================

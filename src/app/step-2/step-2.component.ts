@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RecipeDataService } from '../services/recipe-data.service';
@@ -11,14 +11,14 @@ import { Router } from '@angular/router';
   templateUrl: './step-2.component.html',
   styleUrls: ['./step-2.component.scss'],
 })
-export class Step2Component {
+export class Step2Component implements OnInit {
   portionCount = 2;
   readonly minPortions = 1;
   readonly maxPortions = 12;
 
   personCount = 1;
   readonly minPersons = 1;
-  readonly maxPersons = 3;
+  readonly maxPersons = 4;
 
   selectedCookingTimes: string[] = [];
   selectedCuisines: string[] = [];
@@ -37,6 +37,8 @@ export class Step2Component {
     this.selectedCookingTimes = [...prefs.cookingTimes];
     this.selectedCuisines = [...prefs.cuisines];
     this.selectedDiets = [...prefs.diets];
+
+    // Optional: wenn du Step2 immer "frisch" möchtest, kannst du das rausnehmen
     this.resetUI();
   }
 
@@ -47,7 +49,6 @@ export class Step2Component {
     this.selectedCuisines = [];
     this.selectedDiets = [];
   }
-
 
   increasePortions() {
     if (this.portionCount < this.maxPortions) this.portionCount++;
@@ -110,10 +111,13 @@ export class Step2Component {
       .subscribe({
         next: (res) => {
           console.log('✅ n8n Workflow Response:', res);
+
+          // Ergebnis in den Service schreiben -> triggert LoadingScreen
           this.recipeService.setResult(res);
 
-          // 5️⃣ Jetzt weiter zu Results
-          this.router.navigate(['/results']);
+          // ❗ Variante A: Nach erfolgreichem n8n localStorage leeren,
+          // aber RAM-Daten behalten.
+          this.recipeService.finalizeRecipe();
         },
         error: (err) => {
           console.error('❌ Fehler beim Aufruf des Workflows:', err);
@@ -124,5 +128,4 @@ export class Step2Component {
   goBack() {
     this.router.navigate(['/step1']);
   }
-
 }

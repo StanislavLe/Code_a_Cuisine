@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Subscription, timer } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { RecipeDataService } from '../services/recipe-data.service';
 
 @Component({
@@ -18,7 +18,6 @@ export class LoadingScreenComponent implements OnInit, OnDestroy {
   constructor(private recipeService: RecipeDataService, private router: Router) {}
 
   ngOnInit() {
-
     this.sub = this.recipeService.isRecipeReady().subscribe((ready) => {
       if (ready) {
         console.log('✅ Rezeptdaten empfangen, gehe zu Results...');

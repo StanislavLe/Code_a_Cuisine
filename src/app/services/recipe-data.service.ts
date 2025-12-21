@@ -88,6 +88,26 @@ export class RecipeDataService {
     }
   }
 
+  /**
+   * Wird nach erfolgreichem n8n-Run aufgerufen.
+   * Löscht NUR den persistenten Speicher, lässt die aktuellen Daten im RAM.
+   * -> Aktueller Tab kann Result noch anzeigen,
+   *    Reload / späterer Besuch startet frisch.
+   */
+  finalizeRecipe() {
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (err) {
+        console.error('⚠️ Fehler beim Löschen aus localStorage (finalizeRecipe):', err);
+      }
+    }
+  }
+
+  /**
+   * Hard Reset: RAM + localStorage
+   * Nutze das z.B. wenn der User bewusst "Neues Rezept" startet.
+   */
   reset() {
     this.recipeData = {
       ingredients: [],

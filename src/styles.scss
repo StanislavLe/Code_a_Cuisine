@@ -69,3 +69,14 @@ body {
   gap: 16px;
   color: #FAF0E6;
 }
+
+.backButtonRecipe {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  cursor: pointer;
+  gap: 16px;
+  color: #396039;
+  margin-bottom: 80px;
+  margin-top: 50px;
+}
