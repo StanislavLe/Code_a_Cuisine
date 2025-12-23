@@ -32,7 +32,7 @@
                 <!-- ===== SCROLLABLE GRID ===== -->
                 <div class="recipe-grid-wrapper" *ngIf="recipes.length > 0">
                     <div class="recipe-grid">
-                        <article class="recipe-card" *ngFor="let r of recipes">
+                        <article (click)="openRecipe(r)" class="recipe-card" *ngFor="let r of recipes">
                             <div class="overviewHeader">
                                 <div class="cookingTime">
                                     <img src="assets/img/cookingTime.png" />

@@ -13,7 +13,7 @@ export class RecipeCardComponent {
   @Input() recipe: any;
   @Input() index: number = 1;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   openRecipe() {
     if (!this.recipe?.recipe_id) {
@@ -21,6 +21,8 @@ export class RecipeCardComponent {
       return;
     }
 
-    this.router.navigate(['/recipe', this.recipe.recipe_id]);
+    this.router.navigate(['/recipe', this.recipe.recipe_id], {
+      state: { from: 'results' },
+    });
   }
 }

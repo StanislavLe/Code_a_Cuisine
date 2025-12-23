@@ -92,8 +92,14 @@ export class RecipeListComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  openRecipe(recipe: StoredRecipe) {
-  this.router.navigate(['/recipe', recipe.recipe_id]);
+openRecipe(recipe: StoredRecipe) {
+  this.router.navigate(['/recipe', recipe.recipe_id], {
+    state: {
+      from: 'recipe-list',
+      cuisineId: this.selectedCuisine?.id, // damit wir wieder in die richtige Liste kommen
+    },
+  });
 }
+
 
 }
