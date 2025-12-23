@@ -1,5 +1,5 @@
 <div class="resultsContent" *ngIf="recipes?.length; else loading">
-  <img class="logo" src="../../assets/img/logoWhite.png" />
+  <img (click)="goHome()" class="logo" src="../../assets/img/logoWhite.png" />
 
   <div class="spacer">
     <div class="header">

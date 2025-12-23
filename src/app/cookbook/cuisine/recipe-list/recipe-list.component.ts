@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Cuisine } from '../../../models/cuisine.model';
 import { cuisines } from '../cuisine-data';
 import { FirestoreRecipeService } from '../../../services/firestore-recipe.service';
@@ -18,72 +18,77 @@ export class RecipeListComponent implements OnInit {
   selectedCuisine?: Cuisine;
   recipes$!: Observable<StoredRecipe[]>;
 
+  // Pagination
+  page = 1;
+  pageSize = 12;
+
+  allRecipes: StoredRecipe[] = [];   // alle Rezepte der Cuisine
+  pagedRecipes: StoredRecipe[] = []; // aktueller Seiten-Slice
+  totalPages = 1;
+  pages: number[] = [];              // [1, 2, 3, ...]
+
   constructor(
     private route: ActivatedRoute,
-    private firestoreRecipeService: FirestoreRecipeService
-  ) { }
+    private firestoreRecipeService: FirestoreRecipeService,
+    private router: Router
+  ) {}
 
-ngOnInit(): void {
-  const cuisineId = this.route.snapshot.queryParamMap.get('cuisine');
+  ngOnInit(): void {
+    const cuisineId = this.route.snapshot.queryParamMap.get('cuisine');
 
-  if (cuisineId) {
-    this.selectedCuisine = cuisines.find((c) => c.id === cuisineId);
+    if (cuisineId) {
+      this.selectedCuisine = cuisines.find((c) => c.id === cuisineId);
 
-    this.recipes$ = this.firestoreRecipeService.getRecipesByCuisine(cuisineId);
+      this.recipes$ = this.firestoreRecipeService.getRecipesByCuisine(cuisineId);
 
-    this.recipes$.subscribe(recipes => {
-      this.totalPages = Math.ceil(recipes.length / this.pageSize);
+      this.recipes$.subscribe((recipes) => {
+        this.allRecipes = recipes;
 
-      // Seitenliste erzeugen (1, 2, 3, …)
-      this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+        this.totalPages = Math.ceil(recipes.length / this.pageSize);
+        this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
 
-      this.updatePagedRecipes(recipes);
-    });
+        this.page = 1; // sicherheitshalber auf Seite 1
+        this.updatePagedRecipes();
+      });
+    }
   }
-}
 
-
-
-  updatePagedRecipes(recipes: StoredRecipe[]) {
+  private updatePagedRecipes() {
     const start = (this.page - 1) * this.pageSize;
     const end = start + this.pageSize;
-    this.pagedRecipes = recipes.slice(start, end);
+    this.pagedRecipes = this.allRecipes.slice(start, end);
   }
 
+  nextPage() {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.updatePagedRecipes();
+    }
+  }
 
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.updatePagedRecipes();
+    }
+  }
+
+  goToPage(pageNumber: number) {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.page = pageNumber;
+      this.updatePagedRecipes();
+    }
+  }
 
   goBack() {
     window.history.back();
   }
 
-
-  page = 1;
-  pageSize = 12;
-
-  pagedRecipes: StoredRecipe[] = [];
-  totalPages = 1;
-  pages: number[] = [];
-
-
-
-
-  nextPage() {
-    this.page++;
-    this.recipes$.subscribe(recipes => this.updatePagedRecipes(recipes));
+  generateNewRecipe() {
+    this.router.navigate(['/step1']);
   }
 
-  prevPage() {
-    this.page--;
-    this.recipes$.subscribe(recipes => this.updatePagedRecipes(recipes));
+  goHome() {
+    this.router.navigate(['/home']);
   }
-
-
-  goToPage(pageNumber: number) {
-  this.page = pageNumber;
-
-  this.recipes$.subscribe(recipes => {
-    this.updatePagedRecipes(recipes);
-  });
-}
-
 }

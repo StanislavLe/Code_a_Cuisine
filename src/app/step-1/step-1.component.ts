@@ -163,6 +163,10 @@ export class Step1Component implements AfterViewInit {
     this.router.navigate(['/step2']);
   }
 
+  goHome() {
+    this.router.navigate(['/home']);
+  }
+
   toggleEditDropdown() {
     this.editDropdownOpen = !this.editDropdownOpen;
   }

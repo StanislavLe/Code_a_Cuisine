@@ -21,7 +21,7 @@ export class CookbookComponent implements OnInit {
     private firestoreRecipeService: FirestoreRecipeService,
     private location: Location,    // ✔ richtig
     private router: Router         // ✔ jetzt korrekt integriert
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.topRecipes$ = this.firestoreRecipeService.getTopRecipes(3); // 🔥 nur Top 3
@@ -33,5 +33,10 @@ export class CookbookComponent implements OnInit {
 
   generateNewRecipe() {
     this.router.navigate(['/step1']);  // ✔ Router funktioniert jetzt
+  }
+
+
+  goHome() {
+    this.router.navigate(['/home']);
   }
 }

@@ -1,5 +1,5 @@
 <div class="listContent">
-  <img class="logo" src="assets/img/logoGreen.png" />
+  <img (click)="goHome()" class="logo" src="assets/img/logoGreen.png" />
 
   <div class="backButton" (click)="goBack()">
     <img src="assets/img/back.png" />
@@ -7,18 +7,17 @@
   </div>
 
   <div class="btnWrapper">
-    <button class="generateBtn">Generate a recipe</button>
+    <button (click)="generateNewRecipe()" class="generateBtn">
+      Generate a recipe
+    </button>
   </div>
+
   <div class="header">
     <ng-container *ngIf="selectedCuisine as c">
-
       <img class="cuisineImage" [src]="c.listIcon" [alt]="c.label" />
       <h1 class="cuisineLabel">{{ c.label }}</h1>
-
     </ng-container>
   </div>
-
-
 
   <section class="recipeList" *ngIf="recipes$ | async as recipes">
     <p *ngIf="recipes.length === 0">
@@ -26,9 +25,9 @@
     </p>
 
     <article class="recipeItem" *ngFor="let r of pagedRecipes; let i = index">
-
       <div class="itemNumber">
-        <p>{{ i + 1 }}.</p>
+        <!-- globale Nummerierung über alle Seiten -->
+        <p>{{ (page - 1) * pageSize + i + 1 }}.</p>
       </div>
 
       <div class="itemHeader">
@@ -52,20 +51,22 @@
     </article>
 
     <div class="pagination" *ngIf="totalPages > 1">
-      <button (click)="prevPage()">
-        < </button>
-          <button class="pageButton" *ngFor="let p of pages" [class.active]="p === page" (click)="goToPage(p)">
-            {{ p }}
-          </button>
+      <button (click)="prevPage()" [disabled]="page === 1">
+        &lt;
+      </button>
 
-          <button (click)="nextPage()">
-            >
-          </button>
+      <button
+        class="pageButton"
+        *ngFor="let p of pages"
+        [class.active]="p === page"
+        (click)="goToPage(p)"
+      >
+        {{ p }}
+      </button>
+
+      <button (click)="nextPage()" [disabled]="page === totalPages">
+        &gt;
+      </button>
     </div>
-
   </section>
-
-
-
-
 </div>

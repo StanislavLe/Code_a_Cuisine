@@ -126,7 +126,9 @@ generateRecipe() {
     });
 }
 
-
+  goHome() {
+    this.router.navigate(['/home']);
+  }
 
   goBack() {
     this.router.navigate(['/step1']);

@@ -114,4 +114,10 @@ export class RecipeComponent implements OnInit {
   goToCookbook() {
     this.router.navigate(['/cookbook']);
   }
+
+
+  goHome() {
+    this.router.navigate(['/home']);
+  }
+
 }

@@ -87,7 +87,7 @@
     overflow-x: auto;
     overflow-y: hidden;
 
-    padding-bottom: 8px;
+    padding: 10px;
     scroll-behavior: smooth;
 
     box-sizing: border-box;
@@ -128,10 +128,15 @@ article {
     background-color: #DBE0DBB2;
     padding: 16px;
     border-radius: 16px;
+    transition: transform .2s;
 
     h3 {
         margin: 0px;
     }
+}
+
+.recipe-card:hover {
+    transform: scale(1.025);
 }
 
 .overviewHeader {

@@ -38,6 +38,10 @@ export class ResultsComponent implements OnInit {
   }
 
 
+  goHome() {
+    this.router.navigate(['/home']);
+  }
+
   goBack() {
     this.recipeService.reset();
     this.router.navigate(['/step1']);
