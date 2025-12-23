@@ -89,41 +89,44 @@ export class Step2Component implements OnInit {
     }
   }
 
-  generateRecipe() {
-    // 1️⃣ Speichere Einstellungen
-    this.recipeService.setPreferences({
-      portions: this.portionCount,
-      persons: this.personCount,
-      cookingTimes: this.selectedCookingTimes,
-      cuisines: this.selectedCuisines,
-      diets: this.selectedDiets,
+generateRecipe() {
+  // 1️⃣ Einstellungen im Service speichern
+  this.recipeService.setPreferences({
+    portions: this.portionCount,
+    persons: this.personCount,
+    cookingTimes: this.selectedCookingTimes,
+    cuisines: this.selectedCuisines,
+    diets: this.selectedDiets,
+  });
+
+  // 2️⃣ Altes Ergebnis explizit löschen
+  this.recipeService.clearResult();
+
+  // 3️⃣ Vollständiges JSON holen
+  const finalData = this.recipeService.getRecipeData();
+  console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
+
+  // 4️⃣ Direkt zum Loading Screen navigieren
+  this.router.navigate(['/loading-screen']);
+
+  // 5️⃣ Im Hintergrund n8n aufrufen
+  this.http
+    .post('http://localhost:5678/webhook/recipe-generator', finalData)
+    .subscribe({
+      next: (res) => {
+        console.log('✅ n8n Workflow Response:', res);
+
+        // Neues Ergebnis speichern -> RAM + localStorage
+        this.recipeService.setResult(res);
+        // KEIN finalizeRecipe mehr!
+      },
+      error: (err) => {
+        console.error('❌ Fehler beim Aufruf des Workflows:', err);
+      },
     });
+}
 
-    // 2️⃣ Hol das JSON
-    const finalData = this.recipeService.getRecipeData();
-    console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
 
-    // 3️⃣ Direkt zum Loading Screen navigieren
-    this.router.navigate(['/loading-screen']);
-
-    // 4️⃣ Im Hintergrund n8n aufrufen
-    this.http.post('http://localhost:5678/webhook/recipe-generator', finalData)
-      .subscribe({
-        next: (res) => {
-          console.log('✅ n8n Workflow Response:', res);
-
-          // Ergebnis in den Service schreiben -> triggert LoadingScreen
-          this.recipeService.setResult(res);
-
-          // ❗ Variante A: Nach erfolgreichem n8n localStorage leeren,
-          // aber RAM-Daten behalten.
-          this.recipeService.finalizeRecipe();
-        },
-        error: (err) => {
-          console.error('❌ Fehler beim Aufruf des Workflows:', err);
-        },
-      });
-  }
 
   goBack() {
     this.router.navigate(['/step1']);

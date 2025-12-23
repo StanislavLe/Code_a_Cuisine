@@ -18,19 +18,16 @@ export class ResultsComponent implements OnInit {
 
   constructor(
     private recipeService: RecipeDataService,
-    private router: Router 
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.recipe = this.recipeService.getResult();
     this.prefs = this.recipeService.getPreferences();
-
-    // Falls jemand direkt /results aufruft oder nach Reload:
     if (!this.recipe) {
       this.router.navigate(['/step1']);
       return;
     }
-
     if (Array.isArray(this.recipe)) {
       this.recipes = this.recipe;
     } else if (this.recipe?.recipes && Array.isArray(this.recipe.recipes)) {
@@ -40,9 +37,10 @@ export class ResultsComponent implements OnInit {
     }
   }
 
+
   goBack() {
-    // User startet sichtbar einen neuen Prozess -> alles zurücksetzen
     this.recipeService.reset();
     this.router.navigate(['/step1']);
   }
+
 }

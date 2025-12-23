@@ -24,7 +24,6 @@ export class RecipeDataService {
     this.loadFromStorage();
   }
 
-  // --- Step1 ---
   setIngredients(ingredients: RecipeData['ingredients']) {
     this.recipeData.ingredients = ingredients;
     this.saveToStorage();
@@ -34,7 +33,6 @@ export class RecipeDataService {
     return this.recipeData.ingredients;
   }
 
-  // --- Step2 ---
   setPreferences(preferences: Partial<RecipeData['preferences']>) {
     this.recipeData.preferences = { ...this.recipeData.preferences, ...preferences };
     this.saveToStorage();
@@ -44,7 +42,6 @@ export class RecipeDataService {
     return this.recipeData.preferences;
   }
 
-  // --- Recipe Results ---
   setResult(result: any) {
     this.recipeData.result = result;
     this.recipeReady$.next(true);
@@ -59,12 +56,10 @@ export class RecipeDataService {
     return this.recipeReady$.asObservable();
   }
 
-  // --- JSON Output ---
   getRecipeData(): RecipeData {
     return this.recipeData;
   }
 
-  // --- Save / Load ---
   private saveToStorage() {
     if (isPlatformBrowser(this.platformId)) {
       try {
@@ -75,53 +70,61 @@ export class RecipeDataService {
     }
   }
 
-  private loadFromStorage() {
-    if (isPlatformBrowser(this.platformId)) {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          this.recipeData = JSON.parse(stored);
+private loadFromStorage() {
+  if (isPlatformBrowser(this.platformId)) {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        this.recipeData = JSON.parse(stored);
+
+        // 🔥 Wenn beim Laden schon ein Ergebnis vorhanden ist,
+        // dann ist das Rezept "fertig" und kann angezeigt werden.
+        if (this.recipeData.result) {
+          this.recipeReady$.next(true);
         }
-      } catch (err) {
-        console.error('⚠️ Fehler beim Laden aus localStorage:', err);
       }
+    } catch (err) {
+      console.error('⚠️ Fehler beim Laden aus localStorage:', err);
     }
   }
+}
 
-  /**
-   * Wird nach erfolgreichem n8n-Run aufgerufen.
-   * Löscht NUR den persistenten Speicher, lässt die aktuellen Daten im RAM.
-   * -> Aktueller Tab kann Result noch anzeigen,
-   *    Reload / späterer Besuch startet frisch.
-   */
-  finalizeRecipe() {
-    if (isPlatformBrowser(this.platformId)) {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch (err) {
-        console.error('⚠️ Fehler beim Löschen aus localStorage (finalizeRecipe):', err);
-      }
-    }
-  }
+// in recipe-data.service.ts
 
-  /**
-   * Hard Reset: RAM + localStorage
-   * Nutze das z.B. wenn der User bewusst "Neues Rezept" startet.
-   */
-  reset() {
-    this.recipeData = {
-      ingredients: [],
-      preferences: {
-        portions: 1,
-        persons: 1,
-        cookingTimes: [],
-        cuisines: [],
-        diets: [],
-      },
-    };
-    this.recipeReady$.next(false);
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(STORAGE_KEY);
-    }
+clearResult() {
+  // nur das Ergebnis löschen
+  this.recipeData.result = undefined;
+  this.recipeReady$.next(false);
+  this.saveToStorage();
+}
+
+
+finalizeRecipe() {
+  // Früher: localStorage.removeItem(STORAGE_KEY)
+  // Jetzt: NO-OP oder ganz entfernen
+  // Wir wollen die Daten im localStorage behalten,
+  // bis der User bewusst reset() auslöst.
+}
+
+reset() {
+  // ggf. clearResult aufrufen, um sicher zu gehen
+  this.recipeData = {
+    ingredients: [],
+    preferences: {
+      portions: 1,
+      persons: 1,
+      cookingTimes: [],
+      cuisines: [],
+      diets: [],
+    },
+    result: undefined,
+  };
+
+  this.recipeReady$.next(false);
+
+  if (isPlatformBrowser(this.platformId)) {
+    localStorage.removeItem(STORAGE_KEY);
   }
+}
+
 }

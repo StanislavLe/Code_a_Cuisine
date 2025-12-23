@@ -14,28 +14,23 @@ import { FirestoreRecipeService } from '../services/firestore-recipe.service';
 })
 export class RecipeComponent implements OnInit {
   recipe: any = null;
-
- isLiking = false;
-hasLiked = false;
-isHovered = false;
-
+  isLiking = false;
+  hasLiked = false;
+  isHovered = false;
 
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeDataService,
     private router: Router,
     private firestoreRecipeService: FirestoreRecipeService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     console.log('📥 Recipe ID from route:', id);
-
     const result = this.recipeService.getResult();
     console.log('📦 Full result in RecipeComponent:', result);
-
     let allRecipes: any[] = [];
-
     if (Array.isArray(result)) {
       allRecipes = result;
     } else if (result?.recipes && Array.isArray(result.recipes)) {
@@ -43,7 +38,6 @@ isHovered = false;
     } else if (result) {
       allRecipes = [result];
     }
-
     this.recipe = allRecipes.find(r => r.recipe_id === id);
     console.log('🎯 Selected recipe:', this.recipe);
   }
@@ -52,22 +46,17 @@ isHovered = false;
     this.router.navigate(['/results']);
   }
 
-  // 🔥 LIKE-LOGIK
   async onLike() {
     if (!this.recipe || this.isLiking) return;
-
     this.isLiking = true;
-
     try {
       const clientId = this.getOrCreateClientId();
       const recipeData = this.recipeService.getRecipeData();
-
       await this.firestoreRecipeService.saveLikedRecipe(
         this.recipe,
         recipeData,
         clientId
       );
-
       this.hasLiked = true;
       console.log('✅ Rezept im Kochbuch gespeichert / Like erhöht');
     } catch (err) {
@@ -86,8 +75,6 @@ isHovered = false;
     }
     return id;
   }
-
-  // === dein bisheriger Code bleibt ===
 
   chefIconPaths: string[] = [
     '../../assets/img/chef1.png',
@@ -122,7 +109,6 @@ isHovered = false;
 
   generateNewRecipe() {
     this.router.navigate(['/step1']);
-    this.recipeService.reset();
   }
 
   goToCookbook() {
