@@ -20,20 +20,49 @@
 
 
 
- <section class="recipeList" *ngIf="recipes$ | async as recipes">
+  <section class="recipeList" *ngIf="recipes$ | async as recipes">
     <p *ngIf="recipes.length === 0">
       No recipes for this cuisine yet.
     </p>
 
-    <article class="recipeListItem" *ngFor="let r of recipes">
-      <div class="recipeListHeader">
-        <h3>{{ r.recipe_name }}</h3>
-        <span>{{ r.total_time_minutes }} min</span>
+    <article class="recipeItem" *ngFor="let r of pagedRecipes; let i = index">
+
+      <div class="itemNumber">
+        <p>{{ i + 1 }}.</p>
       </div>
-      <p class="recipeMeta">
-        Likes: {{ r.likes }} · Helpers: {{ r.helpers }}
-      </p>
+
+      <div class="itemHeader">
+        <div class="itemTime">
+          <img src="assets/img/cookingTime.png" />
+          <p>Cooking time:</p>
+          <span>{{ r.total_time_minutes }} min</span>
+        </div>
+        <h3>{{ r.recipe_name }}</h3>
+      </div>
+
+      <div class="itemInfo">
+        <p class="diet">{{ r.dietary_preferences }}</p>
+        <p class="time">{{ r.cook_time }}</p>
+
+        <div class="likeBox">
+          <img src="assets/img/like.png" />
+          <p>{{ r.likes }}</p>
+        </div>
+      </div>
     </article>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="prevPage()">
+        < </button>
+          <button class="pageButton" *ngFor="let p of pages" [class.active]="p === page" (click)="goToPage(p)">
+            {{ p }}
+          </button>
+
+          <button (click)="nextPage()">
+            >
+          </button>
+    </div>
+
   </section>
 
 

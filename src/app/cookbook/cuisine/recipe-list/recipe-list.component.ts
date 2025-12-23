@@ -21,22 +21,69 @@ export class RecipeListComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private firestoreRecipeService: FirestoreRecipeService
-  ) {}
+  ) { }
 
 ngOnInit(): void {
   const cuisineId = this.route.snapshot.queryParamMap.get('cuisine');
-  console.log('🔍 cuisineId from route:', cuisineId);
 
   if (cuisineId) {
     this.selectedCuisine = cuisines.find((c) => c.id === cuisineId);
-    console.log('🔍 selectedCuisine:', this.selectedCuisine);
 
     this.recipes$ = this.firestoreRecipeService.getRecipesByCuisine(cuisineId);
+
+    this.recipes$.subscribe(recipes => {
+      this.totalPages = Math.ceil(recipes.length / this.pageSize);
+
+      // Seitenliste erzeugen (1, 2, 3, …)
+      this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+
+      this.updatePagedRecipes(recipes);
+    });
   }
 }
+
+
+
+  updatePagedRecipes(recipes: StoredRecipe[]) {
+    const start = (this.page - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedRecipes = recipes.slice(start, end);
+  }
+
 
 
   goBack() {
     window.history.back();
   }
+
+
+  page = 1;
+  pageSize = 12;
+
+  pagedRecipes: StoredRecipe[] = [];
+  totalPages = 1;
+  pages: number[] = [];
+
+
+
+
+  nextPage() {
+    this.page++;
+    this.recipes$.subscribe(recipes => this.updatePagedRecipes(recipes));
+  }
+
+  prevPage() {
+    this.page--;
+    this.recipes$.subscribe(recipes => this.updatePagedRecipes(recipes));
+  }
+
+
+  goToPage(pageNumber: number) {
+  this.page = pageNumber;
+
+  this.recipes$.subscribe(recipes => {
+    this.updatePagedRecipes(recipes);
+  });
+}
+
 }

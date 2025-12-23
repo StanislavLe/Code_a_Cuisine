@@ -37,3 +37,151 @@
         bottom: 129px;
     }
 }
+
+
+.recipeList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.itemNumber {
+    width: 61px;
+    height: 35px;
+    border-radius: 100%;
+    background: #39603933;
+    color: #1E5515;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px;
+
+    p {
+        padding: 0px;
+        margin: 0px;
+    }
+}
+
+
+.recipeItem {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: row;
+    gap: 12px;
+
+    .itemHeader {
+        width: max-content;
+
+        h3 {
+            width: max-content;
+        }
+    }
+
+    .itemTime {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        width: 100%;
+        margin-bottom: 10px;
+        gap: 8px;
+
+        p,
+        span {
+            font-family: 'quicksandBold';
+            font-size: 16px;
+            color: #10310B;
+            margin: 0;
+        }
+
+        img {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
+
+
+.itemInfo {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 100%;
+    gap: 24px;
+
+    p {
+        font-family: 'quicksandBook';
+        font-size: 18px;
+        color: #10310B;
+        margin: 0;
+        padding: 6px 12px;
+        border-radius: 30px;
+        background-color: #39603933;
+    }
+
+    .likeBox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-family: 'quicksandBook';
+        font-size: 18px;
+        color: #10310B;
+        margin: 0;
+        padding: 6px 12px;
+        border-radius: 30px;
+        background-color: #39603933;
+
+        p {
+            background-color: transparent;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        img {
+            width: 20px;
+            height: 20px;
+        }
+
+        span {
+            font-family: 'quicksandBold';
+            font-size: 16px;
+            color: #10310B;
+        }
+    }
+
+
+    .pagination {
+        margin: 40px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        button {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            background: #1E5515;
+            color: white;
+            cursor: pointer;
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+        }
+
+        span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1E5515;
+        }
+    }
+
+}
