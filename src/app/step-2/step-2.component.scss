@@ -158,22 +158,3 @@ h1 {
 
 
 
-.generateBtn {
-    margin-top: 20px;
-    padding: 16px 32px;
-    font-size: 20px;
-    font-weight: 600;
-    background-color: #1E5515;
-    color: #FAF0E6;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    font-family: 'quicksandBold';
-    transition: background-color 0.3s ease;
-
-    &:hover {
-        background-color: #379c28;
-        transition: background-color 0.3s ease;
-    }
-}

@@ -1,8 +1,7 @@
-// src/app/models/stored-recipe.model.ts
 import { RecipeData } from './recipe-data.model';
 
 export interface StoredRecipe {
-  id?: string; // Firestore Dokument-ID (optional in Angular)
+  id?: string; // Firestore-ID
 
   recipe_id: string;
   recipe_name: string;
@@ -32,6 +31,9 @@ export interface StoredRecipe {
 
   input_ingredients: RecipeData['ingredients'];
   input_preferences: RecipeData['preferences'];
+
+  // 🔥 NEU: Cuisine-Feld zum Filtern
+  cuisineId?: string;
 
   likes: number;
   createdAt: any;

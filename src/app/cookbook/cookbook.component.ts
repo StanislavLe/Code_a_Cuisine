@@ -5,6 +5,7 @@ import { StoredRecipe } from '../models/stored-recipe.model';
 import { Observable } from 'rxjs';
 import { CuisineComponent } from './cuisine/cuisine.component';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cookbook',
@@ -18,14 +19,19 @@ export class CookbookComponent implements OnInit {
 
   constructor(
     private firestoreRecipeService: FirestoreRecipeService,
-    private location: Location,          // 👈 Location für „echtes“ Zurück
+    private location: Location,    // ✔ richtig
+    private router: Router         // ✔ jetzt korrekt integriert
   ) {}
 
   ngOnInit(): void {
-    this.topRecipes$ = this.firestoreRecipeService.getTopRecipes(12);
+    this.topRecipes$ = this.firestoreRecipeService.getTopRecipes(3); // 🔥 nur Top 3
   }
 
   goBack() {
-    this.location.back();               // 👈 geht zur vorherigen Seite im Browser-Stack
+    this.location.back();          // ✔ echte vorherige Seite
+  }
+
+  generateNewRecipe() {
+    this.router.navigate(['/step1']);  // ✔ Router funktioniert jetzt
   }
 }

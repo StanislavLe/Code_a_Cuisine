@@ -1,7 +1,7 @@
-// src/app/models/cuisine.model.ts
 export interface Cuisine {
-  id: string;        // zb 'italian'
-  label: string;     // Anzeige-Name
+  id: string;
+  label: string;
   description?: string;
-  icon?: string;     // Pfad zum Bild/Icon
+  icon?: string;
+  listIcon?: string;
 }

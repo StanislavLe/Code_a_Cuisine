@@ -1,0 +1,39 @@
+.listContent {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 50px;
+    font-family: 'quicksandBook';
+}
+
+.btnWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 100%;
+    margin-top: 60px;
+}
+
+.header {
+    font-family: 'quicksandBold';
+    font-size: 32px;
+    margin-bottom: 20px;
+    width: 100%;
+
+    img {
+        width: 80%;
+    }
+
+    h1 {
+        color: #10310B;
+        margin: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        bottom: 129px;
+    }
+}

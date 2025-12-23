@@ -39,6 +39,26 @@ body {
   src: url('assets/fonts/quicksand/Quicksand_Light_Oblique.otf');
 }
 
+.generateBtn {
+    margin-top: 20px;
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: #1E5515;
+    color: #FAF0E6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'quicksandBold';
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #379c28;
+        transition: background-color 0.3s ease;
+    }
+}
+
 .logo {
   width: 142px !important;
   height: 48px !important;
@@ -56,6 +76,8 @@ body {
   left: 60px;
   cursor: pointer;
   gap: 16px;
+  color: #396039;
+  font-family: 'quicksandBookOblique';
 }
 
 .backButtonResults {
@@ -68,6 +90,7 @@ body {
   cursor: pointer;
   gap: 16px;
   color: #FAF0E6;
+  font-family: 'quicksandBookOblique';
 }
 
 .backButtonRecipe {
@@ -79,4 +102,5 @@ body {
   color: #396039;
   margin-bottom: 80px;
   margin-top: 50px;
+  font-family: 'quicksandBookOblique';
 }
