@@ -91,4 +91,9 @@ export class RecipeListComponent implements OnInit {
   goHome() {
     this.router.navigate(['/home']);
   }
+
+  openRecipe(recipe: StoredRecipe) {
+  this.router.navigate(['/recipe', recipe.recipe_id]);
+}
+
 }

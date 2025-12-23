@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeDataService } from '../services/recipe-data.service';
 import { CommonModule } from '@angular/common';
 import { FirestoreRecipeService } from '../services/firestore-recipe.service';
+import { StoredRecipe } from '../models/stored-recipe.model';
 
 @Component({
   selector: 'app-recipe',
@@ -28,8 +29,11 @@ export class RecipeComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     console.log('📥 Recipe ID from route:', id);
+
+    // 1️⃣ Dein bisheriger RAM-Flow (unverändert)
     const result = this.recipeService.getResult();
     console.log('📦 Full result in RecipeComponent:', result);
+
     let allRecipes: any[] = [];
     if (Array.isArray(result)) {
       allRecipes = result;
@@ -38,8 +42,24 @@ export class RecipeComponent implements OnInit {
     } else if (result) {
       allRecipes = [result];
     }
-    this.recipe = allRecipes.find(r => r.recipe_id === id);
-    console.log('🎯 Selected recipe:', this.recipe);
+
+    if (id) {
+      this.recipe = allRecipes.find(r => r.recipe_id === id);
+    }
+
+    console.log('🎯 Selected recipe from RAM:', this.recipe);
+
+    // 2️⃣ Fallback: Wenn nichts im aktuellen Result → Firestore
+    if (!this.recipe && id) {
+      this.firestoreRecipeService.getRecipeById(id).subscribe((stored: StoredRecipe | undefined) => {
+        if (stored) {
+          console.log('🗄️ Loaded recipe from Firestore:', stored);
+          this.recipe = stored;
+        } else {
+          console.warn('⚠️ No recipe found in Firestore for id:', id);
+        }
+      });
+    }
   }
 
   goBack() {
@@ -115,9 +135,7 @@ export class RecipeComponent implements OnInit {
     this.router.navigate(['/cookbook']);
   }
 
-
   goHome() {
     this.router.navigate(['/home']);
   }
-
 }

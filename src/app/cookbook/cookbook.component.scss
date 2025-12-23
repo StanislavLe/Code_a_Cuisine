@@ -135,6 +135,10 @@ article {
     }
 }
 
+.recipe-card {
+    cursor: pointer;
+}
+
 .recipe-card:hover {
     transform: scale(1.025);
 }

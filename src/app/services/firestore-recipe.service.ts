@@ -11,6 +11,7 @@ import {
   limit,
   collectionData,
   where,
+  docData,
 } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { StoredRecipe } from '../models/stored-recipe.model';
@@ -106,6 +107,11 @@ getRecipesByCuisine(cuisineId: string): Observable<StoredRecipe[]> {
   );
 
   return collectionData(q, { idField: 'id' }) as Observable<StoredRecipe[]>;
+}
+
+getRecipeById(recipeId: string): Observable<StoredRecipe | undefined> {
+  const docRef = doc(this.firestore, 'recipes', recipeId);
+  return docData(docRef, { idField: 'id' }) as Observable<StoredRecipe | undefined>;
 }
 
 

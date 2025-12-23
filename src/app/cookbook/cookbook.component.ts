@@ -35,6 +35,9 @@ export class CookbookComponent implements OnInit {
     this.router.navigate(['/step1']);  // ✔ Router funktioniert jetzt
   }
 
+  openRecipe(recipe: StoredRecipe) {
+  this.router.navigate(['/recipe', recipe.recipe_id]);
+}
 
   goHome() {
     this.router.navigate(['/home']);
