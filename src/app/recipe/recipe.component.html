@@ -8,9 +8,6 @@
 
   <div class="recipePage" *ngIf="recipe; else notFound">
     <div class="recipeBox">
-      <!-- =======================
-         HEADER
-    ======================= -->
       <div class="recipeHeader">
         <div class="recipeInfo">
           <div class="cookingTime">
@@ -60,10 +57,6 @@
           </div>
         </div>
       </div>
-
-      <!-- =======================
-         INGREDIENTS SECTION
-    ======================= -->
       <div class="recipeIngredients">
         <div>
           <img src="assets/img/recipeIngredients.png" />
@@ -90,10 +83,6 @@
           </div>
         </div>
       </div>
-
-      <!-- =======================
-         INSTRUCTIONS SECTION (Neue Struktur)
-    ======================= -->
       <div class="recipeDirections">
         <div>
           <img src="assets/img/recipeDirections.png" />
@@ -122,32 +111,24 @@
       : isHovered
         ? 'assets/img/likeHover.png'
         : 'assets/img/like.png'
-  " (mouseenter)="isHovered = true" (mouseleave)="isHovered = false" [class.disabled]="isLiking" alt="Like" />
-
+  " 
+  (mouseenter)="isHovered = true" 
+  (mouseleave)="isHovered = false" 
+  [class.disabled]="isLiking" alt="Like" />
         </div>
-
       </div>
     </div>
     <div class="inspirationBox">
       <h2>Find inspiration for your next culinary adventure!</h2>
       <button class="cookbookBtn" (click)="goToCookbook()">Cookbook</button>
     </div>
-
-
-
   </div>
-
-
-
 
   <div class="backButtonRecipe" (click)="generateNewRecipe()">
     <p>Generate new recipie</p>
     <img src="../../assets/img/arrowGreen.png">
   </div>
 
-  <!-- =======================
-       NOT FOUND HANDLING
-  ======================= -->
   <ng-template #notFound>
     <p>Recipe not found.</p>
   </ng-template>

@@ -76,9 +76,6 @@ private loadFromStorage() {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         this.recipeData = JSON.parse(stored);
-
-        // 🔥 Wenn beim Laden schon ein Ergebnis vorhanden ist,
-        // dann ist das Rezept "fertig" und kann angezeigt werden.
         if (this.recipeData.result) {
           this.recipeReady$.next(true);
         }
@@ -89,15 +86,11 @@ private loadFromStorage() {
   }
 }
 
-// in recipe-data.service.ts
-
 clearResult() {
-  // nur das Ergebnis löschen
   this.recipeData.result = undefined;
   this.recipeReady$.next(false);
   this.saveToStorage();
 }
-
 
 finalizeRecipe() {
   // Früher: localStorage.removeItem(STORAGE_KEY)
@@ -107,7 +100,6 @@ finalizeRecipe() {
 }
 
 reset() {
-  // ggf. clearResult aufrufen, um sicher zu gehen
   this.recipeData = {
     ingredients: [],
     preferences: {
@@ -119,9 +111,7 @@ reset() {
     },
     result: undefined,
   };
-
   this.recipeReady$.next(false);
-
   if (isPlatformBrowser(this.platformId)) {
     localStorage.removeItem(STORAGE_KEY);
   }

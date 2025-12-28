@@ -1,7 +1,7 @@
 import { RecipeData } from './recipe-data.model';
 
 export interface StoredRecipe {
-  id?: string; // Firestore-ID
+  id?: string; 
 
   recipe_id: string;
   recipe_name: string;
@@ -31,10 +31,7 @@ export interface StoredRecipe {
 
   input_ingredients: RecipeData['ingredients'];
   input_preferences: RecipeData['preferences'];
-
-  // 🔥 NEU: Cuisine-Feld zum Filtern
   cuisineId?: string;
-
   likes: number;
   createdAt: any;
   createdByClientId: string;

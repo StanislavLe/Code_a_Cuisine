@@ -26,7 +26,6 @@
 
     <article (click)="openRecipe(r)" class="recipeItem" *ngFor="let r of pagedRecipes; let i = index">
       <div class="itemNumber">
-        <!-- globale Nummerierung über alle Seiten -->
         <p>{{ (page - 1) * pageSize + i + 1 }}.</p>
       </div>
 

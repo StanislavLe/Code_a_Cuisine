@@ -45,6 +45,7 @@
     align-items: center;
     flex-direction: column;
     width: 100%;
+    gap: 8px;
 }
 
 .itemNumber {
@@ -74,6 +75,9 @@
     justify-content: center;
     flex-direction: row;
     gap: 12px;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+    transform: scale(1); 
 
     .itemHeader {
         width: max-content;
@@ -90,6 +94,7 @@
         width: 100%;
         margin-bottom: 10px;
         gap: 8px;
+        white-space: nowrap;
 
         p,
         span {
@@ -104,6 +109,10 @@
             height: 16px;
         }
     }
+}
+
+.recipeItem:hover {
+    transform: scale(1.05);
 }
 
 

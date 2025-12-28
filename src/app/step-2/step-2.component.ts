@@ -37,8 +37,6 @@ export class Step2Component implements OnInit {
     this.selectedCookingTimes = [...prefs.cookingTimes];
     this.selectedCuisines = [...prefs.cuisines];
     this.selectedDiets = [...prefs.diets];
-
-    // Optional: wenn du Step2 immer "frisch" möchtest, kannst du das rausnehmen
     this.resetUI();
   }
 
@@ -90,7 +88,6 @@ export class Step2Component implements OnInit {
   }
 
 generateRecipe() {
-  // 1️⃣ Einstellungen im Service speichern
   this.recipeService.setPreferences({
     portions: this.portionCount,
     persons: this.personCount,
@@ -99,26 +96,16 @@ generateRecipe() {
     diets: this.selectedDiets,
   });
 
-  // 2️⃣ Altes Ergebnis explizit löschen
   this.recipeService.clearResult();
-
-  // 3️⃣ Vollständiges JSON holen
   const finalData = this.recipeService.getRecipeData();
   console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
-
-  // 4️⃣ Direkt zum Loading Screen navigieren
   this.router.navigate(['/loading-screen']);
-
-  // 5️⃣ Im Hintergrund n8n aufrufen
   this.http
     .post('http://localhost:5678/webhook/recipe-generator', finalData)
     .subscribe({
       next: (res) => {
         console.log('✅ n8n Workflow Response:', res);
-
-        // Neues Ergebnis speichern -> RAM + localStorage
         this.recipeService.setResult(res);
-        // KEIN finalizeRecipe mehr!
       },
       error: (err) => {
         console.error('❌ Fehler beim Aufruf des Workflows:', err);

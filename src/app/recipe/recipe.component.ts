@@ -1,4 +1,3 @@
-// src/app/recipe/recipe.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeDataService } from '../services/recipe-data.service';
@@ -18,8 +17,6 @@ export class RecipeComponent implements OnInit {
   isLiking = false;
   hasLiked = false;
   isHovered = false;
-
-  // 🧭 Von wo kamen wir?
   private fromPage: 'results' | 'recipe-list' = 'results';
   private fromCuisineId?: string;
 
@@ -33,27 +30,19 @@ export class RecipeComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     console.log('📥 Recipe ID from route:', id);
-
-    // 1️⃣ Herkunft auslesen (nur beim ersten Navigation-Event verfügbar)
     const nav = this.router.getCurrentNavigation();
     const state = (nav?.extras.state || {}) as { from?: string; cuisineId?: string };
-
     if (state.from === 'recipe-list') {
       this.fromPage = 'recipe-list';
     } else {
       this.fromPage = 'results';
     }
-
     if (state.cuisineId) {
       this.fromCuisineId = state.cuisineId;
     }
-
     console.log('🧭 Navigation state:', state, '→ fromPage:', this.fromPage, 'cuisineId:', this.fromCuisineId);
-
-    // 2️⃣ Dein bisheriger RAM-Flow (unverändert)
     const result = this.recipeService.getResult();
     console.log('📦 Full result in RecipeComponent:', result);
-
     let allRecipes: any[] = [];
     if (Array.isArray(result)) {
       allRecipes = result;
@@ -62,14 +51,10 @@ export class RecipeComponent implements OnInit {
     } else if (result) {
       allRecipes = [result];
     }
-
     if (id) {
       this.recipe = allRecipes.find(r => r.recipe_id === id);
     }
-
     console.log('🎯 Selected recipe from RAM:', this.recipe);
-
-    // 3️⃣ Fallback: Wenn nichts im aktuellen Result → Firestore
     if (!this.recipe && id) {
       this.firestoreRecipeService.getRecipeById(id).subscribe((stored: StoredRecipe | undefined) => {
         if (stored) {
@@ -84,17 +69,14 @@ export class RecipeComponent implements OnInit {
 
   goBack() {
     if (this.fromPage === 'recipe-list') {
-      // Zurück zur Liste mit gleicher Cuisine
       if (this.fromCuisineId) {
         this.router.navigate(['/recipe-list'], {
           queryParams: { cuisine: this.fromCuisineId },
         });
       } else {
-        // Fallback, falls keine Cuisine im State war
         this.router.navigate(['/cookbook']);
       }
     } else {
-      // Standard-Fall: aus den Results gekommen
       this.router.navigate(['/results']);
     }
   }

@@ -5,7 +5,7 @@ import { JsonPipe, CommonModule } from '@angular/common';
 @Component({
   selector: 'app-recipe-card',
   standalone: true,
-  imports: [CommonModule, JsonPipe],  // 👈 JSON PIPE HINZUFÜGEN
+  imports: [CommonModule, JsonPipe],
   templateUrl: './recipe-card.component.html',
   styleUrls: ['./recipe-card.component.scss']
 })

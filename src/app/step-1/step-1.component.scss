@@ -1,9 +1,7 @@
-/* 🌍 Global Smooth Transitions */
 * {
     transition: all 0.25s ease-in-out;
 }
 
-/* 🔥 Einheitliche Keyframes */
 @keyframes fadeInSmooth {
     from {
         opacity: 0;
@@ -28,7 +26,6 @@
     }
 }
 
-/* 🌫️ Globale Utility-Klassen für Bewegung */
 .fade-in {
     animation: fadeInSmooth 0.25s ease-out forwards;
 }
@@ -412,34 +409,30 @@ input {
 }
 
 input::placeholder {
-    color: #aaa; // Standardfarbe
+    color: #aaa; 
     transition: opacity 0.2s ease;
 }
 
 input:focus::placeholder {
-    opacity: 0; // verschwindet weich
+    opacity: 0; 
 }
 
-/* Entfernt Pfeile in Chrome, Edge, Safari, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* Entfernt Pfeile in Firefox */
 input {
     -moz-appearance: textfield;
 }
 
-/* Entfernt Pfeile in Chrome, Edge, Safari, Opera */
 select::-webkit-outer-spin-button,
 select::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* Entfernt Pfeile in Firefox */
 select {
     -moz-appearance: textfield;
 }

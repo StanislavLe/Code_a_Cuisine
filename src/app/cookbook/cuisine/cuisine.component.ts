@@ -12,7 +12,7 @@ import { cuisines } from './cuisine-data';
   styleUrls: ['./cuisine.component.scss'],
 })
 export class CuisineComponent {
-  cuisines: Cuisine[] = cuisines;  // 👈 zentrale Datenquelle nutzen
+  cuisines: Cuisine[] = cuisines; 
 
   constructor(private router: Router) {}
 

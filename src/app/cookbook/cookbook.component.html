@@ -7,7 +7,6 @@
     </div>
 
     <div class="cookbookHeader">
-        <!-- ================== TEXT SECTION ================== -->
         <div class="textSection">
             <h1>Cookbook</h1>
             <p>
@@ -16,7 +15,6 @@
             </p>
         </div>
 
-        <!-- ================== FAV DISHES ================== -->
         <div class="favDishes">
             <div class="favDishesHeader">
                 <p>Most liked recipes</p>
@@ -29,7 +27,6 @@
                     <a routerLink="/step1">Generate your first recipe</a>
                 </div>
 
-                <!-- ===== SCROLLABLE GRID ===== -->
                 <div class="recipe-grid-wrapper" *ngIf="recipes.length > 0">
                     <div class="recipe-grid">
                         <article (click)="openRecipe(r)" class="recipe-card" *ngFor="let r of recipes">

@@ -17,37 +17,30 @@ import { Observable } from 'rxjs';
 export class RecipeListComponent implements OnInit {
   selectedCuisine?: Cuisine;
   recipes$!: Observable<StoredRecipe[]>;
-
-  // Pagination
   page = 1;
   pageSize = 12;
-
-  allRecipes: StoredRecipe[] = [];   // alle Rezepte der Cuisine
-  pagedRecipes: StoredRecipe[] = []; // aktueller Seiten-Slice
+  allRecipes: StoredRecipe[] = [];
+  pagedRecipes: StoredRecipe[] = [];
   totalPages = 1;
-  pages: number[] = [];              // [1, 2, 3, ...]
+  pages: number[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private firestoreRecipeService: FirestoreRecipeService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const cuisineId = this.route.snapshot.queryParamMap.get('cuisine');
 
     if (cuisineId) {
       this.selectedCuisine = cuisines.find((c) => c.id === cuisineId);
-
       this.recipes$ = this.firestoreRecipeService.getRecipesByCuisine(cuisineId);
-
       this.recipes$.subscribe((recipes) => {
         this.allRecipes = recipes;
-
         this.totalPages = Math.ceil(recipes.length / this.pageSize);
         this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-
-        this.page = 1; // sicherheitshalber auf Seite 1
+        this.page = 1;
         this.updatePagedRecipes();
       });
     }
@@ -92,14 +85,12 @@ export class RecipeListComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-openRecipe(recipe: StoredRecipe) {
-  this.router.navigate(['/recipe', recipe.recipe_id], {
-    state: {
-      from: 'recipe-list',
-      cuisineId: this.selectedCuisine?.id, // damit wir wieder in die richtige Liste kommen
-    },
-  });
-}
-
-
+  openRecipe(recipe: StoredRecipe) {
+    this.router.navigate(['/recipe', recipe.recipe_id], {
+      state: {
+        from: 'recipe-list',
+        cuisineId: this.selectedCuisine?.id,
+      },
+    });
+  }
 }
