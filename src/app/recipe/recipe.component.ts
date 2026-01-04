@@ -17,7 +17,7 @@ export class RecipeComponent implements OnInit {
   isLiking = false;
   hasLiked = false;
   isHovered = false;
-  private fromPage: 'results' | 'recipe-list' = 'results';
+  fromPage: 'results' | 'recipe-list' | 'cookbook' = 'results';
   private fromCuisineId?: string;
 
   constructor(
@@ -30,19 +30,26 @@ export class RecipeComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     console.log('📥 Recipe ID from route:', id);
-    const nav = this.router.getCurrentNavigation();
-    const state = (nav?.extras.state || {}) as { from?: string; cuisineId?: string };
-    if (state.from === 'recipe-list') {
+    
+    // Hole Query-Parameter
+    const queryFrom = this.route.snapshot.queryParamMap.get('from');
+    const queryCuisine = this.route.snapshot.queryParamMap.get('cuisine');
+    
+    // Setze fromPage basierend auf Query-Parameter
+    if (queryFrom === 'recipe-list') {
       this.fromPage = 'recipe-list';
+      this.fromCuisineId = queryCuisine || undefined;
+    } else if (queryFrom === 'cookbook') {
+      this.fromPage = 'cookbook';
     } else {
       this.fromPage = 'results';
     }
-    if (state.cuisineId) {
-      this.fromCuisineId = state.cuisineId;
-    }
-    console.log('🧭 Navigation state:', state, '→ fromPage:', this.fromPage, 'cuisineId:', this.fromCuisineId);
+    
+    console.log('🧭 Query params → fromPage:', this.fromPage, 'cuisineId:', this.fromCuisineId);
+    
     const result = this.recipeService.getResult();
     console.log('📦 Full result in RecipeComponent:', result);
+    
     let allRecipes: any[] = [];
     if (Array.isArray(result)) {
       allRecipes = result;
@@ -51,20 +58,39 @@ export class RecipeComponent implements OnInit {
     } else if (result) {
       allRecipes = [result];
     }
+    
     if (id) {
       this.recipe = allRecipes.find(r => r.recipe_id === id);
     }
+    
     console.log('🎯 Selected recipe from RAM:', this.recipe);
+    
     if (!this.recipe && id) {
       this.firestoreRecipeService.getRecipeById(id).subscribe((stored: StoredRecipe | undefined) => {
         if (stored) {
           console.log('🗄️ Loaded recipe from Firestore:', stored);
           this.recipe = stored;
+          
+          // Fallback: Wenn Query-Params fehlen aber cuisineId im Rezept ist
+          if (stored.cuisineId && !queryFrom) {
+            this.fromPage = 'recipe-list';
+            this.fromCuisineId = stored.cuisineId;
+            console.log('🔄 Fallback: Using stored cuisineId:', this.fromCuisineId);
+          }
         } else {
           console.warn('⚠️ No recipe found in Firestore for id:', id);
         }
       });
     }
+  }
+
+  getBackButtonText(): string {
+    if (this.fromPage === 'recipe-list') {
+      return 'Recipe list';
+    } else if (this.fromPage === 'cookbook') {
+      return 'Cookbook';
+    }
+    return 'Recipe results';
   }
 
   goBack() {
@@ -76,6 +102,8 @@ export class RecipeComponent implements OnInit {
       } else {
         this.router.navigate(['/cookbook']);
       }
+    } else if (this.fromPage === 'cookbook') {
+      this.router.navigate(['/cookbook']);
     } else {
       this.router.navigate(['/results']);
     }

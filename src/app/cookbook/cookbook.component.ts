@@ -19,25 +19,31 @@ export class CookbookComponent implements OnInit {
 
   constructor(
     private firestoreRecipeService: FirestoreRecipeService,
-    private location: Location,    
-    private router: Router           
+    private location: Location,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.topRecipes$ = this.firestoreRecipeService.getTopRecipes(3); 
+    this.topRecipes$ = this.firestoreRecipeService.getTopRecipes(3);
   }
 
   goBack() {
-    this.location.back();            
+    this.location.back();
+  }
+
+  goBackToResults() {
+    this.router.navigate(['/results']);
   }
 
   generateNewRecipe() {
-    this.router.navigate(['/step1']);  
+    this.router.navigate(['/step1']);
   }
 
   openRecipe(recipe: StoredRecipe) {
-  this.router.navigate(['/recipe', recipe.recipe_id]);
-}
+    this.router.navigate(['/recipe', recipe.recipe_id], {
+      queryParams: { from: 'cookbook' }
+    });
+  }
 
   goHome() {
     this.router.navigate(['/home']);

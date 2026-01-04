@@ -1,10 +1,10 @@
 <div class="recipeContent">
   <img (click)="goHome()" class="logo" src="assets/img/logoGreen.png" />
 
-  <div class="backButton" (click)="goBack()">
-    <img src="assets/img/back.png" />
-    <p>Recipe results</p>
-  </div>
+<div class="backButton" (click)="goBack()">
+  <img src="assets/img/back.png" />
+  <p>{{ getBackButtonText() }}</p>
+</div>
 
   <div class="recipePage" *ngIf="recipe; else notFound">
     <div class="recipeBox">

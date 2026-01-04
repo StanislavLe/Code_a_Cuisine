@@ -85,12 +85,17 @@ export class RecipeListComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+    goToCookbook() {
+    this.router.navigate(['/cookbook']);
+  }
+
+  // RICHTIGE Methode mit recipe Parameter!
   openRecipe(recipe: StoredRecipe) {
     this.router.navigate(['/recipe', recipe.recipe_id], {
-      state: {
+      queryParams: { 
         from: 'recipe-list',
-        cuisineId: this.selectedCuisine?.id,
-      },
+        cuisine: this.selectedCuisine?.id 
+      }
     });
   }
 }
