@@ -24,11 +24,13 @@ export class Step2Component implements OnInit {
   selectedCuisines: string[] = [];
   selectedDiets: string[] = [];
 
+  showIngredientWarning = false; // ⚠️ neues Flag
+
   constructor(
     private recipeService: RecipeDataService,
     private http: HttpClient,
-    private router: Router,
-  ) { }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     const prefs = this.recipeService.getPreferences();
@@ -87,37 +89,47 @@ export class Step2Component implements OnInit {
     }
   }
 
-generateRecipe() {
-  this.recipeService.setPreferences({
-    portions: this.portionCount,
-    persons: this.personCount,
-    cookingTimes: this.selectedCookingTimes,
-    cuisines: this.selectedCuisines,
-    diets: this.selectedDiets,
-  });
+  generateRecipe() {
+    const ingredients = this.recipeService.getIngredients();
+    if (!ingredients || ingredients.length < 1) {
+      this.showIngredientWarning = true;
+      return;
+    }
 
-  this.recipeService.clearResult();
-  const finalData = this.recipeService.getRecipeData();
-  console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
-  this.router.navigate(['/loading-screen']);
-  this.http
-    .post('http://localhost:5678/webhook/recipe-generator', finalData)
-    .subscribe({
-      next: (res) => {
-        console.log('✅ n8n Workflow Response:', res);
-        this.recipeService.setResult(res);
-      },
-      error: (err) => {
-        console.error('❌ Fehler beim Aufruf des Workflows:', err);
-      },
+    this.recipeService.setPreferences({
+      portions: this.portionCount,
+      persons: this.personCount,
+      cookingTimes: this.selectedCookingTimes,
+      cuisines: this.selectedCuisines,
+      diets: this.selectedDiets,
     });
-}
+
+    this.recipeService.clearResult();
+    const finalData = this.recipeService.getRecipeData();
+    console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
+    this.router.navigate(['/loading-screen']);
+    this.http
+      .post('http://localhost:5678/webhook/recipe-generator', finalData)
+      .subscribe({
+        next: (res) => {
+          console.log('✅ n8n Workflow Response:', res);
+          this.recipeService.setResult(res);
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Aufruf des Workflows:', err);
+        },
+      });
+  }
 
   goHome() {
     this.router.navigate(['/home']);
   }
 
   goBack() {
+    this.router.navigate(['/step1']);
+  }
+
+  goToStep1() {
     this.router.navigate(['/step1']);
   }
 }

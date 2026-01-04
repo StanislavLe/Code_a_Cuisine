@@ -156,5 +156,39 @@ h1 {
 }
 
 
+.ingredient-warning {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
 
+.warning-box {
+    background: #396039;
+    color: #FAF0E6;
+    padding: 2rem 3rem;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    h2 {
+        margin-bottom: 0.5rem;
+    }
+    p {
+        margin-bottom: 1.5rem;
+    }
+}
 
+.infoBackButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    gap: 16px;
+    background: #396039;
+    color: #FAF0E6;
+    font-family: "quicksandBookOblique";
+}

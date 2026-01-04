@@ -1,10 +1,10 @@
 <div class="step2Content">
   <img (click)="goHome()" class="logo" src="../../assets/img/logoGreen.png" />
 
-<div class="backButton" (click)="goBack()">
-  <img src="../../assets/img/back.png">
+  <div class="backButton" (click)="goBack()">
+    <img src="../../assets/img/back.png">
     <p>Ingredients</p>
-</div>
+  </div>
 
 
   <div class="spacer">
@@ -110,4 +110,23 @@
     </div>
 
   </div>
+
+  <div *ngIf="showIngredientWarning" class="ingredient-warning">
+    <div class="warning-box">
+      <h2>Ups! Not quite enough...</h2>
+      <p>It looks like some ingredient quantities aren’t
+        sufficient for your selected servings.
+        Please add or adjust quantities and try again.</p>
+      <p>Please add at least <strong>1 ingredient</strong>
+        before generating a recipe.</p>
+      <div class="infoBackButton" (click)="goToStep1()">
+        <p>Go back to Ingredients</p>
+        <img src="../../assets/img/arrow.png">
+      </div>
+
+    </div>
+  </div>
+
+
+
 </div>
