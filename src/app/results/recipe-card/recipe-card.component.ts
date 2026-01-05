@@ -15,14 +15,15 @@ export class RecipeCardComponent {
 
   constructor(private router: Router) { }
 
-  openRecipe() {
-    if (!this.recipe?.recipe_id) {
-      console.warn('⚠️ recipe_id fehlt im Rezept:', this.recipe);
-      return;
-    }
-
-    this.router.navigate(['/recipe', this.recipe.recipe_id], {
-      state: { from: 'results' },
-    });
+openRecipe() {
+  if (!this.recipe?.recipe_id) {
+    console.warn('⚠️ recipe_id fehlt im Rezept:', this.recipe);
+    return;
   }
+
+  this.router.navigate(['/recipe', this.recipe.recipe_id], {
+    queryParams: { from: 'results' },
+  });
+}
+
 }

@@ -9,8 +9,10 @@
         <div class="bottomTextSection">
             <p>Hungry for inspiration?</p>
             <div class="cookbookArrowWrapper">
-                <a routerLink="/cookbook">Go to cookbook <img src="../../assets/img/arrow.png">
+                <a [routerLink]="['/cookbook']" [queryParams]="{ from: 'home' }">
+                    Go to cookbook <img src="../../assets/img/arrow.png">
                 </a>
+
             </div>
         </div>
     </div>

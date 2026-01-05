@@ -30,11 +30,11 @@ export class RecipeComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     console.log('📥 Recipe ID from route:', id);
-    
+
     // Hole Query-Parameter
     const queryFrom = this.route.snapshot.queryParamMap.get('from');
     const queryCuisine = this.route.snapshot.queryParamMap.get('cuisine');
-    
+
     // Setze fromPage basierend auf Query-Parameter
     if (queryFrom === 'recipe-list') {
       this.fromPage = 'recipe-list';
@@ -44,12 +44,12 @@ export class RecipeComponent implements OnInit {
     } else {
       this.fromPage = 'results';
     }
-    
+
     console.log('🧭 Query params → fromPage:', this.fromPage, 'cuisineId:', this.fromCuisineId);
-    
+
     const result = this.recipeService.getResult();
     console.log('📦 Full result in RecipeComponent:', result);
-    
+
     let allRecipes: any[] = [];
     if (Array.isArray(result)) {
       allRecipes = result;
@@ -58,19 +58,19 @@ export class RecipeComponent implements OnInit {
     } else if (result) {
       allRecipes = [result];
     }
-    
+
     if (id) {
       this.recipe = allRecipes.find(r => r.recipe_id === id);
     }
-    
+
     console.log('🎯 Selected recipe from RAM:', this.recipe);
-    
+
     if (!this.recipe && id) {
       this.firestoreRecipeService.getRecipeById(id).subscribe((stored: StoredRecipe | undefined) => {
         if (stored) {
           console.log('🗄️ Loaded recipe from Firestore:', stored);
           this.recipe = stored;
-          
+
           // Fallback: Wenn Query-Params fehlen aber cuisineId im Rezept ist
           if (stored.cuisineId && !queryFrom) {
             this.fromPage = 'recipe-list';
@@ -175,8 +175,21 @@ export class RecipeComponent implements OnInit {
   }
 
   goToCookbook() {
-    this.router.navigate(['/cookbook']);
+    const currentFrom = this.route.snapshot.queryParamMap.get('from');
+    const id = this.recipe?.recipe_id;
+    if (currentFrom === 'results') {
+      this.router.navigate(['/cookbook'], {
+        queryParams: { from: 'results', recipeId: id },
+      });
+    } else {
+      this.router.navigate(['/cookbook'], {
+        queryParams: { from: 'recipe', recipeId: id },
+      });
+    }
   }
+
+
+
 
   goHome() {
     this.router.navigate(['/home']);
