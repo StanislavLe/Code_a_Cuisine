@@ -1,7 +1,9 @@
+// src/app/step2/step-2.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RecipeDataService } from '../services/recipe-data.service';
+import { FirestoreUsageService } from '../services/firestore-usage.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -24,12 +26,13 @@ export class Step2Component implements OnInit {
   selectedCuisines: string[] = [];
   selectedDiets: string[] = [];
 
-  showIngredientWarning = false; // ⚠️ neues Flag
+  showIngredientWarning = false;
 
   constructor(
     private recipeService: RecipeDataService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private firestoreUsage: FirestoreUsageService // 👈 NEU: Service injizieren
   ) {}
 
   ngOnInit() {
@@ -106,10 +109,18 @@ export class Step2Component implements OnInit {
 
     this.recipeService.clearResult();
     const finalData = this.recipeService.getRecipeData();
-    console.log('🧾 Final Recipe JSON:', JSON.stringify(finalData, null, 2));
+    
+    // 👇 NEU: userId hinzufügen
+    const requestData = {
+      ...finalData,
+      userId: this.firestoreUsage.getUserHash()
+    };
+
+    console.log('🧾 Final Recipe JSON:', JSON.stringify(requestData, null, 2));
     this.router.navigate(['/loading-screen']);
+    
     this.http
-      .post('http://localhost:5678/webhook/recipe-generator', finalData)
+      .post('http://localhost:5678/webhook/recipe-generator', requestData) // 👈 requestData statt finalData
       .subscribe({
         next: (res) => {
           console.log('✅ n8n Workflow Response:', res);

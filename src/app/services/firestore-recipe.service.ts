@@ -1,3 +1,4 @@
+// src/app/services/firestore-recipe.service.ts
 import {
   Firestore,
   doc,
@@ -21,8 +22,12 @@ import { cuisines } from '../cookbook/cuisine/cuisine-data';
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreRecipeService {
-  constructor(private firestore: Firestore) { }
+  constructor(private firestore: Firestore) {}
 
+  /**
+   * Speichert oder aktualisiert ein Rezept in Firestore.
+   * Die Client-ID (SHA-256 Hash der IP) wird DSGVO-konform gespeichert.
+   */
   async saveLikedRecipe(
     recipe: any,
     inputData: RecipeData,
@@ -31,18 +36,24 @@ export class FirestoreRecipeService {
     const recipesRef = collection(this.firestore, 'recipes');
     const docRef = doc(recipesRef, recipe.recipe_id);
     const snap = await getDoc(docRef);
+
     const rawCuisine = inputData.preferences.cuisines?.[0];
     const cuisineId =
-      cuisines.find(c =>
-        c.id.toLowerCase() === rawCuisine?.toLowerCase() ||
-        c.label.toLowerCase() === rawCuisine?.toLowerCase()
+      cuisines.find(
+        (c) =>
+          c.id.toLowerCase() === rawCuisine?.toLowerCase() ||
+          c.label.toLowerCase() === rawCuisine?.toLowerCase()
       )?.id || 'unknown';
+
     console.log('💾 rawCuisine:', rawCuisine, '→ mapped cuisineId:', cuisineId);
+
     if (snap.exists()) {
+      // Falls das Rezept bereits existiert → Like-Zähler erhöhen
       await updateDoc(docRef, {
         likes: increment(1),
       });
     } else {
+      // Neues Rezept-Dokument anlegen
       const stored: StoredRecipe = {
         recipe_id: recipe.recipe_id,
         recipe_name: recipe.recipe_name,
@@ -58,31 +69,28 @@ export class FirestoreRecipeService {
         cuisineId,
         likes: 1,
         createdAt: new Date(),
-        createdByClientId: clientId,
+        createdByClientId: clientId, // 👈 gehashte Client-ID (SHA-256)
       };
+
       await setDoc(docRef, stored);
     }
   }
 
+  /** Beliebteste Rezepte */
   getTopRecipes(limitNumber: number): Observable<StoredRecipe[]> {
     const recipesRef = collection(this.firestore, 'recipes');
-    const q = query(
-      recipesRef,
-      orderBy('likes', 'desc'),
-      limit(limitNumber)
-    );
+    const q = query(recipesRef, orderBy('likes', 'desc'), limit(limitNumber));
     return collectionData(q, { idField: 'id' }) as Observable<StoredRecipe[]>;
   }
 
+  /** Rezepte nach Küche */
   getRecipesByCuisine(cuisineId: string): Observable<StoredRecipe[]> {
     const recipesRef = collection(this.firestore, 'recipes');
-    const q = query(
-      recipesRef,
-      where('cuisineId', '==', cuisineId),
-    );
+    const q = query(recipesRef, where('cuisineId', '==', cuisineId));
     return collectionData(q, { idField: 'id' }) as Observable<StoredRecipe[]>;
   }
 
+  /** Einzelnes Rezept nach ID */
   getRecipeById(recipeId: string): Observable<StoredRecipe | undefined> {
     const docRef = doc(this.firestore, 'recipes', recipeId);
     return docData(docRef, { idField: 'id' }) as Observable<StoredRecipe | undefined>;
