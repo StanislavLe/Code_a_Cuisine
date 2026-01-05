@@ -106,7 +106,12 @@
       </div>
     </div>
     <div>
-      <button class="generateBtn" (click)="generateRecipe()">Generate a recipe</button>
+<button
+  class="generateBtn"
+  (click)="generateRecipe()"
+  [disabled]="generateDisabled">
+  {{ generateDisabled ? 'Limit reached' : 'Generate a recipe (' + remainingTries + ' left)' }}
+</button>
     </div>
 
   </div>

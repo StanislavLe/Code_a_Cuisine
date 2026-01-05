@@ -27,15 +27,19 @@ export class Step2Component implements OnInit {
   selectedDiets: string[] = [];
 
   showIngredientWarning = false;
+  generateDisabled = false; // 🔒 Button-Sperre
+  remainingTries = 0; // 🔢 Anzeige verbleibender Versuche
+  private usageLimit = 0;
 
   constructor(
     private recipeService: RecipeDataService,
     private http: HttpClient,
     private router: Router,
-    private firestoreUsage: FirestoreUsageService // 👈 NEU: Service injizieren
+    private firestoreUsage: FirestoreUsageService
   ) {}
 
-  ngOnInit() {
+  /** Initialisierung beim Laden der Seite */
+  async ngOnInit() {
     const prefs = this.recipeService.getPreferences();
     this.portionCount = prefs.portions;
     this.personCount = prefs.persons;
@@ -43,6 +47,12 @@ export class Step2Component implements OnInit {
     this.selectedCuisines = [...prefs.cuisines];
     this.selectedDiets = [...prefs.diets];
     this.resetUI();
+
+    // 🔹 Firestore-Status abfragen
+    this.usageLimit = this.firestoreUsage.getLimit();
+    const usage = await this.firestoreUsage.getCurrentUsageCount();
+    this.remainingTries = Math.max(this.usageLimit - usage, 0);
+    this.generateDisabled = this.remainingTries <= 0;
   }
 
   private resetUI() {
@@ -53,6 +63,7 @@ export class Step2Component implements OnInit {
     this.selectedDiets = [];
   }
 
+  // --- UI Helper-Methoden ---
   increasePortions() {
     if (this.portionCount < this.maxPortions) this.portionCount++;
   }
@@ -92,13 +103,29 @@ export class Step2Component implements OnInit {
     }
   }
 
-  generateRecipe() {
+  // --- Rezept-Generierung mit Limitprüfung ---
+  async generateRecipe() {
+    if (this.generateDisabled) {
+      alert('⚠️ Du hast dein tägliches Limit erreicht!');
+      return;
+    }
+
+    // 🔹 Prüfe in Firestore, ob neuer Request erlaubt ist
+    const canProceed = await this.firestoreUsage.canGenerateRecipe();
+    if (!canProceed) {
+      this.generateDisabled = true;
+      this.remainingTries = 0;
+      return;
+    }
+
+    // 🔸 Prüfe, ob Zutaten vorhanden sind
     const ingredients = this.recipeService.getIngredients();
     if (!ingredients || ingredients.length < 1) {
       this.showIngredientWarning = true;
       return;
     }
 
+    // 🔹 Benutzereinstellungen speichern
     this.recipeService.setPreferences({
       portions: this.portionCount,
       persons: this.personCount,
@@ -109,22 +136,29 @@ export class Step2Component implements OnInit {
 
     this.recipeService.clearResult();
     const finalData = this.recipeService.getRecipeData();
-    
-    // 👇 NEU: userId hinzufügen
+
+    // 🔸 Nutzer-Hash anhängen
     const requestData = {
       ...finalData,
-      userId: this.firestoreUsage.getUserHash()
+      userId: this.firestoreUsage.getUserHash(),
     };
 
     console.log('🧾 Final Recipe JSON:', JSON.stringify(requestData, null, 2));
+
     this.router.navigate(['/loading-screen']);
-    
+
+    // 🔸 n8n Workflow aufrufen
     this.http
-      .post('http://localhost:5678/webhook/recipe-generator', requestData) // 👈 requestData statt finalData
+      .post('http://localhost:5678/webhook/recipe-generator', requestData)
       .subscribe({
-        next: (res) => {
+        next: async (res) => {
           console.log('✅ n8n Workflow Response:', res);
           this.recipeService.setResult(res);
+
+          // 🔁 Zähler aktualisieren
+          const usage = await this.firestoreUsage.getCurrentUsageCount();
+          this.remainingTries = Math.max(this.usageLimit - usage, 0);
+          this.generateDisabled = this.remainingTries <= 0;
         },
         error: (err) => {
           console.error('❌ Fehler beim Aufruf des Workflows:', err);
@@ -132,6 +166,7 @@ export class Step2Component implements OnInit {
       });
   }
 
+  // --- Navigation ---
   goHome() {
     this.router.navigate(['/home']);
   }
