@@ -106,12 +106,9 @@
       </div>
     </div>
     <div>
-<button
-  class="generateBtn"
-  (click)="generateRecipe()"
-  [disabled]="generateDisabled">
-  {{ generateDisabled ? 'Limit reached' : 'Generate a recipe (' + remainingTries + ' left)' }}
-</button>
+      <button class="generateBtn" (click)="generateRecipe()" [disabled]="generateDisabled">
+        {{ generateDisabled ? 'Limit reached' : 'Generate a recipe (' + remainingTries + ' left)' }}
+      </button>
     </div>
 
   </div>
@@ -132,6 +129,11 @@
     </div>
   </div>
 
+  <div *ngIf="generateDisabled" class="limit-info">
+    <div class="warning-box">
+      <p>You’ve reached your daily limit of 5 recipes</p>
+    </div>
+  </div>
 
 
 </div>

@@ -39,21 +39,23 @@ export class Step2Component implements OnInit {
   ) {}
 
   /** Initialisierung beim Laden der Seite */
-  async ngOnInit() {
-    const prefs = this.recipeService.getPreferences();
-    this.portionCount = prefs.portions;
-    this.personCount = prefs.persons;
-    this.selectedCookingTimes = [...prefs.cookingTimes];
-    this.selectedCuisines = [...prefs.cuisines];
-    this.selectedDiets = [...prefs.diets];
-    this.resetUI();
+async ngOnInit() {
+  const prefs = this.recipeService.getPreferences();
+  this.portionCount = prefs.portions;
+  this.personCount = prefs.persons;
+  this.selectedCookingTimes = [...prefs.cookingTimes];
+  this.selectedCuisines = [...prefs.cuisines];
+  this.selectedDiets = [...prefs.diets];
+  this.resetUI();
 
-    // 🔹 Firestore-Status abfragen
-    this.usageLimit = this.firestoreUsage.getLimit();
-    const usage = await this.firestoreUsage.getCurrentUsageCount();
-    this.remainingTries = Math.max(this.usageLimit - usage, 0);
-    this.generateDisabled = this.remainingTries <= 0;
-  }
+  this.usageLimit = this.firestoreUsage.getLimit();
+
+  // 🔹 Versuche sofort, Zähler zu laden
+  const usage = await this.firestoreUsage.getCurrentUsageCount();
+  this.remainingTries = Math.max(this.usageLimit - usage, 0);
+  this.generateDisabled = this.remainingTries <= 0;
+}
+
 
   private resetUI() {
     this.portionCount = 2;

@@ -196,3 +196,13 @@ h1 {
     color: #FAF0E6;
     font-family: "quicksandBookOblique";
 }
+
+.limit-info {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
