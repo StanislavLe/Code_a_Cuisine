@@ -39,23 +39,22 @@ export class Step2Component implements OnInit {
   ) {}
 
   /** Initialisierung beim Laden der Seite */
-async ngOnInit() {
-  const prefs = this.recipeService.getPreferences();
-  this.portionCount = prefs.portions;
-  this.personCount = prefs.persons;
-  this.selectedCookingTimes = [...prefs.cookingTimes];
-  this.selectedCuisines = [...prefs.cuisines];
-  this.selectedDiets = [...prefs.diets];
-  this.resetUI();
+  async ngOnInit() {
+    const prefs = this.recipeService.getPreferences();
+    this.portionCount = prefs.portions;
+    this.personCount = prefs.persons;
+    this.selectedCookingTimes = [...prefs.cookingTimes];
+    this.selectedCuisines = [...prefs.cuisines];
+    this.selectedDiets = [...prefs.diets];
+    this.resetUI();
 
-  this.usageLimit = this.firestoreUsage.getLimit();
+    this.usageLimit = this.firestoreUsage.getLimit();
 
-  // 🔹 Versuche sofort, Zähler zu laden
-  const usage = await this.firestoreUsage.getCurrentUsageCount();
-  this.remainingTries = Math.max(this.usageLimit - usage, 0);
-  this.generateDisabled = this.remainingTries <= 0;
-}
-
+    // 🔹 Versuche sofort, Zähler zu laden
+    const usage = await this.firestoreUsage.getCurrentUsageCount();
+    this.remainingTries = Math.max(this.usageLimit - usage, 0);
+    this.generateDisabled = this.remainingTries <= 0;
+  }
 
   private resetUI() {
     this.portionCount = 2;
@@ -105,27 +104,31 @@ async ngOnInit() {
     }
   }
 
-  // --- Rezept-Generierung mit Limitprüfung ---
+  // --- ✅ KORRIGIERTE Rezept-Generierung ---
   async generateRecipe() {
     if (this.generateDisabled) {
       alert('⚠️ Du hast dein tägliches Limit erreicht!');
       return;
     }
 
-    // 🔹 Prüfe in Firestore, ob neuer Request erlaubt ist
+    // 🔸 ERST Zutaten prüfen (OHNE Counter zu erhöhen)
+    const ingredients = this.recipeService.getIngredients();
+    if (!ingredients || ingredients.length < 1) {
+      this.showIngredientWarning = true;
+      return; // ⚠️ Hier wird NICHT gezählt!
+    }
+
+    // 🔹 JETZT erst Firestore-Limit prüfen
     const canProceed = await this.firestoreUsage.canGenerateRecipe();
     if (!canProceed) {
       this.generateDisabled = true;
       this.remainingTries = 0;
+      alert('⚠️ Du hast dein tägliches Limit erreicht!');
       return;
     }
 
-    // 🔸 Prüfe, ob Zutaten vorhanden sind
-    const ingredients = this.recipeService.getIngredients();
-    if (!ingredients || ingredients.length < 1) {
-      this.showIngredientWarning = true;
-      return;
-    }
+    // ✅ Counter erhöhen (erst jetzt!)
+    await this.firestoreUsage.incrementUsageCount();
 
     // 🔹 Benutzereinstellungen speichern
     this.recipeService.setPreferences({

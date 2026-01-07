@@ -76,7 +76,7 @@ export class FirestoreUsageService {
 
   async getCurrentUsageCount(): Promise<number> {
     const hash = this.getUserHash();
-    if (!hash) return 0;
+    if (!hash || hash === 'anonymous') return 0;
 
     const usageRef = doc(this.firestore, this.COLLECTION, hash);
     const snap = await getDoc(usageRef);
@@ -86,9 +86,10 @@ export class FirestoreUsageService {
     return data?.['usageCount'] ?? 0;
   }
 
+  /** ✅ NEUE VERSION: Prüft nur das Limit, erhöht aber NICHT den Counter */
   async canGenerateRecipe(): Promise<boolean> {
     const hash = this.getUserHash();
-    if (!hash) return false;
+    if (!hash || hash === 'anonymous') return false;
 
     const usageRef = doc(this.firestore, this.COLLECTION, hash);
     const snap = await getDoc(usageRef);
@@ -99,22 +100,38 @@ export class FirestoreUsageService {
     const resetDate = data?.['resetDate'];
     const today = new Date().toISOString().split('T')[0];
 
+    // Falls neuer Tag: Zähler zurücksetzen
     if (resetDate !== today) {
       await updateDoc(usageRef, {
-        usageCount: 1,
+        usageCount: 0,
         resetDate: today,
         lastAccess: new Date(),
       });
-      return true;
+      return true; // ✅ Neuer Tag = erlaubt
     }
 
-    if (count >= this.USAGE_LIMIT) return false;
+    // Prüfe Limit
+    return count < this.USAGE_LIMIT;
+  }
+
+  /** ✅ NEU: Counter erhöhen (wird erst nach Zutatsprüfung aufgerufen) */
+  async incrementUsageCount(): Promise<void> {
+    const hash = this.getUserHash();
+    if (!hash || hash === 'anonymous') return;
+
+    const usageRef = doc(this.firestore, this.COLLECTION, hash);
+    const snap = await getDoc(usageRef);
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const count = data?.['usageCount'] ?? 0;
 
     await updateDoc(usageRef, {
       usageCount: count + 1,
       lastAccess: new Date(),
     });
-    return true;
+
+    console.log(`✅ UsageCount erhöht: ${count} → ${count + 1}`);
   }
 
   getLimit(): number {
