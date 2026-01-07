@@ -131,7 +131,10 @@
 
   <div *ngIf="generateDisabled" class="limit-info">
     <div class="warning-box">
-      <p>You’ve reached your daily limit of 5 recipes</p>
+      <p>You’ve reached your daily limit of 5 recipes. Check back tomorrow, or explore new dishes in your Cookbook for more inspiration.</p>
+         <p class="quotaBtn" (click)="goToCookbook()">
+                    Go to cookbook <img src="../../assets/img/arrow.png">
+         </p>
     </div>
   </div>
 

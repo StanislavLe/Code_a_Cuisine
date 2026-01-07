@@ -36,7 +36,7 @@ export class Step2Component implements OnInit {
     private http: HttpClient,
     private router: Router,
     private firestoreUsage: FirestoreUsageService
-  ) {}
+  ) { }
 
   /** Initialisierung beim Laden der Seite */
   async ngOnInit() {
@@ -174,6 +174,10 @@ export class Step2Component implements OnInit {
   // --- Navigation ---
   goHome() {
     this.router.navigate(['/home']);
+  }
+
+  goToCookbook() {
+    this.router.navigate(['/cookbook']);
   }
 
   goBack() {

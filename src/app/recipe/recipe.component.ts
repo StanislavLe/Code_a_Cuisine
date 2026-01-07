@@ -28,10 +28,8 @@ export class RecipeComponent implements OnInit {
     private firestoreRecipeService: FirestoreRecipeService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    console.log('📥 Recipe ID from route:', id);
-
     const queryFrom = this.route.snapshot.queryParamMap.get('from');
     const queryCuisine = this.route.snapshot.queryParamMap.get('cuisine');
 
@@ -44,41 +42,36 @@ export class RecipeComponent implements OnInit {
       this.fromPage = 'results';
     }
 
-    console.log('🧭 Query params → fromPage:', this.fromPage, 'cuisineId:', this.fromCuisineId);
-
     const result = this.recipeService.getResult();
-    console.log('📦 Full result in RecipeComponent:', result);
-
     let allRecipes: any[] = [];
-    if (Array.isArray(result)) {
-      allRecipes = result;
-    } else if (result?.recipes && Array.isArray(result.recipes)) {
-      allRecipes = result.recipes;
-    } else if (result) {
-      allRecipes = [result];
-    }
+    if (Array.isArray(result)) allRecipes = result;
+    else if (result?.recipes && Array.isArray(result.recipes)) allRecipes = result.recipes;
+    else if (result) allRecipes = [result];
 
-    if (id) {
-      this.recipe = allRecipes.find(r => r.recipe_id === id);
-    }
-
-    console.log('🎯 Selected recipe from RAM:', this.recipe);
+    if (id) this.recipe = allRecipes.find(r => r.recipe_id === id);
 
     if (!this.recipe && id) {
-      this.firestoreRecipeService.getRecipeById(id).subscribe((stored: StoredRecipe | undefined) => {
+      // Rezept aus Firestore nachladen
+      this.firestoreRecipeService.getRecipeById(id).subscribe(async (stored: StoredRecipe | undefined) => {
         if (stored) {
-          console.log('🗄️ Loaded recipe from Firestore:', stored);
           this.recipe = stored;
-
-          if (stored.cuisineId && !queryFrom) {
-            this.fromPage = 'recipe-list';
-            this.fromCuisineId = stored.cuisineId;
-            console.log('🔄 Fallback: Using stored cuisineId:', this.fromCuisineId);
-          }
-        } else {
-          console.warn('⚠️ No recipe found in Firestore for id:', id);
+          await this.updateLikeStatus();
         }
       });
+    } else if (this.recipe) {
+      await this.updateLikeStatus(); // 🔹 Direkt prüfen ohne Delay
+    }
+  }
+
+  /** Like-Status prüfen */
+  private async updateLikeStatus() {
+    const clientHash = await this.getClientHash();
+    const cached = localStorage.getItem(`liked_${this.recipe.recipe_id}`);
+    if (cached === 'true') {
+      this.hasLiked = true; // ⚡ sofortiges Rendering aus Cache
+    } else {
+      this.hasLiked = await this.firestoreRecipeService.hasUserLikedRecipe(clientHash, this.recipe.recipe_id);
+      if (this.hasLiked) localStorage.setItem(`liked_${this.recipe.recipe_id}`, 'true');
     }
   }
 
@@ -91,9 +84,7 @@ export class RecipeComponent implements OnInit {
   goBack() {
     if (this.fromPage === 'recipe-list') {
       if (this.fromCuisineId) {
-        this.router.navigate(['/recipe-list'], {
-          queryParams: { cuisine: this.fromCuisineId },
-        });
+        this.router.navigate(['/recipe-list'], { queryParams: { cuisine: this.fromCuisineId } });
       } else {
         this.router.navigate(['/cookbook']);
       }
@@ -104,10 +95,12 @@ export class RecipeComponent implements OnInit {
     }
   }
 
-  /**
-   * Öffentliche IP-Adresse hashen (DSGVO-konform)
-   */
+  /** Hash abrufen und lokal cachen */
   private async getClientHash(): Promise<string> {
+    const CACHE_KEY = 'clientHash';
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) return cached;
+
     try {
       const res = await fetch('https://api.ipify.org?format=json');
       const data = await res.json();
@@ -117,7 +110,7 @@ export class RecipeComponent implements OnInit {
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      console.log('🌐 Client Hash erkannt:', hashHex);
+      localStorage.setItem(CACHE_KEY, hashHex);
       return hashHex;
     } catch (err) {
       console.warn('⚠️ IP-Hashing fehlgeschlagen, Fallback auf lokale UUID', err);
@@ -125,9 +118,6 @@ export class RecipeComponent implements OnInit {
     }
   }
 
-  /**
-   * Fallback-ID (lokale UUID), falls IP nicht verfügbar ist
-   */
   private getOrCreateFallbackId(): string {
     const KEY = 'clientId';
     let id = localStorage.getItem(KEY);
@@ -138,25 +128,17 @@ export class RecipeComponent implements OnInit {
     return id;
   }
 
-  /**
-   * Rezept liken / speichern
-   */
+  /** Rezept liken (einmalig) */
   async onLike() {
-    if (!this.recipe || this.isLiking) return;
+    if (!this.recipe || this.isLiking || this.hasLiked) return;
     this.isLiking = true;
 
     try {
-      const clientHash = await this.getClientHash(); // 👈 gehashte IP statt Klartext
+      const clientHash = await this.getClientHash();
       const recipeData = this.recipeService.getRecipeData();
-
-      await this.firestoreRecipeService.saveLikedRecipe(
-        this.recipe,
-        recipeData,
-        clientHash
-      );
-
+      await this.firestoreRecipeService.saveLikedRecipe(this.recipe, recipeData, clientHash);
       this.hasLiked = true;
-      console.log(`💚 Rezept geliked von Client Hash: ${clientHash}`);
+      localStorage.setItem(`liked_${this.recipe.recipe_id}`, 'true'); // sofort speichern
     } catch (err) {
       console.error('❌ Fehler beim Speichern des Rezepts in Firestore:', err);
     } finally {
@@ -177,40 +159,13 @@ export class RecipeComponent implements OnInit {
     return this.chefIconPaths.slice(0, cooksToShow);
   }
 
-  getChefImage(role: string): string {
-    const key = role.toLowerCase();
-    if (key.includes('helfer 1')) return '../../assets/img/chef1.png';
-    if (key.includes('helfer 2')) return '../../assets/img/chef2.png';
-    if (key.includes('helfer 3')) return '../../assets/img/chef3.png';
-    if (key.includes('helfer 4')) return '../../assets/img/chef4.png';
-    return '../../assets/img/default_chef.png';
-  }
-
-  get groupedInstructions() {
-    const groups: { [key: string]: any[] } = {};
-    this.recipe.instructions.forEach((inst: any) => {
-      if (!groups[inst.assigned_to]) groups[inst.assigned_to] = [];
-      groups[inst.assigned_to].push(inst);
-    });
-    return groups;
-  }
-
   generateNewRecipe() {
     this.router.navigate(['/step1']);
   }
 
   goToCookbook() {
-    const currentFrom = this.route.snapshot.queryParamMap.get('from');
     const id = this.recipe?.recipe_id;
-    if (currentFrom === 'results') {
-      this.router.navigate(['/cookbook'], {
-        queryParams: { from: 'results', recipeId: id },
-      });
-    } else {
-      this.router.navigate(['/cookbook'], {
-        queryParams: { from: 'recipe', recipeId: id },
-      });
-    }
+    this.router.navigate(['/cookbook'], { queryParams: { from: 'recipe', recipeId: id } });
   }
 
   goHome() {

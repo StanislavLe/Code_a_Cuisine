@@ -25,8 +25,7 @@ export class FirestoreRecipeService {
   constructor(private firestore: Firestore) {}
 
   /**
-   * Speichert oder aktualisiert ein Rezept in Firestore.
-   * Die Client-ID (SHA-256 Hash der IP) wird DSGVO-konform gespeichert.
+   * ✅ Speichert Like eines Nutzers pro Rezept nur einmal
    */
   async saveLikedRecipe(
     recipe: any,
@@ -34,9 +33,19 @@ export class FirestoreRecipeService {
     clientId: string
   ): Promise<void> {
     const recipesRef = collection(this.firestore, 'recipes');
-    const docRef = doc(recipesRef, recipe.recipe_id);
-    const snap = await getDoc(docRef);
+    const likesRef = collection(this.firestore, 'userLikes');
+    const recipeDoc = doc(recipesRef, recipe.recipe_id);
+    const likeDoc = doc(likesRef, `${clientId}_${recipe.recipe_id}`);
 
+    // Prüfen, ob User bereits geliked hat
+    const likeSnap = await getDoc(likeDoc);
+    if (likeSnap.exists()) {
+      console.log('⚠️ User hat dieses Rezept bereits geliked.');
+      return;
+    }
+
+    // Rezept anlegen oder Like-Zähler erhöhen
+    const recipeSnap = await getDoc(recipeDoc);
     const rawCuisine = inputData.preferences.cuisines?.[0];
     const cuisineId =
       cuisines.find(
@@ -45,15 +54,9 @@ export class FirestoreRecipeService {
           c.label.toLowerCase() === rawCuisine?.toLowerCase()
       )?.id || 'unknown';
 
-    console.log('💾 rawCuisine:', rawCuisine, '→ mapped cuisineId:', cuisineId);
-
-    if (snap.exists()) {
-      // Falls das Rezept bereits existiert → Like-Zähler erhöhen
-      await updateDoc(docRef, {
-        likes: increment(1),
-      });
+    if (recipeSnap.exists()) {
+      await updateDoc(recipeDoc, { likes: increment(1) });
     } else {
-      // Neues Rezept-Dokument anlegen
       const stored: StoredRecipe = {
         recipe_id: recipe.recipe_id,
         recipe_name: recipe.recipe_name,
@@ -69,11 +72,26 @@ export class FirestoreRecipeService {
         cuisineId,
         likes: 1,
         createdAt: new Date(),
-        createdByClientId: clientId, // 👈 gehashte Client-ID (SHA-256)
+        createdByClientId: clientId,
       };
-
-      await setDoc(docRef, stored);
+      await setDoc(recipeDoc, stored);
     }
+
+    // User-Like speichern
+    await setDoc(likeDoc, {
+      clientId,
+      recipeId: recipe.recipe_id,
+      likedAt: new Date(),
+    });
+
+    console.log(`💚 Like gespeichert: ${clientId}_${recipe.recipe_id}`);
+  }
+
+  /** Prüfen, ob User ein Rezept geliked hat */
+  async hasUserLikedRecipe(clientId: string, recipeId: string): Promise<boolean> {
+    const likeDoc = doc(this.firestore, 'userLikes', `${clientId}_${recipeId}`);
+    const likeSnap = await getDoc(likeDoc);
+    return likeSnap.exists();
   }
 
   /** Beliebteste Rezepte */
