@@ -1,7 +1,7 @@
 <div class="listContent">
-  <img (click)="goHome()" class="logo" src="assets/img/logoGreen.png" />
+  <img (click)="goHome()" class="logoRecipeList" src="assets/img/logoGreen.png" />
 
-  <div class="backButton" (click)="goToCookbook()">
+  <div class="backButtonRecipeList" (click)="goToCookbook()">
     <img src="assets/img/back.png" />
     <p>Cookbook</p>
   </div>
@@ -39,7 +39,9 @@
       </div>
 
       <div class="itemInfo">
-        <p class="diet">{{ r.dietary_preferences }}</p>
+<div class="dietGroup">
+  <p class="diet" *ngFor="let pref of r.dietary_preferences">{{ pref }}</p>
+</div>
         <p class="time">{{ r.cook_time }}</p>
 
         <div class="likeBox">

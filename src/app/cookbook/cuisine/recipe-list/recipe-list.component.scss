@@ -14,7 +14,6 @@
     align-items: center;
     justify-content: end;
     width: 100%;
-    margin-top: 60px;
 }
 
 .header {
@@ -112,7 +111,7 @@
 }
 
 .recipeItem:hover {
-    transform: scale(1.05);
+    transform: scale(1.025);
 }
 
 
@@ -122,6 +121,13 @@
     justify-content: end;
     width: 100%;
     gap: 24px;
+
+    .dietGroup {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
 
     p {
         font-family: 'quicksandBook';

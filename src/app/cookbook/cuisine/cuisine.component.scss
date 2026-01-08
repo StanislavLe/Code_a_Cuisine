@@ -5,6 +5,8 @@
   flex-wrap: wrap;
   gap: 12px;
   width: 1700px;
+  position: relative;
+  z-index: 2;
 }
 
 .cuisineCard {

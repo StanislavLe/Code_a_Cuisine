@@ -1,8 +1,15 @@
-body {
-  margin: 0px !important;
-  font-family: 'quicksandBold';
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; 
 }
 
+.appContent {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
 
 @font-face {
   font-family: 'quicksandBold';
@@ -88,11 +95,80 @@ body {
   cursor: pointer;
 }
 
+.logoCookbook {
+  width: 142px !important;
+  height: 48px !important;
+  position: static;
+  top: 20px;
+  left: 50px;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
+.logoRecipe {
+  width: 142px !important;
+  height: 48px !important;
+  position: static;
+  top: 20px;
+  left: 50px;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
+.logoRecipeList {
+  width: 142px !important;
+  height: 48px !important;
+  position: static;
+  top: 20px;
+  left: 50px;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
 .backButton {
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
+  top: 80px;
+  left: 60px;
+  cursor: pointer;
+  gap: 16px;
+  color: #396039;
+  font-family: 'quicksandBookOblique';
+}
+
+.backButtonCookbook {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  position: static;
+  top: 80px;
+  left: 60px;
+  cursor: pointer;
+  gap: 16px;
+  color: #396039;
+  font-family: 'quicksandBookOblique';
+}
+
+.backButtonRecipe {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  position: static;
+  top: 80px;
+  left: 60px;
+  cursor: pointer;
+  gap: 16px;
+  color: #396039;
+  font-family: 'quicksandBookOblique';
+}
+
+.backButtonRecipeList {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  position: static;
   top: 80px;
   left: 60px;
   cursor: pointer;
@@ -114,7 +190,33 @@ body {
   font-family: 'quicksandBookOblique';
 }
 
-.backButtonRecipe {
+.backButtonRecipeBottom {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  cursor: pointer;
+  gap: 16px;
+  color: #396039;
+  margin-bottom: 80px;
+  margin-top: 50px;
+  font-family: 'quicksandBookOblique';
+}
+
+.backButtonCookbookBottom {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  cursor: pointer;
+  gap: 16px;
+  color: #396039;
+  margin-bottom: 80px;
+  margin-top: 50px;
+  font-family: 'quicksandBookOblique';
+  position: relative;
+  z-index: 2;
+}
+
+.backButtonRecipeListBottom {
   display: flex;
   justify-content: end;
   align-items: center;
