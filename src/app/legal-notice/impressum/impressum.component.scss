@@ -1,0 +1,59 @@
+.impressum {
+    padding: 0 50px;
+        background-color: #FAF0E6;
+
+}
+
+.impressumText {
+    font-family: Arial, sans-serif;
+    color: #396039;
+
+    h1 {
+        font-size: 104px;
+        font-weight: 700;
+        line-height: 100%;
+        letter-spacing: 10%;
+        margin: 32px;
+        margin-left: 0px;
+    }
+
+    h2 {
+        font-size: 48px;
+        font-weight: 400;
+        line-height: 100%;
+        letter-spacing: 10%;
+        margin: 24px;
+        margin-left: 0px;
+
+    }
+
+    p {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 104%;
+        margin: 16px;
+        margin-left: 0px;
+
+    }
+
+
+    a {
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 180%;
+        text-decoration: none;
+        color: inherit;
+        font-family: 'quicksandLight';
+        padding: 0px 20px;
+    }
+
+    .contact-info {
+        margin-top: 20px;
+
+        .email,
+        .phone {
+            display: block;
+            margin-bottom: 5px;
+        }
+    }
+}

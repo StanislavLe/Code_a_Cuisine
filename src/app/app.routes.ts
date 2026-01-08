@@ -8,6 +8,10 @@ import { RecipeComponent } from './recipe/recipe.component';
 import { CookbookComponent } from './cookbook/cookbook.component';
 import { CuisineComponent } from './cookbook/cuisine/cuisine.component';
 import { RecipeListComponent } from './cookbook/cuisine/recipe-list/recipe-list.component';
+import { ImpressumComponent } from './legal-notice/impressum/impressum.component';
+import { PrivacyPolicyComponent } from './legal-notice/privacy-policy/privacy-policy.component';
+import { CookiePolicyComponent } from './legal-notice/cookie-policy/cookie-policy.component';
+import { TermsComponent } from './legal-notice/terms/terms.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,5 +24,9 @@ export const routes: Routes = [
   { path: 'cookbook', component: CookbookComponent },
   { path: 'cuisine', component: CuisineComponent },
   { path: 'recipe-list', component: RecipeListComponent },
+  { path: 'impressum', component: ImpressumComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'cookie-policy', component: CookiePolicyComponent },
+  { path: 'terms', component: TermsComponent },
   { path: '**', redirectTo: 'home' }
 ];
