@@ -44,6 +44,10 @@
     text-align: center;
     gap: 16px;
     padding: 0 50px;
+
+    @media screen and (max-width: 840px) {
+        padding: 0 16px;
+    }
 }
 
 .step1Headline {
@@ -53,6 +57,12 @@
     justify-content: center;
     gap: 32px;
     width: 100%;
+    text-align: left;
+
+
+    @media screen and (max-width: 650px) {
+        gap: 16px;
+    }
 }
 
 h2 {
@@ -61,6 +71,11 @@ h2 {
     line-height: 100%;
     letter-spacing: 0%;
     margin: 0px;
+    font-family: 'quicksandBook';
+
+    @media screen and (max-width: 650px) {
+        font-size: 18px;
+    }
 }
 
 h1 {
@@ -69,6 +84,15 @@ h1 {
     line-height: 100%;
     letter-spacing: 0%;
     margin: 0px;
+    font-family: 'quicksandBold';
+    text-align: left;
+
+
+    @media screen and (max-width: 650px) {
+        font-size: 40px;
+        text-align: left;
+    }
+
 }
 
 .spacer {
@@ -78,6 +102,16 @@ h1 {
     justify-content: center;
     gap: 56px;
     width: 100%;
+
+    @media screen and (max-width: 650px) {
+        gap: 40px;
+        justify-content: start;
+        margin-top: 80px;
+    }
+
+    @media screen and (max-width: 390px) {
+        gap: 18px;
+    }
 }
 
 .tableWrapper {
@@ -87,13 +121,17 @@ h1 {
     justify-content: center;
     gap: 16px;
     width: 100%;
+
+    @media screen and (max-width: 1100px) {
+        flex-direction: column;
+    }
 }
 
 
 .pullIngredientTable,
 .pushIngredientTable {
     background-color: #3960394D;
-    width: 100%;
+    width: 95%;
     display: flex;
     align-items: start;
     padding: 24px;
@@ -101,6 +139,10 @@ h1 {
     border-radius: 20px;
     overflow: hidden;
     transition: height 0.4s ease;
+
+    @media screen and (max-width: 840px) {
+        width: 80%;
+    }
 }
 
 .pullIngredientTable {
@@ -147,8 +189,6 @@ h1 {
     }
 }
 
-
-
 h3 {
     font-family: 'quicksandBook';
     font-size: 20px;
@@ -169,6 +209,10 @@ h3 {
 
     input {
         width: 100%;
+    }
+
+    @media screen and (max-width: 650px) {
+        width: 80%;
     }
 }
 
@@ -204,6 +248,10 @@ input {
 .custom-select-wrapper {
     position: relative;
     width: 80px;
+
+    @media screen and (max-width: 650px) {
+        width: 40px;
+    }
 }
 
 .custom-select,
@@ -279,10 +327,6 @@ input {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding-left: 56px;
-
-
-
 }
 
 .listRow {
@@ -300,6 +344,16 @@ input {
     justify-content: start;
     align-items: center;
     gap: 16px;
+
+    img {
+        cursor: pointer;
+    }
+
+
+    @media screen and (max-width: 650px) {
+        gap: 4px;
+        justify-content: space-between;
+    }
 }
 
 
@@ -329,6 +383,8 @@ input {
     cursor: pointer;
     text-align: left;
     border-radius: 20px;
+    font-family: 'quicksandBook';
+
 }
 
 .autocomplete-item:hover {
@@ -368,6 +424,8 @@ input {
     align-items: center;
     flex-direction: row;
     gap: 6px;
+    font-family: 'quicksandBook';
+
 }
 
 .ingredientEdit {
@@ -402,19 +460,28 @@ input {
         background-color: #379c28;
         transition: background-color 0.3s ease;
     }
+
+    @media screen and (max-width: 390px) {
+        margin: 0px;
+    }
 }
 
 input {
     width: 30%;
+
+
+    @media screen and (max-width: 650px) {
+        width: 50%;
+    }
 }
 
 input::placeholder {
-    color: #aaa; 
+    color: #aaa;
     transition: opacity 0.2s ease;
 }
 
 input:focus::placeholder {
-    opacity: 0; 
+    opacity: 0;
 }
 
 input::-webkit-outer-spin-button,
@@ -438,5 +505,5 @@ select {
 }
 
 .pushIngredientTable.open-edit {
-  height: 16rem !important;
+    height: 16rem !important;
 }
