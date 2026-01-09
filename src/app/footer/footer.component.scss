@@ -98,7 +98,6 @@
       @media screen and (max-width: 650px) {
         flex-direction: column;
         gap: 16px;
-
       }
     }
 
@@ -121,6 +120,17 @@
     bottom: 0px;
     background: transparent;
     color: #1E5515;
+    text-align: left;
+    align-items: left;
+    justify-content: left;
+
+    .footer-links {
+
+      @media screen and (max-width: 540px) {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
   }
 
   &.footer-default {
