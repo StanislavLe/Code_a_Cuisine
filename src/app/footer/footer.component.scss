@@ -16,9 +16,13 @@
     justify-content: center;
     height: auto;
     width: 100%;
-    padding: 24px 32px;
+    padding: 25px 50px;
     font-family: 'quicksandBold';
 
+
+             @media screen and (max-width: 840px) {
+    padding: 12px 16px;
+    }
   }
 
 .footer-links {
@@ -59,6 +63,14 @@
     text-align: left;
     align-items: left;
     justify-content: left;
+
+    .footer-links {
+
+    @media screen and (max-width: 1220px) {
+      flex-direction: column;}
+  }
+
+
   }
 
   &.footer-results {

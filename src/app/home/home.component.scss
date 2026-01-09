@@ -6,6 +6,14 @@
     text-align: center;
     gap: 16px;
     padding: 0 50px;
+
+    @media screen and (max-width: 840px) {
+        padding: 0 16px;
+    }
+
+    @media screen and (max-width: 800px) {
+        overflow: hidden;
+    }
 }
 
 .textSection {
@@ -14,8 +22,19 @@
     align-items: start;
     justify-content: center;
     font-family: 'quicksandBold';
-    gap: 32vh;
+    gap: 30vh;
     flex: 1;
+
+    @media screen and (max-width: 1220px) {
+        height: 80vh;
+        gap: 14vh;
+        justify-content: start;
+    }
+
+
+    @media screen and (max-width: 800px) {
+        margin-top: 150px;
+    }
 }
 
 .homeHeadline {
@@ -24,6 +43,17 @@
     align-items: start;
     justify-content: center;
     gap: 8px;
+    text-align: left;
+
+
+    @media screen and (max-width: 1024px) {
+        width: 70%;
+    }
+
+
+    @media screen and (max-width: 468px) {
+        width: 60%;
+    }
 }
 
 h2 {
@@ -32,6 +62,18 @@ h2 {
     line-height: 100%;
     letter-spacing: 0%;
     margin: 0px;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 32px;
+    }
+
+    @media screen and (max-width: 800px) {
+        font-size: 32px;
+    }
+
+    @media screen and (max-width: 468px) {
+        font-size: 20px;
+    }
 }
 
 h1 {
@@ -40,6 +82,19 @@ h1 {
     line-height: 100%;
     letter-spacing: 0%;
     margin: 0px;
+
+    @media screen and (max-width: 1024px) {
+        font-size: 82px;
+    }
+
+    @media screen and (max-width: 800px) {
+        font-size: 48px;
+    }
+
+
+    @media screen and (max-width: 468px) {
+        font-size: 32px;
+    }
 }
 
 .startBtn {
@@ -68,12 +123,22 @@ h1 {
     align-items: start;
     justify-content: center;
     gap: 40px;
+    text-align: left;
 
     p {
         font-size: 32px;
         font-weight: 500;
         line-height: 104%;
         margin: 0px;
+
+        @media screen and (max-width: 800px) {
+            font-size: 24px;
+        }
+
+        @media screen and (max-width: 468px) {
+            font-size: 20px;
+            width: 60%;
+        }
     }
 
     .cookbookArrowWrapper {
@@ -87,7 +152,12 @@ h1 {
             color: inherit;
             font-family: 'quicksandLight';
             padding: 0px 20px;
+
+            @media screen and (max-width: 1220px) {
+                padding: 0px;
+            }
         }
+
 
         img {
             width: 24px;
@@ -105,6 +175,10 @@ h1 {
             }
         }
     }
+
+    @media screen and (max-width: 1220px) {
+        flex-direction: column;
+    }
 }
 
 .plates {
@@ -112,4 +186,13 @@ h1 {
     width: auto;
     object-fit: contain;
     align-self: stretch;
+
+    @media screen and (max-width: 800px) {
+        position: fixed;
+        right: -247px;
+    }
+
+    @media screen and (max-width: 586px) {
+        right: -300px;
+    }
 }

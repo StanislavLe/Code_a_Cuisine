@@ -93,6 +93,10 @@ html, body {
   top: 20px;
   left: 50px;
   cursor: pointer;
+
+         @media screen and (max-width: 840px) {
+       left: 16px;
+    }
 }
 
 .logoCookbook {
