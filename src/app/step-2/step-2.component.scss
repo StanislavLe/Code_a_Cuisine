@@ -31,7 +31,7 @@
 
     @media screen and (max-width: 770px) {
         justify-content: start;
-        margin-top: 100px;
+        margin-top: 106px;
     }
 
     @media screen and (max-width: 540px) {
@@ -47,6 +47,13 @@
     justify-content: center;
     gap: 32px;
     width: 100%;
+
+    @media screen and (max-width: 540px) {
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+    }
 }
 
 h1 {
@@ -58,6 +65,10 @@ h1 {
 
     @media screen and (max-width: 540px) {
         font-size: 24px;
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: start;
     }
 }
 
@@ -93,10 +104,20 @@ h1 {
 
     @media screen and (max-width: 540px) {
         gap: 4px;
+        width: 100%;
+        align-items: start;
     }
 }
 
-.portionRow {}
+.cookingTime,
+.cuisine,
+.dietPreferences {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 8px;
+}
 
 .portionWrapper,
 .personWrapper {
@@ -180,6 +201,7 @@ h1 {
 
     @media screen and (max-width: 540px) {
         padding: 6px 8px;
+        gap: 8px;
     }
 
     .headlines {
