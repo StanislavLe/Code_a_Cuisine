@@ -297,18 +297,23 @@ h1 {
 .warning-box {
     background: #396039;
     color: #FAF0E6;
-    padding: 2rem 3rem;
+    padding: 16px 32px;
     border-radius: 30px;
     text-align: center;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
     max-width: 400px;
 
     h2 {
-        margin-bottom: 0.5rem;
+        margin-bottom: 4px;
     }
 
     p {
-        margin-bottom: 1.5rem;
+        margin-bottom: 8px;
+    }
+
+    @media screen and (max-width: 540px) {
+        padding: 12px 24px;
+        max-width: 306px;
     }
 }
 
