@@ -5,11 +5,24 @@
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  height: 100dvh;
   text-align: left;
   gap: 16px;
   padding: 0 50px;
   font-family: 'quicksandBook';
+  min-height: 100dvh;
+
+  @media screen and (max-width: 840px) {
+    padding: 0 16px;
+  }
+
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+    align-items: start;
+    min-height: 170dvh;
+    justify-content: start;
+  }
+
 }
 
 .spacer {
@@ -19,6 +32,10 @@
   justify-content: center;
   gap: 32px;
   width: 100%;
+
+  @media screen and (max-width: 540px) {
+    gap: 0px;
+  }
 }
 
 
@@ -28,6 +45,12 @@
   align-items: center;
   flex-direction: row;
   gap: 100px;
+  width: 100%;
+
+  @media screen and (max-width: 1100px) {
+    gap: 32px;
+  }
+
 
   .text {
     display: flex;
@@ -41,12 +64,21 @@
       color: #FAF0E6;
       margin-bottom: 8px;
       font-weight: 700;
+
+      @media screen and (max-width: 1100px) {
+        font-size: 32px;
+      }
+
     }
 
     p {
       font-size: 24px;
       font-weight: 500;
       color: #FAF0E6;
+
+      @media screen and (max-width: 1100px) {
+        font-size: 18px;
+      }
     }
 
     .settingIcons {
@@ -55,12 +87,22 @@
       align-items: center;
       flex-direction: row;
       gap: 12px;
+      flex-wrap: wrap;
+
+      @media screen and (max-width: 1100px) {
+        gap: 4px;
+      }
+
+      @media screen and (max-width: 540px) {
+        padding: 12px 24px;
+      }
 
       p {
         color: #396039;
         background-color: #FAF0E6;
         padding: 6px 12px;
         border-radius: 20px;
+        margin: 4px 0;
       }
     }
   }
@@ -73,7 +115,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
 .recipeCards {
   display: flex;
   align-items: center;
@@ -81,4 +122,56 @@
   gap: 24px;
   margin-top: 32px;
   width: 100%;
+
+  @media screen and (max-width: 840px) {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 900px) {
+
+
+  app-recipe-card {
+    width: 100%;
+  }
+
+  .backButtonResultsWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; // optional, sieht oft sauberer aus
+    gap: 8px;
+  }
+
+  .header .text {
+    display: contents;
+  }
+
+  .header h1 {
+    order: 1;
+  }
+
+  .header .resultsImg {
+    order: 2;
+    width: 100%;
+    margin: 16px 0;
+  }
+
+  .header .textAfterImg {
+    order: 3;
+  }
 }

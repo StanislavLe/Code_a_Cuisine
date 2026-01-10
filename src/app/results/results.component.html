@@ -1,41 +1,39 @@
 <div class="resultsContent" *ngIf="recipes?.length; else loading">
-  <img (click)="goHome()" class="logo" src="../../assets/img/logoWhite.png" />
+  <img (click)="goHome()" class="logoResults" src="../../assets/img/logoWhite.png" />
 
   <div class="spacer">
     <div class="header">
-      <div class="text">
-        <h1>The recipe results</h1>
-        <p>
-          We took what you have and let our AI do the thinking.
-          Here are 3 easy recipes you can make right now!
-        </p>
+  <div class="text">
+    <h1>The recipe results</h1>
 
-        <div class="settingIcons" *ngIf="prefs as p">
-          <p *ngFor="let cuisine of p.cuisines">
-            {{ cuisine }}
-          </p>
+    <div class="textAfterImg">
+      <p>
+        We took what you have and let our AI do the thinking.
+        Here are 3 easy recipes you can make right now!
+      </p>
 
-          <p *ngFor="let time of p.cookingTimes">
-            {{ time }}
-          </p>
-        </div>
-
+      <div class="settingIcons" *ngIf="prefs as p">
+        <p *ngFor="let cuisine of p.cuisines">{{ cuisine }}</p>
+        <p *ngFor="let time of p.cookingTimes">{{ time }}</p>
       </div>
-
-      <img class="resultsImg" src="../../assets/img/resultsHeader.png">
     </div>
+  </div>
+
+  <img class="resultsImg" src="../../assets/img/resultsHeader.png">
+</div>
+
 
     <div class="recipeCards">
       <app-recipe-card *ngFor="let r of recipes; let i = index" [recipe]="r" [index]="i + 1">
       </app-recipe-card>
     </div>
 
-
+<div class="backButtonResultsWrapper">
     <div class="backButtonResults" (click)="goBack()">
       <p>Generate new recipie</p>
       <img src="../../assets/img/arrow.png">
     </div>
-
+</div>
 
   </div>
 </div>

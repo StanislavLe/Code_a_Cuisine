@@ -82,6 +82,30 @@
     text-align: left;
     align-items: left;
     justify-content: left;
+
+    @media screen and (max-width: 900px) {
+      position: relative;
+      bottom: -97px;
+      background: #396039;
+      color: #FAF0E6;
+    }
+
+    @media screen and (max-width: 840px) {
+      position: relative;
+      top: 585px;
+    }
+
+    @media screen and (max-width: 453px) {
+      top: 640px;
+    }
+
+    .footer-links {
+
+      @media screen and (max-width: 550px) {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
   }
 
   &.footer-step1 {

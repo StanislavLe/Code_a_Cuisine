@@ -108,6 +108,20 @@ body {
   }
 }
 
+.logoResults {
+  width: 142px !important;
+  height: 48px !important;
+  position: absolute;
+  top: 20px;
+  left: 50px;
+  cursor: pointer;
+
+  @media screen and (max-width: 900px) {
+    position: relative;
+    left: 0px;
+  }
+}
+
 .logoCookbook {
   width: 142px !important;
   height: 48px !important;
@@ -207,6 +221,13 @@ body {
   color: #FAF0E6;
   font-family: 'quicksandBookOblique';
   z-index: 2;
+
+
+  @media screen and (max-width: 900px) {
+    position: relative;
+    left: 0px;
+    bottom: 0px;
+  }
 }
 
 .backButtonRecipeBottom {

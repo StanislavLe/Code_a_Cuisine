@@ -2,6 +2,10 @@
     background-color: #DBE0DB;
     border-radius: 20px;
     padding: 32px 24px;
+
+    @media screen and (max-width: 453px) {
+        padding: 16px 12px;
+    }
 }
 
 .card-header {
