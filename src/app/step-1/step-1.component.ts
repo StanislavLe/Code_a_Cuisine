@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { RecipeDataService } from '../services/recipe-data.service';
+import { environment } from '../../environments/environment';
 
 interface Ingredient {
   name: string;
@@ -65,7 +66,8 @@ export class Step1Component implements AfterViewInit {
       return;
     }
 
-    const url = `http://localhost:5678/webhook/ingredients?query=${encodeURIComponent(query)}`;
+    // ✅ Verwende Proxy-URL (/api/)
+    const url = `${environment.apiUrl}webhook/ingredients?query=${encodeURIComponent(query)}`;
     this.http.get<any[]>(url).subscribe({
       next: (data) => {
         const results = data?.[0]?.queries ?? [];

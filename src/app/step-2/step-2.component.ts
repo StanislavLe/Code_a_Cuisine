@@ -1,10 +1,10 @@
-// src/app/step2/step-2.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RecipeDataService } from '../services/recipe-data.service';
 import { FirestoreUsageService } from '../services/firestore-usage.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-step2',
@@ -27,8 +27,8 @@ export class Step2Component implements OnInit {
   selectedDiets: string[] = [];
 
   showIngredientWarning = false;
-  generateDisabled = false; // 🔒 Button-Sperre
-  remainingTries = 0; // 🔢 Anzeige verbleibender Versuche
+  generateDisabled = false;
+  remainingTries = 0;
   private usageLimit = 0;
 
   constructor(
@@ -38,7 +38,6 @@ export class Step2Component implements OnInit {
     private firestoreUsage: FirestoreUsageService
   ) { }
 
-  /** Initialisierung beim Laden der Seite */
   async ngOnInit() {
     const prefs = this.recipeService.getPreferences();
     this.portionCount = prefs.portions;
@@ -49,8 +48,6 @@ export class Step2Component implements OnInit {
     this.resetUI();
 
     this.usageLimit = this.firestoreUsage.getLimit();
-
-    // 🔹 Versuche sofort, Zähler zu laden
     const usage = await this.firestoreUsage.getCurrentUsageCount();
     this.remainingTries = Math.max(this.usageLimit - usage, 0);
     this.generateDisabled = this.remainingTries <= 0;
@@ -64,7 +61,6 @@ export class Step2Component implements OnInit {
     this.selectedDiets = [];
   }
 
-  // --- UI Helper-Methoden ---
   increasePortions() {
     if (this.portionCount < this.maxPortions) this.portionCount++;
   }
@@ -104,21 +100,18 @@ export class Step2Component implements OnInit {
     }
   }
 
-  // --- ✅ KORRIGIERTE Rezept-Generierung ---
   async generateRecipe() {
     if (this.generateDisabled) {
       alert('⚠️ Du hast dein tägliches Limit erreicht!');
       return;
     }
 
-    // 🔸 ERST Zutaten prüfen (OHNE Counter zu erhöhen)
     const ingredients = this.recipeService.getIngredients();
     if (!ingredients || ingredients.length < 1) {
       this.showIngredientWarning = true;
-      return; // ⚠️ Hier wird NICHT gezählt!
+      return;
     }
 
-    // 🔹 JETZT erst Firestore-Limit prüfen
     const canProceed = await this.firestoreUsage.canGenerateRecipe();
     if (!canProceed) {
       this.generateDisabled = true;
@@ -127,10 +120,8 @@ export class Step2Component implements OnInit {
       return;
     }
 
-    // ✅ Counter erhöhen (erst jetzt!)
     await this.firestoreUsage.incrementUsageCount();
 
-    // 🔹 Benutzereinstellungen speichern
     this.recipeService.setPreferences({
       portions: this.portionCount,
       persons: this.personCount,
@@ -142,25 +133,22 @@ export class Step2Component implements OnInit {
     this.recipeService.clearResult();
     const finalData = this.recipeService.getRecipeData();
 
-    // 🔸 Nutzer-Hash anhängen
     const requestData = {
       ...finalData,
       userId: this.firestoreUsage.getUserHash(),
     };
 
     console.log('🧾 Final Recipe JSON:', JSON.stringify(requestData, null, 2));
-
     this.router.navigate(['/loading-screen']);
 
-    // 🔸 n8n Workflow aufrufen
+    // ✅ Verwende Proxy-URL
     this.http
-      .post('http://localhost:5678/webhook/recipe-generator', requestData)
+      .post(environment.apiUrl + 'webhook/recipe-generator', requestData)
       .subscribe({
         next: async (res) => {
           console.log('✅ n8n Workflow Response:', res);
           this.recipeService.setResult(res);
 
-          // 🔁 Zähler aktualisieren
           const usage = await this.firestoreUsage.getCurrentUsageCount();
           this.remainingTries = Math.max(this.usageLimit - usage, 0);
           this.generateDisabled = this.remainingTries <= 0;
@@ -171,7 +159,6 @@ export class Step2Component implements OnInit {
       });
   }
 
-  // --- Navigation ---
   goHome() {
     this.router.navigate(['/home']);
   }
