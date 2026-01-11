@@ -7,6 +7,10 @@
     gap: 16px;
     padding: 0 50px;
     font-family: 'quicksandBook';
+
+    @media screen and (max-width: 840px) {
+        padding: 0 16px;
+    }
 }
 
 .btnWrapper {
@@ -19,11 +23,10 @@
 .header {
     font-family: 'quicksandBold';
     font-size: 32px;
-    margin-bottom: 20px;
     width: 100%;
 
     img {
-        width: 80%;
+        width: 100%;
     }
 
     h1 {
@@ -34,6 +37,20 @@
         align-items: center;
         position: relative;
         bottom: 129px;
+
+        @media screen and (max-width: 1300px) {
+            font-size: 40px;
+            bottom: 80px;
+        }
+
+        @media screen and (max-width: 1050px) {
+            font-size: 32px;
+            bottom: 61px;
+        }
+
+        @media screen and (max-width: 450px) {
+            bottom: 48px;
+        }
     }
 }
 
@@ -45,6 +62,17 @@
     flex-direction: column;
     width: 100%;
     gap: 8px;
+
+     .recipeItem:nth-child(odd) {
+    background-color: transparent; 
+    padding: 12px;
+  }
+
+  .recipeItem:nth-child(even) {
+    background-color: #39603933; // etwas stärker
+    border-radius: 12px;
+    padding: 12px;
+  }
 }
 
 .itemNumber {
@@ -76,13 +104,21 @@
     gap: 12px;
     cursor: pointer;
     transition: transform 0.25s ease;
-    transform: scale(1); 
+    transform: scale(1);
+
+    @media screen and (max-width: 800px) {
+        flex-direction: column;
+    }
 
     .itemHeader {
-        width: max-content;
 
         h3 {
-            width: max-content;
+            width: 100%;
+            max-width: 800px;
+
+            @media screen and (max-width: 800px) {
+                flex-direction: column;
+            }
         }
     }
 
@@ -199,4 +235,11 @@
     background: #1e5515;
     color: #ffffff;
     transform: scale(1.55);
+}
+
+.mobileGenerateBtn {
+    @media screen and (max-width: 840px) {
+        position: relative;
+        bottom: 12px;
+    }
 }

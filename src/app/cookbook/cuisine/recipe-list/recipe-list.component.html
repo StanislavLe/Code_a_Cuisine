@@ -7,7 +7,7 @@
   </div>
 
   <div class="btnWrapper">
-    <button (click)="generateNewRecipe()" class="generateBtn">
+    <button (click)="generateNewRecipe()" class="generateBtn mobileGenerateBtn">
       Generate a recipe
     </button>
   </div>
@@ -39,9 +39,9 @@
       </div>
 
       <div class="itemInfo">
-<div class="dietGroup">
-  <p class="diet" *ngFor="let pref of r.dietary_preferences">{{ pref }}</p>
-</div>
+        <div class="dietGroup">
+          <p class="diet" *ngFor="let pref of r.dietary_preferences">{{ pref }}</p>
+        </div>
         <p class="time">{{ r.cook_time }}</p>
 
         <div class="likeBox">
@@ -56,12 +56,7 @@
         &lt;
       </button>
 
-      <button
-        class="pageButton"
-        *ngFor="let p of pages"
-        [class.active]="p === page"
-        (click)="goToPage(p)"
-      >
+      <button class="pageButton" *ngFor="let p of pages" [class.active]="p === page" (click)="goToPage(p)">
         {{ p }}
       </button>
 
