@@ -132,6 +132,33 @@
     color: #1E5515;
     position: static;
     margin-top: 500px;
+    text-align: left;
+    align-items: left;
+    justify-content: left;
+
+    @media screen and (max-width: 1423px) {
+      margin-top: 20vh;
+    }
+
+    @media screen and (max-width: 1100px) {
+      margin-top: 84vh;
+    }
+
+    @media screen and (max-width: 754px) {
+      margin-top: 199vh;
+    }
+
+    @media screen and (max-width: 650px) {
+      margin-top: 240vh;
+    }
+
+    .footer-links {
+
+      @media screen and (max-width: 650px) {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
   }
 
 

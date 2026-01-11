@@ -6,6 +6,11 @@
     gap: 16px;
     padding: 0 50px;
     font-family: 'quicksandBook';
+
+
+    @media screen and (max-width: 840px) {
+        padding: 0 16px;
+    }
 }
 
 .cookbookHeader {
@@ -16,37 +21,55 @@
     border-radius: 20px;
     max-width: 100%;
     overflow-x: hidden;
-}
 
-.textSection {
-    flex: 0 0 40%;
-    min-width: 0; 
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-
-    h1 {
-        font-family: 'quicksandBold';
-        font-size: 64px;
-        color: #1E5515;
-        margin: 0px;
+    @media screen and (max-width: 1100px) {
+        flex-direction: column;
+        padding: 12px 32px;
     }
 
-    p {
-        font-size: 24px;
-        color: #10310B;
-        font-weight: 500;
+    .textSection {
+        flex: 0 0 40%;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+
+        h1 {
+            font-family: 'quicksandBold';
+            font-size: 64px;
+            color: #1E5515;
+            margin: 0px;
+
+            @media screen and (max-width: 1100px) {
+                font-size: 44px;
+            }
+        }
+
+        p {
+            font-size: 24px;
+            color: #10310B;
+            font-weight: 500;
+
+            @media screen and (max-width: 1100px) {
+                font-size: 18px;
+                margin-bottom: 0px;
+            }
+        }
     }
 }
 
 .favDishes {
-    flex: 0 0 60%;
-    min-width: 0; 
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 24px;
+
+
+    @media screen and (max-width: 1100px) {
+        gap: 8px;
+    }
 
     .favDishesHeader {
         display: flex;
@@ -58,6 +81,11 @@
             font-size: 24px;
             color: #1E5515;
             margin: 0;
+
+
+            @media screen and (max-width: 1100px) {
+                font-size: 20px;
+            }
         }
 
         img {
@@ -157,4 +185,11 @@ article {
             height: 24px;
         }
     }
+}
+
+app-cuisine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }

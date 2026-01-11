@@ -181,6 +181,8 @@ body {
   gap: 16px;
   color: #396039;
   font-family: 'quicksandBookOblique';
+
+
 }
 
 .backButtonRecipe {
@@ -254,6 +256,11 @@ body {
   font-family: 'quicksandBookOblique';
   position: relative;
   z-index: 2;
+
+      @media screen and (max-width: 840px) {
+  margin-top: 0px;
+
+  }
 }
 
 .backButtonRecipeListBottom {
