@@ -103,19 +103,32 @@
     padding: 10px;
     scroll-behavior: smooth;
     box-sizing: border-box;
+    
+    // Hide scrollbar on mobile, show on desktop
+    @media screen and (max-width: 992px) {
+      scrollbar-width: none; // Firefox
+      -ms-overflow-style: none; // IE/Edge
+      
+      &::-webkit-scrollbar {
+        display: none; // Chrome/Safari
+      }
+    }
 }
 
-.recipe-grid-wrapper::-webkit-scrollbar {
+// Desktop: Zeige schöne Scrollbar
+@media screen and (min-width: 993px) {
+  .recipe-grid-wrapper::-webkit-scrollbar {
     height: 8px;
-}
+  }
 
-.recipe-grid-wrapper::-webkit-scrollbar-thumb {
+  .recipe-grid-wrapper::-webkit-scrollbar-thumb {
     background: #9ec89f;
     border-radius: 4px;
-}
+  }
 
-.recipe-grid-wrapper::-webkit-scrollbar-track {
+  .recipe-grid-wrapper::-webkit-scrollbar-track {
     background: #e5f3e7;
+  }
 }
 
 .recipe-grid {

@@ -4,7 +4,24 @@ body {
   margin: 0;
   padding: 0;
   overflow-y: auto;
+
+  // Hide scrollbars on mobile/tablet (Touch-Geräte)
+  @media screen and (max-width: 992px) {
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE/Edge
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome/Safari
+    }
+  }
 }
+
+// Alternativ: Nur die Scrollbar-Breite entfernen, aber scrollbar bleibt (falls gewünscht)
+// @media screen and (max-width: 992px) {
+//   html, body {
+//     scrollbar-gutter: stable; // Reserviert Platz, aber versteckt visuelle Scrollbar
+//   }
+// }
 
 .appContent {
   display: flex;

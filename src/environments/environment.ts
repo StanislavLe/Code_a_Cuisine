@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   firebase: {
     apiKey: "AIzaSyAbVmxwINInQLGvxaAFeBpKzgYlY9jN6EA",
     authDomain: "code-a-cuisine-69336.firebaseapp.com",
@@ -9,5 +9,6 @@ export const environment = {
     appId: "1:47900026820:web:b1098f6816704be77f2691",
     measurementId: "G-GSVYKLLLE6",
   },
-  apiUrl: '/api/' // 👈 Nginx Proxy leitet das an n8n weiter
+  // Docker-Compose: gleiche Domain/Port, Nginx proxyt /api auf n8n
+  apiUrl: '/api/'
 };

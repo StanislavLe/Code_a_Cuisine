@@ -1,14 +1,24 @@
-# --- Build Stage ---
-FROM node:22-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build -- --configuration production --no-progress --verbose --no-aot --optimization=false || true
+### Build Angular and serve via Nginx on port 80
 
-# --- Runtime Stage ---
-FROM nginx:alpine
-COPY --from=build /app/dist/code-a-cuisine /usr/share/nginx/html
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Build stage
+FROM node:18-alpine AS build
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# Serve stage
+FROM nginx:1.25-alpine
+
+# Use custom Nginx config that proxies /api to n8n
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy built Angular assets
+COPY --from=build /app/dist/code-a-cuisine/browser /usr/share/nginx/html/browser
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
